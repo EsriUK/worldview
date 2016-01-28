@@ -1,0 +1,22 @@
+{
+	"background": {
+		"persistent": false,
+		"scripts": [ 
+			"scripts/load.js"
+		]
+	},
+	"chrome_url_overrides": {
+		"newtab": "index.html"
+	},
+	"description": "Experience a beautiful webmap from Esri every time you open a new tab.",
+	"icons": {
+		"128": "images/icon-128.png",
+		"16": "images/icon-16.png",
+		"48": "images/icon-48.png"
+	},
+	"incognito": "split",
+	"manifest_version": 2,
+	"name": "Esri UK Maps",
+	"permissions": ["tabs"],
+	"version": "1.0.4"
+}
