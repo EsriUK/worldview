@@ -14,7 +14,7 @@ var locationField = "Location_Name";
 var uniqueIdField = "OBJECTID";
 
 //Query to restrict returned features. If all features are to be displayed it should be "1=1"
-var serviceQuery = "Editor%3D%27bflanagan_bureau%27+AND+Status%3D1";
+var serviceQuery = "1=1";
 
 //Function for making CORS requests to ArcGIS Online
 function makeRequest(method, url, async, readyStateHandler) {
