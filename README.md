@@ -2,7 +2,7 @@
 
 #About
 
-Esri UK Maps is a Chrome Extension that shows you the aerial imagery for a location in the UK when you open a new tab.
+Esri UK Maps is a Chrome Extension that shows you the aerial imagery for a location in the UK when you open a new tab. Built using [Leaflet](https://github.com/Leaflet/Leaflet) and the [Esri Leaflet](https://github.com/Esri/esri-leaflet) plugin.
 
 #Sample
 The app has been published to the Chrome Web Store. The listing can be found [here](https://chrome.google.com/webstore/detail/esri-uk-maps/aflbpeobpgdpibcfhkkjhaonbbpkmefg?hl=en-GB).
