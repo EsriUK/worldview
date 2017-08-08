@@ -7,9 +7,16 @@
 		<meta content="3 days" name="revisit-after">
 
 		<link href="styles/common.css" rel="stylesheet" />
+        <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script> 
+        <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
+        
+        <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
+        <!-- Added library for form validation ToDo: review whether this can be done natively -->
+        <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
 
-        <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script>
-        <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script>
+        
+        <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script> 
+        <!-- <script src="scripts/lib/esri-leaflet-2.0.8/dist/esri-leaflet.js"></script> -->
 
 	</head>
 	<body>
@@ -19,8 +26,44 @@
 		<div class="location location-extent"></div>
 		<div id="map"></div>
 
+        <!-- Placeholder buttons for new functions -->
+        <div class="button" id="share-button"><p>Share</p></div>
+        <div class="button" id="save-button"><p>Screenshot</p></div>
+        <div class="button" id="show-form"><p>Suggest</p></div>
+
+        <!-- Input form for submitting suggestions -->
+        <div class="details-form-div">
+            <form id="details-form">
+                Where is this? <input type="text" class="place-name-input" name="placeName" required><br>
+                First name:    <input type="text" name="firstName" placeholder="Optional"><br>
+                Last name:     <input type="text" name="lastName" placeholder="Optional"><br>
+                Email:         <input type="email" name="email" placeholder="Optional"><br>
+                <input type="Submit" id="details-form-submit-button" value="Submit">
+                <input type="button" id="details-form-cancel-button" value="Cancel">
+            </form>
+        </div>
+
+        <!-- Div for opening/copying sharing url -->
+        <div class="share-url-div">
+            <div id="share-view">View</div>
+            <div id="share-copy">Copy</div>
+        </div>
+
+
+
+        <!-- Div for displaying stitched image --> 
+        <div id="display-screenshot-div" <!--onclick="hideSave()"-->
+            <!-- Canvas for stitching and exporting map images -->
+            <canvas id="canvas">
+                Sorry - this feature isn't supported by your browser.
+            </canvas>
+        </div>
+
+
         <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
-		<script src="scripts/common.js"></script>
-	
+        <script src="scripts/screenshot.js"></script>
+        <script src="scripts/common.js"></script>
+
 	</body>
+
 </html>

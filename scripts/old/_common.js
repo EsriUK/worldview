@@ -1,7 +1,4 @@
-// Variables ----------------------------------------------------------------------------------- //
-//
-
-// Geographic globals
+    // Geographic globals
 var map, overviewMap, locationName, locationPoint, bounds;
 
 // Container for home button status. Initialised as false
@@ -9,6 +6,7 @@ var homeButtonPressed = false;
 var extentButtonPressed = false;
 var shareButtonPressed = false;
 var saveButtonPressed = false;
+var filterButtonPressed = false; 
 
 // URL to publicly-shared polygon feature service containing areas of interest
 var servicerUrl = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
@@ -16,6 +14,23 @@ var servicerUrl = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/servi
 // URL to user-suggested areas of interest
 // ToDo: new, separate service 
 var suggestionsService = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
+
+/* URL to generalised countries reference service 
+var countries = L.esri.featureLayer({
+    url: 'http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries_(Generalized)/FeatureServer/0',
+});
+*/
+
+countriesWithContent = L.esri.featureLayer({
+    url: 'http://services.arcgis.com/P3ePLMYs2RVChkJx/ArcGIS/rest/services/World_Countries_(Generalized)/FeatureServer/0/',
+    where: "FID > 100"
+});
+
+var sfcID = "";
+
+// OIDs of selected filter countries 
+
+var filterCountryIds = []; 
 
 // Field name in feature service containing location name
 var locationField = "Location_Name";
@@ -27,10 +42,33 @@ var uniqueIdField = "OBJECTID";
 var serviceQuery = "1=1";
 
 
-// Functions ----------------------------------------------------------------------------------- //
-//
+// Set global storage var from async callback 
 
-// Make CORS requests to ArcGIS Online
+function asyncSetter(variable) {
+    var sfcID = varible;
+    return sfcID;
+}
+
+
+// Restore filter option from Chrome storage 
+
+function restoreOptions() {
+    var deferred = $.Deferred();
+    chrome.storage.local.get("myFilterCountryId", function (result) {
+        var savedFilterCountryId = JSON.stringify(result.myFilterCountryId);
+        console.log("getter " + JSON.stringify(result.myFilterCountryId));
+        console.log("getter2 " + savedFilterCountryId);
+        //return savedFilterCountryId;
+        //asyncSetter(savedFilterCountryId);
+        sfcID = result.myFilterCountryId;
+        console.log("sfcID " + sfcID);
+        deferred.resolve(sfcID);
+    });
+    return deferred.promise();
+}
+
+
+// Function for making CORS requests to ArcGIS Online
 function makeRequest(method, url, async, readyStateHandler) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, url, async);
@@ -43,8 +81,16 @@ function makeRequest(method, url, async, readyStateHandler) {
     xhr.send();
 }
 
-// Randomly get a location from the feature service
-function randomise() {    
+// Function to randomnly get a location from the feature service
+function randomise() {
+
+    // Async call to get country ID 
+    restoreOptions().done(function (callback) {
+        console.log("sfcID 2 " + callback);
+
+        //ToDo put the rest of randomise() inside here 
+    
+
     var queryPart = "/query?geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=" + locationField + "%2C+" + uniqueIdField + "&returnGeometry=false&f=pjson";
     var where;
     // For testing, you can append ?objectID to the app's URL to test specific locations
@@ -63,30 +109,36 @@ function randomise() {
         makeRequest("GET", servicerUrl + queryPart + "&returnExtentOnly=true&objectIds=" + randomFeature[uniqueIdField], true, function (resp) {
             createMap(resp.extent);
         });
+    });
     }); 
 }
 
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
 function reverseGeocode(lat, lng, elementClassName) {
+    console.log("reverseGeocode");
     var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
     makeRequest("GET", requestUrl, true, function (resp) {
         // Only update the view to the user if the home button has not been recently pressed.
         // Given the asynchronous nature of the request, without this there could be instances
         // after the home button is pressed that the address information from an
         // earlier map move event is incorrectly displayed.
+        console.log("makerequest");
         if (homeButtonPressed == false) {
+            console.log("homebutton = false");
             if (!resp.error) {
                 var address = resp.address.Address;
                 var city = resp.address.City;
                 var country = resp.address.CountryCode;
                 if (address != null) {
                     document.getElementsByClassName(elementClassName)[0].innerHTML = address + ', ' + city + ', ' + country;
+                    console.log("write address");
                 } else {
                     document.getElementsByClassName(elementClassName)[0].innerHTML = '';
                 }
             } else {
                 document.getElementsByClassName(elementClassName)[0].innerHTML = '';
+                console.log("else");
             }
         };
     });
@@ -137,11 +189,34 @@ function createMap(extent) {
             homeButtonPressed = false;
         }, 3000);
     }).addTo(map);
+
+    // Double-click event for selecting filter by country
+    // ToDo: 
+    countriesWithContent.on('dblclick', function (e) {
+        if (filterButtonPressed == true) {
+            countriesWithContent.query().intersects(e.latlng).ids(function (error, ids) {
+                console.log(ids[0].toString());
+                chrome.storage.local.set({
+                    "myFilterCountryId": ids[0].toString()
+                });
+                console.log("storage " + JSON.stringify(chrome.storage));
+                filterCountryIds.push(ids[0]);
+                console.log(filterCountryIds);
+                map.removeLayer(basemapLayer);
+                map.removeLayer(countriesWithContent);
+                // delete ids;
+                filterButtonPressed = false;
+                // filter();
+                map.doubleClickZoom.enable();
+            });
+
+        }
+    });
 }
 
 // Update the latitude and longtude values for the user
 function updateLatLng(lat, lng) {
-    document.getElementsByClassName("location-extent")[0].innerHTML = lat.toFixed(4) + ', ' + lng.toFixed(4);
+    document.getElementsByClassName("location-extent")[0].innerHTML = lat.toFixed(4) + ', ' + lng.toFixed(4);;
 };
 
 // Update the overview map
@@ -162,6 +237,9 @@ function updateOverviewMap(lat, lng) {
 };
 
 // Validate input from HTML form 
+
+document.getElementById('details-form-submit-button').addEventListener('click', validateForm, false);
+
 function validateForm() {
     // ToDo: review whether plugin is necessary, update when input schema confirmed 
     $('#details-form').validate({ // initialize the plugin
@@ -192,6 +270,9 @@ function validateForm() {
 }
 
 // Hide input form 
+
+document.getElementById('details-form-cancel-button').addEventListener('click', hideForm, false);
+
 function hideForm() {
     $(".details-form-div").hide();
     document.getElementById("details-form").reset();
@@ -205,6 +286,9 @@ function hideShare() {
 };
 
 // Hide save form
+
+document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
+
 function hideSave() {
     $("#display-screenshot-div").hide();
     saveButtonPressed = false;
@@ -217,7 +301,6 @@ function getExtent() {
     ymin = map.getBounds().getSouthWest().lat;
     ymax = map.getBounds().getNorthEast().lat;
     xymean = map.getCenter();
-
     return [xmin, xmax, ymin, ymax, xymean];
 }
 
@@ -225,13 +308,9 @@ function getExtent() {
 function getShareUrl() {
     bbox = getExtent();
     shareUrl = "http://techresearch.maps.arcgis.com/apps/Minimalist/index.html?appid=80c7439232b64a079c88c64d4f52ce22&extent=" + bbox[0] + "," + bbox[2] + "," + bbox[1] + "," + bbox[3] + ",4326";
-
     return shareUrl;
 };
 
-
-// Send current extent to suggestions service
-// jQuery (?)
 function writeExtent() {
     // Get variables representing screen dimensions 
     xmin = map.getBounds().getSouthWest().lng;
@@ -243,6 +322,61 @@ function writeExtent() {
     var firstName = $('#details-form').find('input[name="firstName"]').val()
     var lastName = $('#details-form').find('input[name="lastName"]').val()
     var email = $('#details-form').find('input[name="email"]').val()
+    // Below code uses JQuery/Ajax to create feature 
+    // params must be string  for this to work
+    params = [{
+        "geometry": {
+            "hasZ": false,
+            "hasM": false,
+            "rings": [[
+                [10.0, 10.0],
+                [10.0, 0.0],
+                [0.0, 0.0],
+                [0.0, 10.0],
+                [10.0, 10.0]
+            ]],
+            "spatialReference": {
+                "wkid": 3857
+            }
+        },
+        "attributes": {
+        }
+    }];
+    postData =
+        {
+            "f": "json",
+            "features": [{
+                "geometry": {
+                    "hasZ": false,
+                    "hasM": false,
+                    "rings": [[
+                        [xmax, ymax],
+                        [xmax, ymin],
+                        [xmin, ymin],
+                        [xmin, ymax],
+                        [xmax, ymax]
+                    ]],
+                    "spatialReference": {
+                        "wkid": 3857
+                    }
+                },
+                "attributes": {
+                }
+            }]
+        };
+    postData2 =
+        '{"f": "json","features": [{"geometry": {"hasZ": false,"hasM": false,"rings": [[['+xmax+', '+ymax+'],['+xmax+', '+ymin+'],['+xmin+', '+ymin+'],['+xmin+', '+ymax+'],['+xmax+', '+ymax+']]],"spatialReference": {"wkid": 3857}},"attributes": {}}]}';
+    // ToDo: make AJAX work or fix leaflet 
+    // esri-leaflet.min.js:93 Uncaught TypeError: Cannot read property 'objectIdField' of nullerror 
+    $.ajax({
+        type: "POST",
+        url: suggestionsService + "/addFeatures",
+        data: decodeURIComponent($.param(postData.toString())),
+        dataType: "json"
+    }).done(function () {
+        // this is the leaderboard
+        // ?? 
+    });
     // Use Esri leaflet to create new features 
     var service = L.esri.featureLayer({
         url: suggestionsService + "/addFeatures"
@@ -263,7 +397,7 @@ function writeExtent() {
         // Place name 
         // Email address (?)
         // Get country/location based on extent or centroid rather than user input - or do when processing 
-        properties: { 
+        properties: {
             "Location_Name": placeName,
             "Status": 1,
             "Status_String": "Live",
@@ -283,18 +417,40 @@ function writeExtent() {
     extentButtonPressed = false;
     hideForm();
     delete placeName;
-
     return [xmin, xmax, ymin, ymax];
 };
 
 // Generate sharing URL and reveal HTML linking to/copying it 
+
+document.getElementById('share-button').addEventListener('click', shareExtent, false);
+
+
+
 function shareExtent() {
+    // ToDo: rewrite to remove inline js from html
+    console.log("shareExtent()");
     if (shareButtonPressed == true) {
         hideShare();
         return
     }
     shareButtonPressed = true;
     shareUrl = getShareUrl();
+
+    /*
+    shareUrlHtml = '<a onClick="copyUrlToClipboard()">Copy</a>';
+    viewUrlHTML = '<a href="' + shareUrl + '" target="_blank" onClick="hideShare()">View</a>';
+    
+    $("#share-view").empty();
+    $("#share-copy").empty();
+
+    $("#share-copy").append(shareUrlHtml);
+    $("#share-view").append(viewUrlHTML);
+    
+    $("#share-view").on('click', function () {
+        window.location = viewUrl;
+    }).show();
+    $("#share-copy").show();
+    */
     $(".share-url-div").show();
     $("#share-copy").on('click', function () {
         copyUrlToClipboard();
@@ -304,6 +460,7 @@ function shareExtent() {
         hideShare();
     });
 };
+
 
 function copyUrlToClipboard() {
     shareUrl = getShareUrl();
@@ -324,9 +481,43 @@ $.fn.isOnScreen = function () {
     var bounds = this.offset();
     bounds.right = bounds.left + this.outerWidth();
     bounds.bottom = bounds.top + this.outerHeight();
-
     return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
 };
+
+document.getElementById('save-button').addEventListener('click', saveMapAsImage, false);
+
+function saveMapAsImage() {
+    console.log("saveMapAsImage()");
+    //saveButtonPressed = true; 
+    if (saveButtonPressed == false) {
+        $("#display-screenshot-div").show();
+        saveButtonPressed = true;
+    } else {
+        $("#display-screenshot-div").hide();
+        saveButtonPressed = false;
+    }
+    // $("#display-screenshot-div").show();
+    // Array to be populated with visible map tile URLs 
+    var imgSrcArray = [];
+    // Loop through images in relevant div
+    $('.leaflet-tile-container.leaflet-zoom-animated img').each(function () {
+        // Add the relevant World Imagery tiles (otherwise overview tiles are included)
+        // Also filter out images that have been loaded and scrolled past 
+        if ($(this).attr('src').includes("World_Imagery") && ($(this).isOnScreen())) {
+            imgSrcArray.push($(this).attr('src'));
+        }
+    });
+
+    // ToDo: Should this be in screenshot.js? 
+    getTotalRowAndColResults = getTotalRowAndColFromArray(imgSrcArray);
+    maxMinIndexResults = maxMinIndexGetter(getTotalRowAndColResults[1], getTotalRowAndColResults[3]);
+    columnAndRowResults = columnAndRowArrays(getTotalRowAndColResults[1], getTotalRowAndColResults[0]);
+    parseAndPutResults = parseAndPutInOrder(imgSrcArray, columnAndRowResults[0], columnAndRowResults[1]);
+    getViewPortResults = getViewPortTopLeftInFirstTile(parseAndPutResults[0])
+    draw4(parseAndPutResults[1], columnAndRowResults[1], parseAndPutResults[0], getViewPortResults[0], getViewPortResults[1]);
+};
+
+document.getElementById('show-form').addEventListener('click', showForm, false);
 
 function showForm() {
     // Click again to close 
@@ -338,24 +529,39 @@ function showForm() {
     }
     extentButtonPressed = true; 
     xycenter = map.getBounds().getCenter();
+    console.log(xycenter);
     reverseGeocode(xycenter.lat, xycenter.lng, "place-name-input");
     $(".details-form-div").show();
 };
 
+document.getElementById('filter').addEventListener('click', filter, false);
 
-// Event listeners ----------------------------------------------------------------------------- //
-// 
+function filter() {
+    console.log("filter()");
+    // call functions from filter.js 
+    if (filterButtonPressed == false) {
+        console.log("if false");
+        map.doubleClickZoom.disable();
+        basemapLayer = L.esri.basemapLayer('ImageryLabels').addTo(map); 
+        // ToDo: Point to own hosted Countries layer, set e.g. where "approvedExtents > 5"  
+        countriesWithContent.addTo(map);
+        //map.removeLayer('Imagery');
+        filterButtonPressed = true;
+        
+        
+    } else {
+        //L.esri.basemapLayer('Imagery').addTo(map);
+        console.log("if true"); 
+        map.doubleClickZoom.enable();
+        //L.esri.basemapLayer('ImageryLabels').removeLayer;
+        map.removeLayer(basemapLayer);
+        map.removeLayer(countriesWithContent);
+        filterButtonPressed = false;
+        
+    }
+    
+}
 
-document.getElementById('show-form').addEventListener('click', showForm, false);
-document.getElementById('details-form-submit-button').addEventListener('click', validateForm, false);
-document.getElementById('details-form-cancel-button').addEventListener('click', hideForm, false);
-document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
-document.getElementById('share-button').addEventListener('click', shareExtent, false);
-document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // screenshot.js
-
-
-// Logic --------------------------------------------------------------------------------------- //
-// 
-
-// Function call to start the application
+//Function call to start the application
 randomise();
+//restoreOptions();
