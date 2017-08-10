@@ -1,69 +1,69 @@
 ﻿<html lang="en">
-	<head>
-		<title>New Tab</title>
-		<meta charset="UTF-8">
-		<meta content="" name="description">
-		<meta content="" name="author">
-		<meta content="3 days" name="revisit-after">
-
-		<link href="styles/common.css" rel="stylesheet" />
-        <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script> 
-        <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
-        
-        <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
-        <!-- Added library for form validation ToDo: review whether this can be done natively -->
-        <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
-
-        
-        <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script> 
-        <!-- <script src="scripts/lib/esri-leaflet-2.0.8/dist/esri-leaflet.js"></script> -->
-
-	</head>
-	<body>
-        
-		<div id="overview-map"></div>
-		<div class="location location-name"></div>
-		<div class="location location-extent"></div>
-		<div id="map"></div>
-
-        <!-- Placeholder buttons for new functions -->
-        <div class="button" id="share-button"><p>Share</p></div>
-        <div class="button" id="save-button"><p>Screenshot</p></div>
-        <div class="button" id="show-form"><p>Suggest</p></div>
-
-        <!-- Input form for submitting suggestions -->
-        <div class="details-form-div">
+   <head>
+      <title>New Tab</title>
+      <meta charset="UTF-8">
+      <meta content="" name="description">
+      <meta content="" name="author">
+      <meta content="3 days" name="revisit-after">
+      <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script> 
+      <link href="styles/common.css" rel="stylesheet" />
+      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+      <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
+      <script src="https://use.fontawesome.com/e2338abaf7.js"></script>
+      <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
+      <!-- Added library for form validation ToDo: review whether this can be done natively -->
+      <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
+      <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script> 
+      <!-- <script src="scripts/lib/esri-leaflet-2.0.8/dist/esri-leaflet.js"></script> -->
+   </head>
+   <body>
+      <div id="overview-map"></div>
+      <div id="name" class="location location-name"></div>
+      <div id="latLong" class="location location-extent"></div>
+      <div id="map"></div>
+      <!-- Placeholder buttons for new functions -->
+      <div id="button-group">
+         <div class="button">
+            <i class="fa fa-share-alt" id="share-button"></i>
+         </div>
+         <div class="button">
+            <i class="fa fa-download" id="save-button"></i>
+         </div>
+         <div class="button">
+            <i class="fa fa-camera" id="show-form"></i>
+         </div>
+      </div>
+      <!-- Input form for submitting suggestions -->
+      <div id="modal" class="modal">
+         <div class="modal-content">
+            <span class="close">&times;</span>
+            <br>
             <form id="details-form">
-                Where is this? <input type="text" class="place-name-input" name="placeName" required><br>
-                First name:    <input type="text" name="firstName" placeholder="Optional"><br>
-                Last name:     <input type="text" name="lastName" placeholder="Optional"><br>
-                Email:         <input type="email" name="email" placeholder="Optional"><br>
-                <input type="Submit" id="details-form-submit-button" value="Submit">
-                <input type="button" id="details-form-cancel-button" value="Cancel">
+               <label for="location">Location</label>
+               <input type="text" id="location" name="placeName" placeholder="e.g. London Bridge" required>
+               <label for="fname">Your Name</label>
+               <input type="text" id="fname" name="firstName" placeholder="Optional">
+               <input class="option-buttons" type="Submit" id="details-form-submit-button" value="Submit">
             </form>
-        </div>
-
-        <!-- Div for opening/copying sharing url -->
-        <div class="share-url-div">
-            <div id="share-view">View</div>
-            <div id="share-copy">Copy</div>
-        </div>
-
-
-
-        <!-- Div for displaying stitched image --> 
-        <div id="display-screenshot-div" <!--onclick="hideSave()"-->
-            <!-- Canvas for stitching and exporting map images -->
-            <canvas id="canvas">
-                Sorry - this feature isn't supported by your browser.
-            </canvas>
-        </div>
-
-
-        <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
-        <script src="scripts/screenshot.js"></script>
-        <script src="scripts/common.js"></script>
-
-	</body>
-
+         </div>
+      </div>
+      <!-- Div for opening/copying sharing url -->
+      <div class="modal share-url-div">
+         <div class="modal-content">
+         <div id="share-view">View</div>
+         <div id="share-copy">Copy</div>
+          </div>
+      </div>
+      <!-- Div for displaying stitched image --> 
+      <div id="display-screenshot-div">
+         <!--onclick="hideSave()"-->
+         <!-- Canvas for stitching and exporting map images -->
+         <canvas id="canvas">
+            Sorry - this feature isn't supported by your browser.
+         </canvas>
+      </div>
+      <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
+      <script src="scripts/screenshot.js"></script>
+      <script src="scripts/common.js"></script>
+   </body>
 </html>

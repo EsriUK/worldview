@@ -12,7 +12,8 @@ var saveButtonPressed = false;
 
 // URL to publicly-shared polygon feature service containing areas of interest
 var servicerUrl = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
-
+//URL to current AOIs
+//var serviceUrl = "http://services.arcgis.com/WQ9KVmV6xGGMnCiQ/arcgis/rest/services/ChromeExtension/FeatureServer/0";
 // URL to user-suggested areas of interest
 // ToDo: new, separate service 
 var suggestionsService = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
@@ -110,7 +111,7 @@ function createMap(extent) {
         doubleClickZoom: false,
         scrollWheelZoom: false
     }).setView(bounds.getCenter(), 2);
-    L.esri.basemapLayer('DarkGray').addTo(overviewMap);
+    L.esri.basemapLayer('Imagery').addTo(overviewMap);
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
@@ -267,9 +268,9 @@ function writeExtent() {
             "Location_Name": placeName,
             "Status": 1,
             "Status_String": "Live",
-            "firstName": firstName,
-            "lastName": lastName,
-            "email": email
+            "firstName": firstName
+            //"lastName": lastName,
+            //"email": email
         }
     };
     service.addFeature(feature, function (error, response) {
@@ -343,12 +344,55 @@ function showForm() {
 };
 
 
+
+        //code for modal - suggestions box
+
+        // Get the modal
+        var modal = document.getElementById('modal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("show-form");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks on the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+            $("#button-group").hide();
+            $("#name").hide();
+            $("#latLong").hide();
+            $("div.sticky:not([id])").hide();
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+            $("#button-group").show();
+            $("#name").show();
+            $("#latLong").show();
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                $("#button-group").show();
+                $("#name").show();
+                $("#latLong").show();
+            }
+        }
+
+
+
+
+
 // Event listeners ----------------------------------------------------------------------------- //
 // 
 
 document.getElementById('show-form').addEventListener('click', showForm, false);
 document.getElementById('details-form-submit-button').addEventListener('click', validateForm, false);
-document.getElementById('details-form-cancel-button').addEventListener('click', hideForm, false);
+//document.getElementById('details-form-cancel-button').addEventListener('click', hideForm, false);
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 document.getElementById('share-button').addEventListener('click', shareExtent, false);
 document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // screenshot.js
