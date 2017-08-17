@@ -39,20 +39,20 @@
             <span class="close">&times;</span>
             <br>
             <form id="details-form">
-               <label for="location">Location</label>
+               <label for="location">Location name</label>
                <input type="text" id="location" name="placeName" placeholder="e.g. London Bridge" required>
-               <label for="fname">Your Name</label>
-               <input type="text" id="fname" name="firstName" placeholder="Optional">
                <input class="option-buttons" type="Submit" id="details-form-submit-button" value="Submit">
             </form>
          </div>
-      </div>
-      <!-- Div for opening/copying sharing url -->
-      <div class="modal share-url-div">
+       </div>
+      <!-- Div for opening/copying sharing url --> 
+       <div id="modalShare" class="modalShare">
          <div class="modal-content">
-         <div id="share-view">View</div>
-         <div id="share-copy">Copy</div>
-          </div>
+             <span class="close">&times;</span>
+             <br>
+             <div id="share-view" class="share">View</div>
+             <div id="share-copy" class="share">Copy</div>
+         </div>
       </div>
       <!-- Div for displaying stitched image --> 
       <div id="display-screenshot-div">

@@ -76,7 +76,7 @@ function reverseGeocode(lat, lng, elementClassName) {
         // Given the asynchronous nature of the request, without this there could be instances
         // after the home button is pressed that the address information from an
         // earlier map move event is incorrectly displayed.
-        if (homeButtonPressed == false) {
+        /*if (homeButtonPressed == false) {
             if (!resp.error) {
                 var address = resp.address.Address;
                 var city = resp.address.City;
@@ -89,7 +89,7 @@ function reverseGeocode(lat, lng, elementClassName) {
             } else {
                 document.getElementsByClassName(elementClassName)[0].innerHTML = '';
             }
-        };
+        };*/
     });
 }
 
@@ -128,7 +128,7 @@ function createMap(extent) {
         }
     });
     // Use easyButton Leaflet plugin to display a home button
-    L.easyButton('<span class="home"></span>', function () {
+    /*L.easyButton('<span class="home"></span>', function () {
         homeButtonPressed = true;
         map.fitBounds(bounds);
         document.getElementsByClassName("location-name")[0].innerHTML = locationName;
@@ -137,7 +137,7 @@ function createMap(extent) {
         setTimeout(function () {
             homeButtonPressed = false;
         }, 3000);
-    }).addTo(map);
+    }).addTo(map);*/
 }
 
 // Update the latitude and longtude values for the user
@@ -170,24 +170,25 @@ function validateForm() {
             placeName: {
                 required: true,
                 maxlength: 250
-            },
-            firstName: {
-                required: false,
-                maxlength: 250
-            },
-            lastName: {
-                required: false,
-                maxlength: 250
-            },
-            email: {
-                required: false,
-                email: true
-            }
+            }//,
+            //firstName: {
+            //    required: false,
+            //    maxlength: 250
+            //},
+            //lastName: {
+            //    required: false,
+            //    maxlength: 250
+            //},
+            //email: {
+            //    required: false,
+            //    email: true
+            //}
         },
         submitHandler: function (form) { // for demo
             alert('valid form submitted'); // for demo
             writeExtent();
-            return false; // for demo            
+            return false; // for demo  
+            //console.log('success');
         }
     });
 }
@@ -241,9 +242,9 @@ function writeExtent() {
     ymax = map.getBounds().getNorthEast().lat;
     // Get form values to pass as attributes
     var placeName = $('#details-form').find('input[name="placeName"]').val()
-    var firstName = $('#details-form').find('input[name="firstName"]').val()
-    var lastName = $('#details-form').find('input[name="lastName"]').val()
-    var email = $('#details-form').find('input[name="email"]').val()
+    //var firstName = $('#details-form').find('input[name="firstName"]').val()
+    //var lastName = $('#details-form').find('input[name="lastName"]').val()
+    //var email = $('#details-form').find('input[name="email"]').val()
     // Use Esri leaflet to create new features 
     var service = L.esri.featureLayer({
         url: suggestionsService + "/addFeatures"
@@ -268,7 +269,7 @@ function writeExtent() {
             "Location_Name": placeName,
             "Status": 1,
             "Status_String": "Live",
-            "firstName": firstName
+            //"firstName": firstName
             //"lastName": lastName,
             //"email": email
         }
@@ -345,6 +346,7 @@ function showForm() {
 
 
 
+
         //code for modal - suggestions box
 
         // Get the modal
@@ -353,24 +355,38 @@ function showForm() {
         // Get the button that opens the modal
         var btn = document.getElementById("show-form");
 
+        // Get the button that opens the modal
+        var btn2 = document.getElementById("share-button");
+
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
 
         // When the user clicks on the button, open the modal 
         btn.onclick = function() {
             modal.style.display = "block";
-            $("#button-group").hide();
-            $("#name").hide();
-            $("#latLong").hide();
-            $("div.sticky:not([id])").hide();
+            modalShare.style.display = "none";
+            $("#button-group").fadeOut();
+            $(".leaflet-control-zoom").fadeOut();
+            $(".leaflet-bottom").fadeOut();
+            $("#name").fadeOut();
+            $("#latLong").fadeOut();
+            $("div.sticky:not([id])").fadeOut();
+        }
+        
+        
+        // When the user clicks on the button, open the modal 
+        btn2.onclick = function() {
+            modalShare.style.display = "block";
         }
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function() {
             modal.style.display = "none";
-            $("#button-group").show();
-            $("#name").show();
-            $("#latLong").show();
+            $("#button-group").fadeIn();
+            $("#name").fadeIn();
+            $("#latLong").fadeIn();
+            $(".leaflet-control-zoom").fadeIn();
+            $(".leaflet-bottom").fadeIn();
         }
 
         // When the user clicks anywhere outside of the modal, close it
@@ -380,6 +396,9 @@ function showForm() {
                 $("#button-group").show();
                 $("#name").show();
                 $("#latLong").show();
+            }
+            if (event.target == modalShare) {
+                modalShare.style.display = "none";
             }
         }
 
