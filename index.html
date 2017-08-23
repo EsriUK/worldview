@@ -1,51 +1,55 @@
-﻿<html lang="en">
+<html lang="en">
    <head>
       <title>New Tab</title>
       <meta charset="UTF-8">
       <meta content="" name="description">
       <meta content="" name="author">
       <meta content="3 days" name="revisit-after">
-      <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script> 
+      <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script>
       <link href="styles/common.css" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
       <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
-      <script src="https://use.fontawesome.com/e2338abaf7.js"></script>
+      <script src="scripts/lib/fontsawesome/e2338abaf7.js"></script>
       <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
       <!-- Added library for form validation ToDo: review whether this can be done natively -->
       <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
-      <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script> 
+      <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script>
       <!-- <script src="scripts/lib/esri-leaflet-2.0.8/dist/esri-leaflet.js"></script> -->
    </head>
    <body>
       <div id="overview-map"></div>
       <div id="name" class="location location-name"></div>
-      <div id="latLong" class="location location-extent"></div>
+      <!-- <div id="latLong" class="location location-extent"></div> -->
       <div id="map"></div>
       <!-- Placeholder buttons for new functions -->
       <div id="button-group">
          <div class="button">
             <i class="fa fa-share-alt" id="share-button"></i>
+            <span class="tooltiptext">Open sharing link</span>
          </div>
          <div class="button">
             <i class="fa fa-download" id="save-button"></i>
+            <span class="tooltiptext">Create screenshot</span>
          </div>
          <div class="button">
             <i class="fa fa-camera" id="show-form"></i>
+            <span class="tooltiptext">Add this location</span>
          </div>
       </div>
+      <div id="hidden-button-group"></div>
       <!-- Input form for submitting suggestions -->
       <div id="modal" class="modal">
          <div class="modal-content">
             <span class="close">&times;</span>
             <br>
             <form id="details-form">
-               <label for="location">Location name</label>
+               <label for="location">Location name (e.g. 'London Bridge')</label>
                <input type="text" id="location" name="placeName" placeholder="e.g. London Bridge" required>
                <input class="option-buttons" type="Submit" id="details-form-submit-button" value="Submit">
             </form>
          </div>
        </div>
-      <!-- Div for opening/copying sharing url --> 
+      <!-- Div for opening/copying sharing url -->
        <div id="modalShare" class="modalShare">
          <div class="modal-content">
              <span class="close">&times;</span>
@@ -54,13 +58,21 @@
              <div id="share-copy" class="share">Copy</div>
          </div>
       </div>
-      <!-- Div for displaying stitched image --> 
+      <!-- Div for displaying stitched image -->
       <div id="display-screenshot-div">
          <!--onclick="hideSave()"-->
          <!-- Canvas for stitching and exporting map images -->
          <canvas id="canvas">
             Sorry - this feature isn't supported by your browser.
          </canvas>
+         <div id="canvas-beneath">
+           <div id="canvas-caption-div">
+             <p>Right click image to save...</p>
+           </div>
+           <div id="canvas-close">
+             <span class="close">&times;</span>
+           </div>
+         </div>
       </div>
       <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
       <script src="scripts/screenshot.js"></script>

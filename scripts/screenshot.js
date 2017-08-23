@@ -1,21 +1,21 @@
-// Identify the visible tiles and merge them into a single image 
-
+// Identify the visible tiles and merge them into a single image
 
 // Functions ----------------------------------------------------------------------------------- //
 //
 
-// Return array of all tiles visible in viewport 
+// Return array of all tiles visible in viewport
 // jQuery
 function getTileUrls() {
     var tiles = [];
     // Loop through images in relevant div
-    $('.leaflet-tile-container.leaflet-zoom-animated img').each(function () {
+    $('.leaflet-tile-container.leaflet-zoom-animated img').each(function() {
         // Add the relevant World Imagery tiles (otherwise overview tiles are included)
-        // Also filter out images that have been loaded and scrolled past 
+        // Also filter out images that have been loaded and scrolled past
         if ($(this).attr('src').includes("World_Imagery") && ($(this).isOnScreen())) {
             tiles.push($(this).attr('src'));
         }
     });
+    tiles.splice(0, 1); // First tile is at the wrong scale level ToDo find out why
 
     return tiles;
 }
@@ -29,7 +29,7 @@ function getRowAndColFromUrl(url) {
     return [colVal, rowVal];
 }
 
-// Create array of x-indices for every map tile on screen 
+// Create array of x-indices for every map tile on screen
 function getXArray(tiles) {
     var xArray = [];
     // Iterate through file URLs and parse column values
@@ -41,7 +41,7 @@ function getXArray(tiles) {
     return xArray;
 }
 
-// Create array of y-indices for every map tile on screen 
+// Create array of y-indices for every map tile on screen
 function getYArray(tiles) {
     var yArray = [];
     // Iterate through file URLs and parse row values
@@ -55,24 +55,24 @@ function getYArray(tiles) {
 
 // Function to filter duplicate values and order array
 function filterAndOrderArray(array) {
-    var unique = array.filter(function (elem, index, self) {
+    var unique = array.filter(function(elem, index, self) {
         return index == self.indexOf(elem);
     });
-    uniqueSorted = unique.sort(function (a, b) {
+    uniqueSorted = unique.sort(function(a, b) {
         return a - b
     });
 
     return uniqueSorted;
 }
 
-// Get total number of columns on screen 
+// Get total number of columns on screen
 function getNumCols(xArray) {
     var numOfCols = filterAndOrderArray(xArray).length;
 
     return numOfCols;
 }
 
-// Get total number of rows on screen 
+// Get total number of rows on screen
 function getNumRows(yArray) {
     var numOfRows = Math.max.apply(null, yArray) - Math.min.apply(null, yArray) + 1;
 
@@ -149,7 +149,7 @@ function parseAndPutInOrder(imgSrcArray, xArray, reOrderedColArray, sortedRowArr
     orderedArray = [];
     if (reOrderedColArray == null) {
         reOrderedColArray = filterAndOrderArray(xArray);
-        };
+    };
     for (j = 0; j < reOrderedColArray.length; j++) {
         orderedArray.push([]);
     }
@@ -165,19 +165,18 @@ function parseAndPutInOrder(imgSrcArray, xArray, reOrderedColArray, sortedRowArr
     return [orderedArray, reOrderedColArray];
 }
 
-// Get coordinate of viewport top left in first tile 
+// Get coordinate of viewport top left in first tile
 // jQuery
 function getViewportOffset(orderedArray) {
     // This can be used to clip the canvas to get the exact viewport
-    // Clip can be a final stage, or achieved when defining canvas 
-    // dimensions (i.e. screen.width x screen.height) and x y location of 
-    // map tile imgs 
+    // Clip can be a final stage, or achieved when defining canvas
+    // dimensions (i.e. screen.width x screen.height) and x y location of
+    // map tile imgs
     // http://stackoverflow.com/questions/17067061/calculate-div-overlap-area-and-position
     // http://stackoverflow.com/questions/27146403/efficiently-get-an-elements-visible-area-coordinates
     // http://stackoverflow.com/questions/1960082/position-of-div-in-relation-to-the-top-of-the-viewport
     var img = new Image();
-    img.onload = function () {
-    }
+    img.onload = function() {}
     var x = $("img[src$='" + orderedArray[0][0] + "']");
     var pos = x.position();
     var allImages = document.getElementsByTagName("img");
@@ -195,7 +194,7 @@ function getViewportOffset(orderedArray) {
 }
 
 function drawScreenShot(normalisedTileArray, viewportOffset) {
-    // Normalised tile data 
+    // Normalised tile data
     var orderedArray = normalisedTileArray[0][0];
     var reOrderedColArray = normalisedTileArray[0][1];
     var sortedRowArray = normalisedTileArray[1];
@@ -204,23 +203,23 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
     var topOffset = viewportOffset[1];
     var parsedLeftOffset = parseInt(leftOffset);
     var parsedTopOffset = parseInt(topOffset);
-    // HTML canvas element handler 
+    // HTML canvas element handler
     var canvas = document.getElementById("canvas");
     var context = canvas.getContext("2d");
-    // Map tile dimensions 
-    mapTilePixels = 256;  // Should be dynamic 
+    // Map tile dimensions
+    mapTilePixels = 256; // Should be dynamic
     context.canvas.width = screen.width;
     context.canvas.height = screen.height;
-    // Create blank canvas 
+    // Create blank canvas
     context.clearRect(0, 0, canvas.width, canvas.height);
-    // Iterate normalised TileArray and arrange images on canvas 
+    // Iterate normalised TileArray and arrange images on canvas
     for (var i = 0; i < reOrderedColArray.length; i++) {
         for (var j = 0; j < sortedRowArray.length; j++) {
             var imageObj = new Image();
             imageObj.src = orderedArray[i][j]; // << added
             imageObj.setAtX = (i * mapTilePixels) + parsedLeftOffset;
             imageObj.setAtY = (j * mapTilePixels) + (parsedTopOffset / 2);
-            imageObj.onload = function () {
+            imageObj.onload = function() {
                 context.drawImage(this, this.setAtX, this.setAtY);
             };
         }
@@ -233,44 +232,44 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
 
 // Logic --------------------------------------------------------------------------------------- //
 
-// Get drawing positions from tile URLs, check for date line special case 
+// Get drawing positions from tile URLs, check for date line special case
 function normaliseDateLine(tiles) {
-    // Get dimensions and x, y indices of all visible map tiles 
+    // Get dimensions and x, y indices of all visible map tiles
     var xArray = getXArray(tiles);
     var yArray = getYArray(tiles);
     var numCols = getNumCols(xArray);
     var numRows = getNumRows(yArray);
 
-    // Sort x, y indices into final drawing order 
+    // Sort x, y indices into final drawing order
     var reOrderedColArray = maxMinIndexGetter(xArray, numCols)[3];
     var sortedRowArray = maxMinIndexGetter(yArray, numRows)[2];
-    var ordered2dArray = parseAndPutInOrder(tiles, xArray, reOrderedColArray, sortedRowArray); 
+    var ordered2dArray = parseAndPutInOrder(tiles, xArray, reOrderedColArray, sortedRowArray);
 
     return [ordered2dArray, sortedRowArray];
 }
 
-// Gets URLs of all visible map tiles and draws them to a single canvas element 
+// Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
 function makeScreenshot() {
-
-    // Toggle button visibility 
+    // Toggle button visibility
+    hideStandardUiElements();
     if (saveButtonPressed == false) {
-        $("#display-screenshot-div").show();
+        $("#display-screenshot-div").fadeIn();
         saveButtonPressed = true;
     } else {
-        $("#display-screenshot-div").hide();
+        $("#display-screenshot-div").fadeOut();
         saveButtonPressed = false;
     }
 
-    // Array of visible map tile URLs 
+    // Array of visible map tile URLs
     var tiles = getTileUrls();
 
-    // Parse tile location data and applies correction if viewport crosses the date line 
+    // Parse tile location data and applies correction if viewport crosses the date line
     var normalisedTileArray = normaliseDateLine(tiles);
 
-    // Measures distance between top left corner of viewport, and top left corner of top left tile 
+    // Measures distance between top left corner of viewport, and top left corner of top left tile
     var viewportOffset = getViewportOffset(orderedArray);
 
-    // Fill canvas with tile images and reveal it 
+    // Fill canvas with tile images and reveal it
     drawScreenShot(normalisedTileArray, viewportOffset);
 };

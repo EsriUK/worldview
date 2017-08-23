@@ -30,7 +30,7 @@ html, body, #map {
 }
 
 .location {
-	bottom: 45px;
+	bottom: 20px; // was 45
     left: 135px;
 	color: #fff;
 	font-size: 1rem;
@@ -69,10 +69,9 @@ html, body, #map {
     color: black
 }
 
-
 .button,
 .location {
-    position: absolute;
+  position: absolute;
 	z-index: 10;
 }
 
@@ -114,32 +113,46 @@ html, body, #map {
     z-index: 9;
 }
 
-
-
-
-#canvas {
-    width: 50%;
-    height: 50%;
-}
 #display-screenshot-div {
+    display: none;
     position: absolute;
     color: #fff;
+    background-color: rgba(0, 0, 0, 0.65);
     top: 50%;
     left: 50%;
-    width: 50%;
-    height: 50%;
+    width: 60%;
+    /*height: 75%;*/
     padding: 15px;
     -ms-transform: translateX(-50%) translateY(-50%);
     -webkit-transform: translate(-50%,-50%);
     transform: translate(-50%,-50%);
+    border-radius: 1em;
+    clear: both;
 }
-
-
-
-
-
-
-
+#canvas {
+    width: 100%;
+    /*height: 90%;*/
+}
+#canvas-beneath {
+  float: left;
+}
+#canvas-caption-div {
+  position: absolute;
+  /* left: 50%; */
+  bottom: 0;
+  font-size: 30px;
+  float: left;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+#canvas-close {
+    position: absolute;
+    height: 25px;
+    align: right;
+    right: 15px;
+    bottom: 40px;
+}
 
 /* The Modal (background) */
 .modal {
@@ -179,7 +192,7 @@ html, body, #map {
     font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     padding-bottom: 0px;
-    
+
 }
 /* The Close Button */
 .close {
@@ -195,8 +208,6 @@ html, body, #map {
     text-decoration: none;
     cursor: pointer;
 }
-
-
 
 input[type=text], input[type=email], select {
     width: 100%;
@@ -224,12 +235,9 @@ label {
     font-size: 18px;
 }
 
-
-
 #overview-map {
     display: none;
 }
-
 
 .leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale {
     font-size: 11px;
@@ -301,12 +309,18 @@ label {
     line-height: 32px;
 }
 
-
-
+#hidden-button-group {
+    top: 15;
+    right: 15;
+    height: 150px;
+    width: 50px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0);
+}
 #button-group {
     top: 15;
     right: 15;
-    height: auto;
+    height: 150px;
     width: 50px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.65);
@@ -324,14 +338,48 @@ label {
 .button:hover {
     color: #a1a1a1;
 }
+/*.button {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    align: right;
+}*/
+
+.button .tooltiptext {
+    visibility: hidden;
+    display: inline-block;
+    /* width: 120px; */
+    height: 46px;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 0%;
+    right: 125%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.button .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 100%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.button:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
 i {
     margin-top: 13px;
 }
-
-
-
-
-
-
-
-
