@@ -1,17 +1,22 @@
 // Variables ----------------------------------------------------------------------------------- //
 //
-
 // Geographic globals
 var map, overviewMap, locationName, locationPoint, bounds;
 
 // Container for home button status. Initialised as false
 var homeButtonPressed = false;
+
 var extentButtonPressed = false;
+
 var shareButtonPressed = false;
+
 var saveButtonPressed = false;
 
+var currentLocation = "";
+
 // URL to publicly-shared polygon feature service containing areas of interest
-var servicerUrl = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
+var servicerUrl = "https://utility.arcgis.com/usrsvcs/servers/fd092b1add784ab1abbd84e50f18d841/rest/services/Approvals_Test/FeatureServer/0";
+
 // ToDo: new, separate service
 var suggestionsService = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
 
@@ -39,11 +44,11 @@ function makeRequest(method, url, async, readyStateHandler) {
         }
     }
     xhr.send();
-}
+};
 
 // Randomly get a location from the feature service
 function randomise() {
-    var queryPart = "/query?geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=" + locationField + "%2C+" + uniqueIdField + "&returnGeometry=false&f=pjson";
+    var queryPart = "/query?geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=" + locationField + "%2C+" + uniqueIdField + "&returnGeometry=false&outSR=4326&f=pjson";
     var where;
     // For testing, you can append ?objectID to the app's URL to test specific locations
     var objectID = window.location.search.substring(1).split("&")[0];
@@ -61,7 +66,40 @@ function randomise() {
             createMap(resp.extent);
         });
     });
-}
+};
+
+// Perform a geocode to allow user to search locations
+function geocode() {
+    // var deferred = $.Deferred();
+    var searchString = document.getElementById('location-search').value;
+    var requestUrl = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
+    var params = '?SingleLine=' + searchString;
+    var concatUrl = requestUrl + params;
+    // // load icon?
+    // $.ajax(url, {
+    //     data: {
+    //         text: searchString,
+    //         f: 'json',
+    //         outSR:102100,
+    //         maxlocations:6
+    //     },
+    //     dataType: 'json',
+    //     success: this.geocodeResultsHandler ,
+    //     error: this.geocodeError,
+    //     complete: this.geocodeComplete
+    // });
+    // return deferred.promise();
+
+    makeRequest("GET", concatUrl, true, function(resp) {
+        // var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)].attributes;
+        // locationName = randomFeature[locationField];
+        // document.getElementsByClassName("location-name")[0].innerHTML = locationName;
+        // makeRequest("GET", servicerUrl + queryPart + "&returnExtentOnly=true&objectIds=" + randomFeature[uniqueIdField], true, function(resp) {
+        //     createMap(resp.extent);
+        // });
+        // console.log(resp);
+    });
+};
 
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
@@ -75,10 +113,21 @@ function reverseGeocode(lat, lng, elementId) {
         // earlier map move event is incorrectly displayed.
         if (homeButtonPressed == false) {
             if (!resp.error) {
+                console.log("resp:");
+                console.log(resp);
                 var address = resp.address.Address;
+                if (map._zoom <= 15) {
+                  address = "";
+                }
+                if (address == "") {
+                  address = "Somewhere in "
+                }
                 var city = resp.address.City;
+                var region = resp.address.Region;
                 var country = resp.address.CountryCode;
-                deferred.resolve(country);
+                country = getNameFromCode(country, worldCountries); // country-codes.js
+                console.log("country " + country);
+                deferred.resolve([address, city, region, country]);
                 if (address != null) {
                     // document.getElementsByClassName(elementClassName)[0].innerHTML = address + ', ' + city + ', ' + country;
                 } else {
@@ -90,11 +139,30 @@ function reverseGeocode(lat, lng, elementId) {
         };
         var suggestionString = "";
         var geocodeResult = [address, city, country];
-
         return suggestionString;
     });
 
     return deferred.promise();
+};
+
+// Make geocode result into a friendly string
+// http://www.toptip.ca/2010/02/javascript-trim-leading-or-trailing.html
+function makeReadable(reverseGeocodeData) {
+    locationString = reverseGeocodeData.toString();
+    // Leading & trailing spaces and commas
+    locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
+    // Add space after remaining comma
+    locationString = locationString.split(",").join(", ")
+    console.log(locationString);
+    locationString = locationString.replace(/ ,/g, '');
+    console.log(locationString);
+
+    return locationString;
+};
+
+// Get country name from 3 letter ISO code
+function getCountryName(countryCode) {
+
 }
 
 // Create map and overview maps
@@ -123,16 +191,40 @@ function createMap(extent) {
     map.on("moveend", function(e) {
         $("#name").fadeOut();
         $("#button-group").fadeOut();
+        xycenter = map.getBounds().getCenter();
+        reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+            // document.getElementById("location").value = "Somewhere in " + data;
+            // console.log("reverseGeocode() data = " + data);
+            data = makeReadable(data);
+            currentLocation = data;
+        });
     });
 
     map._layersMinZoom = 4; // Workaround screenshot issue
 
-    $("#hidden-button-group").hover(
+    $("#hidden-button-group").mouseenter(
         function() {
             $("#button-group").fadeIn();
         }
     );
-}
+};
+
+
+// Geocoding test
+
+// // create the geocoding control and add it to the map
+// var searchControl = L.esri.Geocoding.geosearch().addTo(map);
+//
+// // create an empty layer group to store the results and add it to the map
+// var results = L.layerGroup().addTo(map);
+//
+// // listen for the results event and add every result to the map
+// searchControl.on("results", function(data) {
+//     results.clearLayers();
+//     for (var i = data.results.length - 1; i >= 0; i--) {
+//         results.addLayer(L.marker(data.results[i].latlng));
+//     }
+// });
 
 // Update the overview map
 function updateOverviewMap(lat, lng) {
@@ -162,19 +254,19 @@ function validateForm() {
             }
         },
         submitHandler: function(form) { // for demo
-            alert('valid form submitted'); // for demo
+            // console.log('valid form submitted'); // for demo
             writeExtent();
             return false; // for demo
         }
     });
-}
+};
 
 // Hide input form
 function hideForm() {
     $(".details-form-div").hide();
     document.getElementById("details-form").reset();
     extentButtonPressed = false;
-}
+};
 
 // Hide share form
 function hideShare() {
@@ -198,7 +290,7 @@ function getExtent() {
     xymean = map.getCenter();
 
     return [xmin, xmax, ymin, ymax, xymean];
-}
+};
 
 // Concatenate parameterised URL for sharing
 function getShareUrl() {
@@ -209,7 +301,7 @@ function getShareUrl() {
 };
 
 // Send current extent to suggestions service
-// jQuery (?)
+// jQuery
 function writeExtent() {
     // Get variables representing screen dimensions
     xmin = map.getBounds().getSouthWest().lng;
@@ -218,15 +310,12 @@ function writeExtent() {
     ymax = map.getBounds().getNorthEast().lat;
     // Get form values to pass as attributes
     var placeName = $('#details-form').find('input[name="placeName"]').val();
-    // Use Esri leaflet to create new features
-    var service = L.esri.featureLayer({
-        url: suggestionsService + "/addFeatures"
-    });
-    var feature = {
-        type: 'Feature',
-        geometry: {
-            "type": "Polygon",
-            "coordinates": [
+
+    // Use AJAX to create features
+    var url = suggestionsService + "/applyEdits";
+    var json = [{
+        "geometry": {
+            "rings": [
                 [
                     [xmax, ymax],
                     [xmax, ymin],
@@ -234,31 +323,26 @@ function writeExtent() {
                     [xmin, ymax],
                     [xmax, ymax]
                 ]
-            ]
+            ],
+            "spatialReference": {
+                "wkid": 4326
+            }
         },
-        // Todo: create form to get relevant details e.g.
-        // Place name
-        // Email address (?)
-        // Get country/location based on extent or centroid rather than user input - or do when processing
-        properties: {
-            "Location_Name": placeName,
-            "Status": 1,
-            "Status_String": "Live",
-            //"firstName": firstName
-            //"lastName": lastName,
-            //"email": email
+        "attributes": {
+            "Location_Name": placeName
         }
-    };
-    service.addFeature(feature, function(error, response) {
-        if (error) {
-            alert('error creating feature' + error.message);
-        } else {
-            alert('Successfully created feature with id ' + response.objectId);
-        }
-    });
+    }];
+
+    $.post(url,     {
+        f: "json",
+        adds: JSON.stringify(json)   
+    },     function(data, status) {        // console.log("Data: " + data + "\nStatus: " + status);
+           });
+
     // Hide form and reset details
     extentButtonPressed = false;
-    hideForm();
+    // hideForm();
+    closeOnClick();
     delete placeName;
 
     return [xmin, xmax, ymin, ymax];
@@ -279,7 +363,7 @@ function shareExtent() {
 function copyUrlToClipboard() {
     shareUrl = getShareUrl();
     hideShare();
-}
+};
 
 // Check which img are inView
 // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
@@ -320,19 +404,38 @@ function showForm() {
         return;
     }
     extentButtonPressed = true;
-    xycenter = map.getBounds().getCenter();
-    reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-        document.getElementById("location").value = data;
-    });
+    // xycenter = map.getBounds().getCenter();
+    // reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+    //     document.getElementById("location").value = data;
+    // });
+    document.getElementById("location").value = currentLocation;
     $(".details-form-div").show();
     modal.style.display = "block";
-    modalShare.style.display = "none";
+    // modalShare.style.display = "none";
+    hideStandardUiElements();
+};
+
+function showSearch() {
+    // Click again to close
+    // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
+    if (extentButtonPressed == true) {
+        hideForm();
+        extentButtonPressed = false;
+        return;
+    }
+    extentButtonPressed = true;
+    // xycenter = map.getBounds().getCenter();
+    // reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+    //     document.getElementById("location").value = "Somewhere in " + data;
+    // });
+    $(".details-form-div").show();
+    modalSearch.style.display = "block";
+    // modalShare.style.display = "none";
     hideStandardUiElements();
 };
 
 function hideStandardUiElements() {
     $("#button-group").fadeOut();
-    $(".leaflet-control-zoom").fadeOut();
     $(".leaflet-bottom").fadeOut();
     $("#name").fadeOut();
     $("div.sticky:not([id])").fadeOut();
@@ -341,8 +444,7 @@ function hideStandardUiElements() {
 
 function showStandardUiElements() {
     $("#button-group").fadeIn();
-    $("#name").fadeIn();
-    $(".leaflet-control-zoom").fadeIn();
+    // $("#name").fadeIn();
     $(".leaflet-bottom").fadeIn();
     $("#hidden-button-group").fadeIn();
 };
@@ -351,6 +453,9 @@ function showStandardUiElements() {
 
 // Get the modal
 var modal = document.getElementById('modal');
+
+// Get the modal
+var modalSearch = document.getElementById('search-modal');
 
 // Get modal-content div
 var modalShare = document.getElementById("modalShare");
@@ -370,20 +475,28 @@ window.onclick = function(event) {
 
 function closeOnClick() {
     modal.style.display = "none";
-    modalShare.style.display = "none";
+    modalSearch.style.display = "none";
+    // modalShare.style.display = "none";
     showStandardUiElements();
 };
 
 // Event listeners ----------------------------------------------------------------------------- //
 //
 
+document.getElementById('share-button').addEventListener('click', shareExtent, false);
+
+document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
+document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
+
 document.getElementById('show-form').addEventListener('click', showForm, false);
 document.getElementById('details-form-submit-button').addEventListener('click', validateForm, false);
-document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
-document.getElementById('share-button').addEventListener('click', shareExtent, false);
-document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
-document.getElementsByClassName("close")[0].addEventListener('click', closeOnClick, false);
-document.getElementsByClassName("close")[1].addEventListener('click', closeOnClick, false);
+
+document.getElementById('search-button').addEventListener('click', showSearch, false);
+document.getElementById('geocode-submit-button').addEventListener('click', geocode, false);
+
+document.getElementsByClassName('close')[0].addEventListener('click', closeOnClick, false);
+document.getElementsByClassName('close')[1].addEventListener('click', closeOnClick, false);
+document.getElementsByClassName('close')[2].addEventListener('click', closeOnClick, false);
 
 // Logic --------------------------------------------------------------------------------------- //
 //

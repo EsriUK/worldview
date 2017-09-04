@@ -239,6 +239,10 @@ label {
     display: none;
 }
 
+.leaflet-control-zoom {
+  display: none;
+}
+
 .leaflet-container .leaflet-control-attribution, .leaflet-container .leaflet-control-scale {
     font-size: 11px;
     float: right;
@@ -312,15 +316,15 @@ label {
 #hidden-button-group {
     top: 15;
     right: 15;
-    height: 150px;
-    width: 50px;
+    height: 250px;
+    width: 250px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0);
 }
 #button-group {
     top: 15;
     right: 15;
-    height: 150px;
+    height: 200px;
     width: 50px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.65);
@@ -383,3 +387,5 @@ label {
 i {
     margin-top: 13px;
 }
+
+/* Geocoder stuff */

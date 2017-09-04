@@ -5,7 +5,12 @@
       <meta content="" name="description">
       <meta content="" name="author">
       <meta content="3 days" name="revisit-after">
+
       <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script>
+      <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+      <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script> -->
+
+
       <link href="styles/common.css" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
       <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
@@ -13,8 +18,21 @@
       <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
       <!-- Added library for form validation ToDo: review whether this can be done natively -->
       <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
+
+
       <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script>
-      <!-- <script src="scripts/lib/esri-leaflet-2.0.8/dist/esri-leaflet.js"></script> -->
+      <!-- <script src="https://unpkg.com/esri-leaflet@2.0.8"></script> -->
+
+      <!-- <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
+      <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.js"></script> -->
+      <!-- Load Esri Leaflet Geocoder from CDN -->
+<!-- <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css"
+  integrity="sha512-v5YmWLm8KqAAmg5808pETiccEohtt8rPVMGQ1jA6jqkWVydV5Cuz3nJ9fQ7ittSxvuqsvI9RSGfVoKPaAJZ/AQ=="
+  crossorigin="">
+<script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.js"
+  integrity="sha512-NE6FicJEhXDHZNxWrGwC4gdaxb7iOMsp7+bQSintY+stx4GpoUpNAH+yuiE1uduT5inQCPPmH0lf0cdjJFfwcA=="
+  crossorigin=""></script> -->
+
    </head>
    <body>
       <div id="overview-map"></div>
@@ -35,6 +53,10 @@
             <i class="fa fa-camera" id="show-form"></i>
             <span class="tooltiptext">Add this location</span>
          </div>
+         <div class="button">
+            <i class="fa fa-search" id="search-button"></i>
+            <span class="tooltiptext">Find somewhere</span>
+         </div>
       </div>
       <div id="hidden-button-group"></div>
       <!-- Input form for submitting suggestions -->
@@ -44,20 +66,32 @@
             <br>
             <form id="details-form">
                <label for="location">Location name (e.g. 'London Bridge')</label>
-               <input type="text" id="location" name="placeName" placeholder="e.g. London Bridge" required>
+               <input type="text" id="location" name="placeName" placeholder="Waiting for address suggestion..." required>
                <input class="option-buttons" type="Submit" id="details-form-submit-button" value="Submit">
             </form>
          </div>
        </div>
+
+       <div id="search-modal" class="modal">
+          <div class="modal-content">
+             <span class="close">&times;</span>
+             <br>
+             <form id="details-form">
+                <label for="location">Where would you like to go?</label>
+                <input type="text" id="location-search" name="placeName" placeholder="e.g. Spiti" required>
+                <input class="option-buttons" type="Submit" id="geocode-submit-button" value="Search">
+             </form>
+          </div>
+        </div>
       <!-- Div for opening/copying sharing url -->
-       <div id="modalShare" class="modalShare">
+       <!-- <div id="modalShare" class="modalShare">
          <div class="modal-content">
              <span class="close">&times;</span>
              <br>
              <div id="share-view" class="share">View</div>
              <div id="share-copy" class="share">Copy</div>
          </div>
-      </div>
+      </div> -->
       <!-- Div for displaying stitched image -->
       <div id="display-screenshot-div">
          <!--onclick="hideSave()"-->
@@ -76,6 +110,7 @@
       </div>
       <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
       <script src="scripts/screenshot.js"></script>
+      <script src="scripts/country-codes.js"></script>
       <script src="scripts/common.js"></script>
    </body>
 </html>
