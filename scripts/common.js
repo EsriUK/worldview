@@ -68,13 +68,24 @@ function randomise() {
     });
 };
 
+function geocodeFormHandler(e) {
+
+  if (e.preventDefault) e.preventDefault();
+  geocode();
+  return false;
+};
+
 // Perform a geocode to allow user to search locations
 function geocode() {
-    // var deferred = $.Deferred();
+
+    // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
+    var deferred = $.Deferred();
     var searchString = document.getElementById('location-search').value;
-    var requestUrl = 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates';
-    var params = '?SingleLine=' + searchString;
-    var concatUrl = requestUrl + params;
+    var encodedSearchString = encodeURI(searchString);
+    var requestUrlStart = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=';
+    var requestUrlEnd = '&f=json&maxLocations=1';
+    var params = searchString;
+    var concatUrl = requestUrlStart + params + requestUrlEnd;
     // // load icon?
     // $.ajax(url, {
     //     data: {
@@ -97,8 +108,27 @@ function geocode() {
         // makeRequest("GET", servicerUrl + queryPart + "&returnExtentOnly=true&objectIds=" + randomFeature[uniqueIdField], true, function(resp) {
         //     createMap(resp.extent);
         // });
-        // console.log(resp);
+        console.log('obj:')
+        console.log(resp.candidates[0]);
+        // console.log("X:");
+        // console.log(resp.candidates[0].location["x"]);
+        // var lat = resp.candidates[0].location["y"];
+        // var lng = resp.candidates[0].location["x"];
+        // map.panTo(new L.LatLng(lat, lng));
+        var xmax = resp.candidates[0].extent.xmax;
+        var ymax = resp.candidates[0].extent.ymax;
+        var xmin = resp.candidates[0].extent.xmin;
+        var ymin = resp.candidates[0].extent.ymin;
+        console.log(xmax);
+        map.fitBounds([
+          [ymin, xmin],
+          [ymax, xmax]
+        ]);
+        closeOnClick();
+        deferred.resolve(resp);
     });
+
+    return deferred.promise();
 };
 
 // Perform a reverse geocode to display address information to the user
@@ -258,21 +288,24 @@ function updateOverviewMap(lat, lng) {
 };
 
 // Validate input from HTML form
-function validateForm() {
+function validateForm(e) {
+    if (e.preventDefault) e.preventDefault();
     // ToDo: review whether plugin is necessary, update when input schema confirmed
-    $('#details-form').validate({ // initialize the plugin
-        rules: {
-            placeName: {
-                required: true,
-                maxlength: 250
-            }
-        },
-        submitHandler: function(form) { // for demo
-            // console.log('valid form submitted'); // for demo
-            writeExtent();
-            return false; // for demo
-        }
-    });
+    // $('#details-form').validate({ // initialize the plugin
+    //     rules: {
+    //         placeName: {
+    //             required: true,
+    //             maxlength: 250
+    //         }
+    //     },
+    //     submitHandler: function(form) { // for demo
+    //         // console.log('valid form submitted'); // for demo
+    //         writeExtent();
+    //         return false; // for demo
+    //     }
+    // });
+    writeExtent();
+    return false;
 };
 
 // Hide input form
@@ -432,6 +465,10 @@ function showForm() {
 function showSearch() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
+    var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
+    var random = suggestions[Math.floor(Math.random()*suggestions.length)];
+    document.getElementById("location-search").placeholder = "e.g. " + random;
+    document.getElementById("location-search").value = "";
     if (extentButtonPressed == true) {
         hideForm();
         extentButtonPressed = false;
@@ -485,6 +522,7 @@ window.onclick = function(event) {
         modalShare.style.display = "none";
         showStandardUiElements();
     }
+
 };
 
 function closeOnClick() {
@@ -493,6 +531,25 @@ function closeOnClick() {
     // modalShare.style.display = "none";
     showStandardUiElements();
 };
+
+
+// // submit form test
+// function processForm(e) {
+//     if (e.preventDefault) e.preventDefault();
+//
+//     /* do what you want with the form */
+//     console.log("it works!");
+//     // You must return false to prevent the default form behavior
+//     return false;
+// }
+//
+// var form = document.getElementById('geocode-form');
+// if (form.attachEvent) {
+//     form.attachEvent("submit", processForm);
+// } else {
+//     form.addEventListener("submit", processForm);
+// }
+
 
 // Event listeners ----------------------------------------------------------------------------- //
 //
@@ -503,10 +560,10 @@ document.getElementById('save-button').addEventListener('click', makeScreenshot,
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 document.getElementById('show-form').addEventListener('click', showForm, false);
-document.getElementById('details-form-submit-button').addEventListener('click', validateForm, false);
+document.getElementById('details-form').addEventListener('submit', validateForm, false);
 
 document.getElementById('search-button').addEventListener('click', showSearch, false);
-document.getElementById('geocode-submit-button').addEventListener('click', geocode, false);
+document.getElementById('geocode-form').addEventListener('submit', geocodeFormHandler, false);
 
 document.getElementsByClassName('close')[0].addEventListener('click', closeOnClick, false);
 document.getElementsByClassName('close')[1].addEventListener('click', closeOnClick, false);
