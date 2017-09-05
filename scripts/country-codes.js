@@ -79,7 +79,7 @@ worldCountries = [{
     "alpha-3": "AIA",
     "country-code": "660",
     "iso_3166-2": "ISO 3166-2:AI",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -99,7 +99,7 @@ worldCountries = [{
     "alpha-3": "ATG",
     "country-code": "028",
     "iso_3166-2": "ISO 3166-2:AG",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -109,7 +109,7 @@ worldCountries = [{
     "alpha-3": "ARG",
     "country-code": "032",
     "iso_3166-2": "ISO 3166-2:AR",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -129,7 +129,7 @@ worldCountries = [{
     "alpha-3": "ABW",
     "country-code": "533",
     "iso_3166-2": "ISO 3166-2:AW",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -169,7 +169,7 @@ worldCountries = [{
     "alpha-3": "BHS",
     "country-code": "044",
     "iso_3166-2": "ISO 3166-2:BS",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -199,7 +199,7 @@ worldCountries = [{
     "alpha-3": "BRB",
     "country-code": "052",
     "iso_3166-2": "ISO 3166-2:BB",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -229,7 +229,7 @@ worldCountries = [{
     "alpha-3": "BLZ",
     "country-code": "084",
     "iso_3166-2": "ISO 3166-2:BZ",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -249,7 +249,7 @@ worldCountries = [{
     "alpha-3": "BMU",
     "country-code": "060",
     "iso_3166-2": "ISO 3166-2:BM",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Northern America",
     "region-code": "019",
     "sub-region-code": "021"
@@ -269,7 +269,7 @@ worldCountries = [{
     "alpha-3": "BOL",
     "country-code": "068",
     "iso_3166-2": "ISO 3166-2:BO",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -279,7 +279,7 @@ worldCountries = [{
     "alpha-3": "BES",
     "country-code": "535",
     "iso_3166-2": "ISO 3166-2:BQ",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -319,7 +319,7 @@ worldCountries = [{
     "alpha-3": "BRA",
     "country-code": "076",
     "iso_3166-2": "ISO 3166-2:BR",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -399,7 +399,7 @@ worldCountries = [{
     "alpha-3": "CAN",
     "country-code": "124",
     "iso_3166-2": "ISO 3166-2:CA",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Northern America",
     "region-code": "019",
     "sub-region-code": "021"
@@ -419,7 +419,7 @@ worldCountries = [{
     "alpha-3": "CYM",
     "country-code": "136",
     "iso_3166-2": "ISO 3166-2:KY",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -449,7 +449,7 @@ worldCountries = [{
     "alpha-3": "CHL",
     "country-code": "152",
     "iso_3166-2": "ISO 3166-2:CL",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -489,7 +489,7 @@ worldCountries = [{
     "alpha-3": "COL",
     "country-code": "170",
     "iso_3166-2": "ISO 3166-2:CO",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -539,7 +539,7 @@ worldCountries = [{
     "alpha-3": "CRI",
     "country-code": "188",
     "iso_3166-2": "ISO 3166-2:CR",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -569,7 +569,7 @@ worldCountries = [{
     "alpha-3": "CUB",
     "country-code": "192",
     "iso_3166-2": "ISO 3166-2:CU",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -579,7 +579,7 @@ worldCountries = [{
     "alpha-3": "CUW",
     "country-code": "531",
     "iso_3166-2": "ISO 3166-2:CW",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -629,7 +629,7 @@ worldCountries = [{
     "alpha-3": "DMA",
     "country-code": "212",
     "iso_3166-2": "ISO 3166-2:DM",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -639,7 +639,7 @@ worldCountries = [{
     "alpha-3": "DOM",
     "country-code": "214",
     "iso_3166-2": "ISO 3166-2:DO",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -649,7 +649,7 @@ worldCountries = [{
     "alpha-3": "ECU",
     "country-code": "218",
     "iso_3166-2": "ISO 3166-2:EC",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -669,7 +669,7 @@ worldCountries = [{
     "alpha-3": "SLV",
     "country-code": "222",
     "iso_3166-2": "ISO 3166-2:SV",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -719,7 +719,7 @@ worldCountries = [{
     "alpha-3": "FLK",
     "country-code": "238",
     "iso_3166-2": "ISO 3166-2:FK",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -769,7 +769,7 @@ worldCountries = [{
     "alpha-3": "GUF",
     "country-code": "254",
     "iso_3166-2": "ISO 3166-2:GF",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -869,7 +869,7 @@ worldCountries = [{
     "alpha-3": "GRL",
     "country-code": "304",
     "iso_3166-2": "ISO 3166-2:GL",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Northern America",
     "region-code": "019",
     "sub-region-code": "021"
@@ -879,7 +879,7 @@ worldCountries = [{
     "alpha-3": "GRD",
     "country-code": "308",
     "iso_3166-2": "ISO 3166-2:GD",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -889,7 +889,7 @@ worldCountries = [{
     "alpha-3": "GLP",
     "country-code": "312",
     "iso_3166-2": "ISO 3166-2:GP",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -909,7 +909,7 @@ worldCountries = [{
     "alpha-3": "GTM",
     "country-code": "320",
     "iso_3166-2": "ISO 3166-2:GT",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -949,7 +949,7 @@ worldCountries = [{
     "alpha-3": "GUY",
     "country-code": "328",
     "iso_3166-2": "ISO 3166-2:GY",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -959,7 +959,7 @@ worldCountries = [{
     "alpha-3": "HTI",
     "country-code": "332",
     "iso_3166-2": "ISO 3166-2:HT",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -989,7 +989,7 @@ worldCountries = [{
     "alpha-3": "HND",
     "country-code": "340",
     "iso_3166-2": "ISO 3166-2:HN",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -1109,7 +1109,7 @@ worldCountries = [{
     "alpha-3": "JAM",
     "country-code": "388",
     "iso_3166-2": "ISO 3166-2:JM",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1399,7 +1399,7 @@ worldCountries = [{
     "alpha-3": "MTQ",
     "country-code": "474",
     "iso_3166-2": "ISO 3166-2:MQ",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1439,7 +1439,7 @@ worldCountries = [{
     "alpha-3": "MEX",
     "country-code": "484",
     "iso_3166-2": "ISO 3166-2:MX",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -1499,7 +1499,7 @@ worldCountries = [{
     "alpha-3": "MSR",
     "country-code": "500",
     "iso_3166-2": "ISO 3166-2:MS",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1599,7 +1599,7 @@ worldCountries = [{
     "alpha-3": "NIC",
     "country-code": "558",
     "iso_3166-2": "ISO 3166-2:NI",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -1709,7 +1709,7 @@ worldCountries = [{
     "alpha-3": "PAN",
     "country-code": "591",
     "iso_3166-2": "ISO 3166-2:PA",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Central America",
     "region-code": "019",
     "sub-region-code": "013"
@@ -1729,7 +1729,7 @@ worldCountries = [{
     "alpha-3": "PRY",
     "country-code": "600",
     "iso_3166-2": "ISO 3166-2:PY",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -1739,7 +1739,7 @@ worldCountries = [{
     "alpha-3": "PER",
     "country-code": "604",
     "iso_3166-2": "ISO 3166-2:PE",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -1789,7 +1789,7 @@ worldCountries = [{
     "alpha-3": "PRI",
     "country-code": "630",
     "iso_3166-2": "ISO 3166-2:PR",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1824,7 +1824,7 @@ worldCountries = [{
     "region-code": "150",
     "sub-region-code": "151"
 }, {
-    "name": "Russian Federation",
+    "name": "Russia",
     "alpha-2": "RU",
     "alpha-3": "RUS",
     "country-code": "643",
@@ -1849,7 +1849,7 @@ worldCountries = [{
     "alpha-3": "BLM",
     "country-code": "652",
     "iso_3166-2": "ISO 3166-2:BL",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1869,7 +1869,7 @@ worldCountries = [{
     "alpha-3": "KNA",
     "country-code": "659",
     "iso_3166-2": "ISO 3166-2:KN",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1879,7 +1879,7 @@ worldCountries = [{
     "alpha-3": "LCA",
     "country-code": "662",
     "iso_3166-2": "ISO 3166-2:LC",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1889,7 +1889,7 @@ worldCountries = [{
     "alpha-3": "MAF",
     "country-code": "663",
     "iso_3166-2": "ISO 3166-2:MF",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -1899,7 +1899,7 @@ worldCountries = [{
     "alpha-3": "SPM",
     "country-code": "666",
     "iso_3166-2": "ISO 3166-2:PM",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Northern America",
     "region-code": "019",
     "sub-region-code": "021"
@@ -1909,7 +1909,7 @@ worldCountries = [{
     "alpha-3": "VCT",
     "country-code": "670",
     "iso_3166-2": "ISO 3166-2:VC",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2009,7 +2009,7 @@ worldCountries = [{
     "alpha-3": "SXM",
     "country-code": "534",
     "iso_3166-2": "ISO 3166-2:SX",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2119,7 +2119,7 @@ worldCountries = [{
     "alpha-3": "SUR",
     "country-code": "740",
     "iso_3166-2": "ISO 3166-2:SR",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -2259,7 +2259,7 @@ worldCountries = [{
     "alpha-3": "TTO",
     "country-code": "780",
     "iso_3166-2": "ISO 3166-2:TT",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2299,7 +2299,7 @@ worldCountries = [{
     "alpha-3": "TCA",
     "country-code": "796",
     "iso_3166-2": "ISO 3166-2:TC",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2359,7 +2359,7 @@ worldCountries = [{
     "alpha-3": "USA",
     "country-code": "840",
     "iso_3166-2": "ISO 3166-2:US",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Northern America",
     "region-code": "019",
     "sub-region-code": "021"
@@ -2379,7 +2379,7 @@ worldCountries = [{
     "alpha-3": "URY",
     "country-code": "858",
     "iso_3166-2": "ISO 3166-2:UY",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -2409,7 +2409,7 @@ worldCountries = [{
     "alpha-3": "VEN",
     "country-code": "862",
     "iso_3166-2": "ISO 3166-2:VE",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "South America",
     "region-code": "019",
     "sub-region-code": "005"
@@ -2429,7 +2429,7 @@ worldCountries = [{
     "alpha-3": "VGB",
     "country-code": "092",
     "iso_3166-2": "ISO 3166-2:VG",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2439,7 +2439,7 @@ worldCountries = [{
     "alpha-3": "VIR",
     "country-code": "850",
     "iso_3166-2": "ISO 3166-2:VI",
-    "region": "Americas",
+    "region": "America",
     "sub-region": "Caribbean",
     "region-code": "019",
     "sub-region-code": "029"
@@ -2498,13 +2498,16 @@ worldCountries = [{
 // Functions ----------------------------------------------------------------------------------- //
 //
 
+// Take 'alpha-3' country code and JSON object with country details, returns 'name'
+// e.g. 'ZWE' =  'Zimbabwe'
 function getNameFromCode(code, worldCountries) {
   var countryName = ""
   $.each(worldCountries, function(i, item) {
       //if you want to get the value of y based on x or vice versa then check
       if(item["alpha-3"] == code) {
          countryName = item.name;
-      }
+         worldRegion = item.region;
+      };
    });
-   return countryName;
+   return [countryName, worldRegion];
 };

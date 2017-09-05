@@ -104,6 +104,7 @@ function geocode() {
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
 function reverseGeocode(lat, lng, elementId) {
+
     var deferred = $.Deferred();
     var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
     makeRequest("GET", requestUrl, true, function(resp) {
@@ -113,21 +114,16 @@ function reverseGeocode(lat, lng, elementId) {
         // earlier map move event is incorrectly displayed.
         if (homeButtonPressed == false) {
             if (!resp.error) {
-                console.log("resp:");
-                console.log(resp);
+                // console.log("resp:");
+                // console.log(resp);
                 var address = resp.address.Address;
-                if (map._zoom <= 15) {
-                  address = "";
-                }
-                if (address == "") {
-                  address = "Somewhere in "
-                }
                 var city = resp.address.City;
                 var region = resp.address.Region;
                 var country = resp.address.CountryCode;
-                country = getNameFromCode(country, worldCountries); // country-codes.js
-                console.log("country " + country);
-                deferred.resolve([address, city, region, country]);
+                var worldRegion = "";
+                [country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
+                // console.log("country " + country);
+                deferred.resolve([address, city, region, country, worldRegion]);
                 if (address != null) {
                     // document.getElementsByClassName(elementClassName)[0].innerHTML = address + ', ' + city + ', ' + country;
                 } else {
@@ -148,22 +144,39 @@ function reverseGeocode(lat, lng, elementId) {
 // Make geocode result into a friendly string
 // http://www.toptip.ca/2010/02/javascript-trim-leading-or-trailing.html
 function makeReadable(reverseGeocodeData) {
-    locationString = reverseGeocodeData.toString();
-    // Leading & trailing spaces and commas
-    locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
-    // Add space after remaining comma
-    locationString = locationString.split(",").join(", ")
-    console.log(locationString);
-    locationString = locationString.replace(/ ,/g, '');
-    console.log(locationString);
+
+    // Retrieve individual variables
+    var address = reverseGeocodeData[0];
+    var city = reverseGeocodeData[1];
+    var region = reverseGeocodeData[2];
+    var country = reverseGeocodeData[3];
+    var worldRegion = reverseGeocodeData[4];
+
+    // Concatenate string based on map zoom level
+    if (map._zoom <= 6) {
+      locationString = 'Somewhere in ' + worldRegion;
+    } else if (map._zoom > 6 && map._zoom <= 8) {
+      locationString = 'Somewhere in ' + country;
+    } else if (map._zoom > 8 && map._zoom <= 11) {
+      locationString = 'Somewhere in ' + region + ', ' + country;
+    } else if (map._zoom > 11 && map._zoom <= 15) {
+      locationString = 'Somewhere in ' + city + ', '+ country;
+    } else if (map._zoom > 15) {
+      // Remove any specific building address
+      address = address.replace(/[0-9]/g, '');
+      locationString = address + ', '+ city;
+    };
+
+     // Remove any leading/trailing commas or spaces in case logic above fails
+     locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
 
     return locationString;
 };
 
-// Get country name from 3 letter ISO code
-function getCountryName(countryCode) {
-
-}
+// // Get country name from 3 letter ISO code
+// function getCountryName(countryCode) {
+//
+// }
 
 // Create map and overview maps
 function createMap(extent) {
@@ -192,6 +205,7 @@ function createMap(extent) {
         $("#name").fadeOut();
         $("#button-group").fadeOut();
         xycenter = map.getBounds().getCenter();
+        currentLocation = 'Here be dragons...'
         reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
             // document.getElementById("location").value = "Somewhere in " + data;
             // console.log("reverseGeocode() data = " + data);
