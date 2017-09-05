@@ -7,37 +7,16 @@
       <meta content="3 days" name="revisit-after">
 
       <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script>
-      <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
-      <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script> -->
-
-
       <link href="styles/common.css" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-      <!-- <script src="scripts/lib/leaflet-1.1.0/leaflet.js"></script> -->
       <script src="scripts/lib/fontsawesome/e2338abaf7.js"></script>
       <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
-      <!-- Added library for form validation ToDo: review whether this can be done natively -->
-      <script src="scripts/lib/jquery.validation-1.16.0/validation.js"></script>
-
-
       <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script>
-      <!-- <script src="https://unpkg.com/esri-leaflet@2.0.8"></script> -->
-
-      <!-- <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
-      <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.js"></script> -->
-      <!-- Load Esri Leaflet Geocoder from CDN -->
-<!-- <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css"
-  integrity="sha512-v5YmWLm8KqAAmg5808pETiccEohtt8rPVMGQ1jA6jqkWVydV5Cuz3nJ9fQ7ittSxvuqsvI9RSGfVoKPaAJZ/AQ=="
-  crossorigin="">
-<script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.js"
-  integrity="sha512-NE6FicJEhXDHZNxWrGwC4gdaxb7iOMsp7+bQSintY+stx4GpoUpNAH+yuiE1uduT5inQCPPmH0lf0cdjJFfwcA=="
-  crossorigin=""></script> -->
 
    </head>
    <body>
       <div id="overview-map"></div>
       <div id="name" class="location location-name"></div>
-      <!-- <div id="latLong" class="location location-extent"></div> -->
       <div id="map"></div>
       <!-- Placeholder buttons for new functions -->
       <div id="button-group">
@@ -79,22 +58,13 @@
              <form id="geocode-form">
                 <label for="location">Where would you like to go?</label>
                 <input type="text" id="location-search" name="placeName" placeholder="e.g. Spiti" required>
-                <input class="option-buttons" type="Submit" id="geocode-submit-button" value="Search">
+                <input class="option-buttons" type="Submit" id="geocode-submit-button" value="I'm feeling lucky...">
              </form>
           </div>
         </div>
-      <!-- Div for opening/copying sharing url -->
-       <!-- <div id="modalShare" class="modalShare">
-         <div class="modal-content">
-             <span class="close">&times;</span>
-             <br>
-             <div id="share-view" class="share">View</div>
-             <div id="share-copy" class="share">Copy</div>
-         </div>
-      </div> -->
+
       <!-- Div for displaying stitched image -->
       <div id="display-screenshot-div">
-         <!--onclick="hideSave()"-->
          <!-- Canvas for stitching and exporting map images -->
          <canvas id="canvas">
             Sorry - this feature isn't supported by your browser.

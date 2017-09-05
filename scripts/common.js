@@ -3,7 +3,7 @@
 // Geographic globals
 var map, overviewMap, locationName, locationPoint, bounds;
 
-// Container for home button status. Initialised as false
+// Container for button press statuses. Initialised as false
 var homeButtonPressed = false;
 
 var extentButtonPressed = false;
@@ -12,12 +12,13 @@ var shareButtonPressed = false;
 
 var saveButtonPressed = false;
 
+// Global string for reverse geocode results
 var currentLocation = "";
 
 // URL to publicly-shared polygon feature service containing areas of interest
 var servicerUrl = "https://utility.arcgis.com/usrsvcs/servers/fd092b1add784ab1abbd84e50f18d841/rest/services/Approvals_Test/FeatureServer/0";
 
-// ToDo: new, separate service
+// URL to service where submissions are stored
 var suggestionsService = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
 
 // Field name in feature service containing location name
@@ -32,6 +33,17 @@ var serviceQuery = "1=1";
 
 // Functions ----------------------------------------------------------------------------------- //
 //
+// 1. Map stuff
+// 2. Geocoding
+// 3. Tools:
+//      Open sharing link
+//      Create screenshot
+//      Add this location
+//      (See 2. Geocoding for 'Find somewhere')
+// 4. UI interactions
+//
+
+// 1. Map stuff
 
 // Make CORS requests to ArcGIS Online
 function makeRequest(method, url, async, readyStateHandler) {
@@ -68,11 +80,59 @@ function randomise() {
     });
 };
 
+// Create initial map
+function createMap(extent) {
+    var southWest = L.latLng(extent.ymin, extent.xmin);
+    var northEast = L.latLng(extent.ymax, extent.xmax);
+    bounds = L.latLngBounds(southWest, northEast);
+    map = L.map('map', {
+        maxZoom: 18
+    }).fitBounds(bounds);
+    L.esri.basemapLayer('Imagery').addTo(map);
+    initialCenter = map.getCenter();
+    var lat = map.getCenter().lat;
+    var lng = map.getCenter().lng;
+    map.on("moveend", function(e) {
+        $("#name").fadeOut();
+        $("#button-group").fadeOut();
+        xycenter = map.getBounds().getCenter();
+        currentLocation = 'Here be dragons...'
+        reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+            data = makeReadable(data);
+            currentLocation = data;
+        });
+    });
+
+    map._layersMinZoom = 4; // Min zoom to work around screenshot issue
+
+    // Reveal button group on hover
+    $("#hidden-button-group").mouseenter(
+        function() {
+            $("#button-group").fadeIn();
+        }
+    );
+};
+
+// Get geographic extent of map div on screen
+function getExtent() {
+    // Get variables representing screen dimensions
+    xmin = map.getBounds().getSouthWest().lng;
+    xmax = map.getBounds().getNorthEast().lng;
+    ymin = map.getBounds().getSouthWest().lat;
+    ymax = map.getBounds().getNorthEast().lat;
+    xymean = map.getCenter();
+
+    return [xmin, xmax, ymin, ymax, xymean];
+};
+
+// 2. Geocoding
+
+// Catch geocode-form submit event
 function geocodeFormHandler(e) {
 
-  if (e.preventDefault) e.preventDefault();
-  geocode();
-  return false;
+    if (e.preventDefault) e.preventDefault();
+    geocode();
+    return false;
 };
 
 // Perform a geocode to allow user to search locations
@@ -80,50 +140,30 @@ function geocode() {
 
     // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
     var deferred = $.Deferred();
+
+    // Get user input
     var searchString = document.getElementById('location-search').value;
     var encodedSearchString = encodeURI(searchString);
+
+    // Concatenate search URL
     var requestUrlStart = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=';
-    var requestUrlEnd = '&f=json&maxLocations=1';
+    var requestUrlEnd = '&f=json&maxLocations=1'; // return first result only
     var params = searchString;
     var concatUrl = requestUrlStart + params + requestUrlEnd;
-    // // load icon?
-    // $.ajax(url, {
-    //     data: {
-    //         text: searchString,
-    //         f: 'json',
-    //         outSR:102100,
-    //         maxlocations:6
-    //     },
-    //     dataType: 'json',
-    //     success: this.geocodeResultsHandler ,
-    //     error: this.geocodeError,
-    //     complete: this.geocodeComplete
-    // });
-    // return deferred.promise();
 
+    // Call geocode service and pan to the extent of the result
     makeRequest("GET", concatUrl, true, function(resp) {
-        // var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)].attributes;
-        // locationName = randomFeature[locationField];
-        // document.getElementsByClassName("location-name")[0].innerHTML = locationName;
-        // makeRequest("GET", servicerUrl + queryPart + "&returnExtentOnly=true&objectIds=" + randomFeature[uniqueIdField], true, function(resp) {
-        //     createMap(resp.extent);
-        // });
-        console.log('obj:')
-        console.log(resp.candidates[0]);
-        // console.log("X:");
-        // console.log(resp.candidates[0].location["x"]);
-        // var lat = resp.candidates[0].location["y"];
-        // var lng = resp.candidates[0].location["x"];
-        // map.panTo(new L.LatLng(lat, lng));
+        // Get bounding box from response
         var xmax = resp.candidates[0].extent.xmax;
         var ymax = resp.candidates[0].extent.ymax;
         var xmin = resp.candidates[0].extent.xmin;
         var ymin = resp.candidates[0].extent.ymin;
-        console.log(xmax);
+        // Pan to bounding box
         map.fitBounds([
-          [ymin, xmin],
-          [ymax, xmax]
+            [ymin, xmin],
+            [ymax, xmax]
         ]);
+
         closeOnClick();
         deferred.resolve(resp);
     });
@@ -138,30 +178,15 @@ function reverseGeocode(lat, lng, elementId) {
     var deferred = $.Deferred();
     var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
     makeRequest("GET", requestUrl, true, function(resp) {
-        // Only update the view to the user if the home button has not been recently pressed.
-        // Given the asynchronous nature of the request, without this there could be instances
-        // after the home button is pressed that the address information from an
-        // earlier map move event is incorrectly displayed.
-        if (homeButtonPressed == false) {
-            if (!resp.error) {
-                // console.log("resp:");
-                // console.log(resp);
-                var address = resp.address.Address;
-                var city = resp.address.City;
-                var region = resp.address.Region;
-                var country = resp.address.CountryCode;
-                var worldRegion = "";
-                [country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
-                // console.log("country " + country);
-                deferred.resolve([address, city, region, country, worldRegion]);
-                if (address != null) {
-                    // document.getElementsByClassName(elementClassName)[0].innerHTML = address + ', ' + city + ', ' + country;
-                } else {
-                    // document.getElementsByClassName(elementClassName)[0].innerHTML = '';
-                }
-            } else {
-                // document.getElementsByClassName(elementClassName)[0].innerHTML = '';
-            }
+
+        if (!resp.error) {
+            var address = resp.address.Address;
+            var city = resp.address.City;
+            var region = resp.address.Region;
+            var country = resp.address.CountryCode;
+            var worldRegion = "";
+            [country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
+            deferred.resolve([address, city, region, country, worldRegion]);
         };
         var suggestionString = "";
         var geocodeResult = [address, city, country];
@@ -182,162 +207,31 @@ function makeReadable(reverseGeocodeData) {
     var country = reverseGeocodeData[3];
     var worldRegion = reverseGeocodeData[4];
 
-    // Concatenate string based on map zoom level
+    // Concatenate suggestion based on map zoom level
     if (map._zoom <= 6) {
-      locationString = 'Somewhere in ' + worldRegion;
+        locationString = 'Somewhere in ' + worldRegion;
     } else if (map._zoom > 6 && map._zoom <= 8) {
-      locationString = 'Somewhere in ' + country;
+        locationString = 'Somewhere in ' + country;
     } else if (map._zoom > 8 && map._zoom <= 11) {
-      locationString = 'Somewhere in ' + region + ', ' + country;
+        locationString = 'Somewhere in ' + region + ', ' + country;
     } else if (map._zoom > 11 && map._zoom <= 15) {
-      locationString = 'Somewhere in ' + city + ', '+ country;
+        locationString = 'Somewhere in ' + city + ', ' + country;
     } else if (map._zoom > 15) {
-      // Remove any specific building address
-      address = address.replace(/[0-9]/g, '');
-      locationString = address + ', '+ city;
+        // Remove any specific building number from address
+        address = address.replace(/[0-9]/g, '');
+        locationString = address + ', ' + city + ', ' + country;
     };
 
-     // Remove any leading/trailing commas or spaces in case logic above fails
-     locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
+    // Remove any leading/trailing commas or spaces in case logic above fails
+    locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
+    // Remove any commas preceded by spaces within the string
+    locationString = locationString.replace(/ ,/g, '');
 
     return locationString;
 };
 
-// // Get country name from 3 letter ISO code
-// function getCountryName(countryCode) {
-//
-// }
-
-// Create map and overview maps
-function createMap(extent) {
-    var southWest = L.latLng(extent.ymin, extent.xmin);
-    var northEast = L.latLng(extent.ymax, extent.xmax);
-    bounds = L.latLngBounds(southWest, northEast);
-    map = L.map('map', {
-        maxZoom: 18
-    }).fitBounds(bounds);
-    L.esri.basemapLayer('Imagery').addTo(map);
-    overviewMap = L.map('overview-map', {
-        zoomControl: false,
-        attributionControl: false,
-        dragging: false,
-        touchzoom: false,
-        boxZoom: false,
-        doubleClickZoom: false,
-        scrollWheelZoom: false
-    }).setView(bounds.getCenter(), 2);
-    L.esri.basemapLayer('Imagery').addTo(overviewMap);
-    initialCenter = map.getCenter();
-    var lat = map.getCenter().lat;
-    var lng = map.getCenter().lng;
-    updateOverviewMap(lat, lng);
-    map.on("moveend", function(e) {
-        $("#name").fadeOut();
-        $("#button-group").fadeOut();
-        xycenter = map.getBounds().getCenter();
-        currentLocation = 'Here be dragons...'
-        reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-            // document.getElementById("location").value = "Somewhere in " + data;
-            // console.log("reverseGeocode() data = " + data);
-            data = makeReadable(data);
-            currentLocation = data;
-        });
-    });
-
-    map._layersMinZoom = 4; // Workaround screenshot issue
-
-    $("#hidden-button-group").mouseenter(
-        function() {
-            $("#button-group").fadeIn();
-        }
-    );
-};
-
-
-// Geocoding test
-
-// // create the geocoding control and add it to the map
-// var searchControl = L.esri.Geocoding.geosearch().addTo(map);
-//
-// // create an empty layer group to store the results and add it to the map
-// var results = L.layerGroup().addTo(map);
-//
-// // listen for the results event and add every result to the map
-// searchControl.on("results", function(data) {
-//     results.clearLayers();
-//     for (var i = data.results.length - 1; i >= 0; i--) {
-//         results.addLayer(L.marker(data.results[i].latlng));
-//     }
-// });
-
-// Update the overview map
-function updateOverviewMap(lat, lng) {
-    if (overviewMap.hasLayer(locationPoint)) {
-        overviewMap.removeLayer(locationPoint);
-    };
-    overviewMap.panTo([lat, lng]);
-    locationPoint = L.circle([lat, lng], 100000, {
-        fillColor: "transparent",
-        weight: 2,
-        color: '#fff',
-        stroke: true,
-        fillOpacity: 0.6,
-        clickable: false
-    });
-    overviewMap.addLayer(locationPoint);
-};
-
-// Validate input from HTML form
-function validateForm(e) {
-    if (e.preventDefault) e.preventDefault();
-    // ToDo: review whether plugin is necessary, update when input schema confirmed
-    // $('#details-form').validate({ // initialize the plugin
-    //     rules: {
-    //         placeName: {
-    //             required: true,
-    //             maxlength: 250
-    //         }
-    //     },
-    //     submitHandler: function(form) { // for demo
-    //         // console.log('valid form submitted'); // for demo
-    //         writeExtent();
-    //         return false; // for demo
-    //     }
-    // });
-    writeExtent();
-    return false;
-};
-
-// Hide input form
-function hideForm() {
-    $(".details-form-div").hide();
-    document.getElementById("details-form").reset();
-    extentButtonPressed = false;
-};
-
-// Hide share form
-function hideShare() {
-    $(".share-url-div").hide();
-    shareButtonPressed = false;
-};
-
-// Hide save form
-function hideSave() {
-    $("#display-screenshot-div").hide();
-    showStandardUiElements();
-    saveButtonPressed = false;
-};
-
-// Get geographic extent of map div on screen
-function getExtent() {
-    xmin = map.getBounds().getSouthWest().lng;
-    xmax = map.getBounds().getNorthEast().lng;
-    ymin = map.getBounds().getSouthWest().lat;
-    ymax = map.getBounds().getNorthEast().lat;
-    xymean = map.getCenter();
-
-    return [xmin, xmax, ymin, ymax, xymean];
-};
+// 3. Tools:
+//      Open sharing link
 
 // Concatenate parameterised URL for sharing
 function getShareUrl() {
@@ -347,14 +241,56 @@ function getShareUrl() {
     return shareUrl;
 };
 
+// Generate sharing URL and reveal HTML linking to/copying it
+function shareExtent() {
+    if (shareButtonPressed == true) {
+        hideShare();
+        return
+    }
+    shareButtonPressed = true;
+    shareUrl = getShareUrl();
+    // copyUrlToClipboard();
+    window.open(shareUrl);
+    hideShare();
+};
+
+// 3. Tools:
+//      Create screenshot
+
+// Check which img are inView
+// http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+$.fn.isOnScreen = function() {
+    var win = $(window);
+    var viewport = {
+        top: win.scrollTop(),
+        left: win.scrollLeft()
+    };
+    viewport.right = viewport.left + win.width();
+    viewport.bottom = viewport.top + win.height();
+    var bounds = this.offset();
+    bounds.right = bounds.left + this.outerWidth();
+    bounds.bottom = bounds.top + this.outerHeight();
+
+    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+};
+
+// See also: screenshot.js
+
+// 3. Tools:
+//      Add this location
+
+// Validate input from HTML form
+function validateForm(e) {
+    if (e.preventDefault) e.preventDefault();
+    writeExtent();
+    return false;
+};
+
 // Send current extent to suggestions service
 // jQuery
 function writeExtent() {
     // Get variables representing screen dimensions
-    xmin = map.getBounds().getSouthWest().lng;
-    xmax = map.getBounds().getNorthEast().lng;
-    ymin = map.getBounds().getSouthWest().lat;
-    ymax = map.getBounds().getNorthEast().lat;
+    var [xmin, xmax, ymin, ymax, xymean] = getExtent();
     // Get form values to pass as attributes
     var placeName = $('#details-form').find('input[name="placeName"]').val();
 
@@ -383,65 +319,19 @@ function writeExtent() {
     $.post(url,     {
         f: "json",
         adds: JSON.stringify(json)   
-    },     function(data, status) {        // console.log("Data: " + data + "\nStatus: " + status);
-           });
+    },     function(data, status) {    });
 
     // Hide form and reset details
     extentButtonPressed = false;
-    // hideForm();
     closeOnClick();
     delete placeName;
 
     return [xmin, xmax, ymin, ymax];
 };
 
-// Generate sharing URL and reveal HTML linking to/copying it
-function shareExtent() {
-    if (shareButtonPressed == true) {
-        hideShare();
-        return
-    }
-    shareButtonPressed = true;
-    shareUrl = getShareUrl();
-    copyUrlToClipboard();
-    window.open(shareUrl);
-};
+// 4. UI interaction
 
-function copyUrlToClipboard() {
-    shareUrl = getShareUrl();
-    hideShare();
-};
-
-// Check which img are inView
-// http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
-$.fn.isOnScreen = function() {
-    var win = $(window);
-    var viewport = {
-        top: win.scrollTop(),
-        left: win.scrollLeft()
-    };
-    viewport.right = viewport.left + win.width();
-    viewport.bottom = viewport.top + win.height();
-    var bounds = this.offset();
-    bounds.right = bounds.left + this.outerWidth();
-    bounds.bottom = bounds.top + this.outerHeight();
-
-    return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
-};
-
-// Make string from geocode results
-function locationNameSuggestion(x, y, geocodeCallback) {
-    var geocodeResult = geocodeCallback(x, y);
-    var suggestionString = "";
-    for (i = 0; i < 3; i++) {
-        if (geocodeResult[i].length > 0) {
-            suggestionString += geocodeResult[i] + " ";
-        }
-    }
-
-    return;
-};
-
+// Show location suggestion form
 function showForm() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
@@ -451,22 +341,21 @@ function showForm() {
         return;
     }
     extentButtonPressed = true;
-    // xycenter = map.getBounds().getCenter();
-    // reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-    //     document.getElementById("location").value = data;
-    // });
     document.getElementById("location").value = currentLocation;
-    $(".details-form-div").show();
+    // $(".details-form-div").show();
+
     modal.style.display = "block";
+    $('#location').focus();
     // modalShare.style.display = "none";
     hideStandardUiElements();
 };
 
+// Show location search form
 function showSearch() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
     var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
-    var random = suggestions[Math.floor(Math.random()*suggestions.length)];
+    var random = suggestions[Math.floor(Math.random() * suggestions.length)];
     document.getElementById("location-search").placeholder = "e.g. " + random;
     document.getElementById("location-search").value = "";
     if (extentButtonPressed == true) {
@@ -475,14 +364,40 @@ function showSearch() {
         return;
     }
     extentButtonPressed = true;
-    // xycenter = map.getBounds().getCenter();
-    // reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-    //     document.getElementById("location").value = "Somewhere in " + data;
-    // });
-    $(".details-form-div").show();
+    //$(".details-form-div").show();
+
     modalSearch.style.display = "block";
+    $('#location-search').focus();
     // modalShare.style.display = "none";
     hideStandardUiElements();
+};
+
+// Show all default ui elements
+function showStandardUiElements() {
+    $("#button-group").fadeIn();
+    // $("#name").fadeIn();
+    $(".leaflet-bottom").fadeIn();
+    $("#hidden-button-group").fadeIn();
+};
+
+// Hide input form
+function hideForm() {
+    $(".details-form-div").hide();
+    document.getElementById("details-form").reset();
+    extentButtonPressed = false;
+};
+
+// Hide share form
+function hideShare() {
+    $(".share-url-div").hide();
+    shareButtonPressed = false;
+};
+
+// Hide save form
+function hideSave() {
+    $("#display-screenshot-div").hide();
+    showStandardUiElements();
+    saveButtonPressed = false;
 };
 
 function hideStandardUiElements() {
@@ -493,14 +408,7 @@ function hideStandardUiElements() {
     $("#hidden-button-group").hide();
 };
 
-function showStandardUiElements() {
-    $("#button-group").fadeIn();
-    // $("#name").fadeIn();
-    $(".leaflet-bottom").fadeIn();
-    $("#hidden-button-group").fadeIn();
-};
-
-// code for modal - suggestions box
+// Code for modal - suggestions box interactions
 
 // Get the modal
 var modal = document.getElementById('modal');
@@ -518,6 +426,10 @@ window.onclick = function(event) {
         $("#button-group").show();
         $("#name").show();
     }
+    if (event.target == modalSearch) {
+        modalSearch.style.display = "none";
+        showStandardUiElements();
+    }
     if (event.target == modalShare) {
         modalShare.style.display = "none";
         showStandardUiElements();
@@ -525,6 +437,7 @@ window.onclick = function(event) {
 
 };
 
+// Close modals
 function closeOnClick() {
     modal.style.display = "none";
     modalSearch.style.display = "none";
@@ -532,39 +445,25 @@ function closeOnClick() {
     showStandardUiElements();
 };
 
-
-// // submit form test
-// function processForm(e) {
-//     if (e.preventDefault) e.preventDefault();
-//
-//     /* do what you want with the form */
-//     console.log("it works!");
-//     // You must return false to prevent the default form behavior
-//     return false;
-// }
-//
-// var form = document.getElementById('geocode-form');
-// if (form.attachEvent) {
-//     form.attachEvent("submit", processForm);
-// } else {
-//     form.addEventListener("submit", processForm);
-// }
-
-
 // Event listeners ----------------------------------------------------------------------------- //
 //
 
+// Open sharing link
 document.getElementById('share-button').addEventListener('click', shareExtent, false);
 
+// Create screenshot
 document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
+// Add this location
 document.getElementById('show-form').addEventListener('click', showForm, false);
 document.getElementById('details-form').addEventListener('submit', validateForm, false);
 
+// Find somewhere
 document.getElementById('search-button').addEventListener('click', showSearch, false);
 document.getElementById('geocode-form').addEventListener('submit', geocodeFormHandler, false);
 
+// Close windows with 'X'
 document.getElementsByClassName('close')[0].addEventListener('click', closeOnClick, false);
 document.getElementsByClassName('close')[1].addEventListener('click', closeOnClick, false);
 document.getElementsByClassName('close')[2].addEventListener('click', closeOnClick, false);

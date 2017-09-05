@@ -15,7 +15,8 @@ function getTileUrls() {
             tiles.push($(this).attr('src'));
         }
     });
-    tiles.splice(0, 1); // First tile is at the wrong scale level ToDo find out why
+    // tiles.splice(0, 1); // First tile is at the wrong scale level ToDo find out why
+    // resolved following several edits on 05/09
 
     return tiles;
 }
