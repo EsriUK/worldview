@@ -2499,7 +2499,7 @@ worldCountries = [{
 //
 
 // Take 'alpha-3' country code and JSON object with country details, returns 'name'
-// e.g. 'ZWE' =  'Zimbabwe'
+// and 'region' e.g. 'ZWE' =  'Zimbabwe', 'Africa' 
 function getNameFromCode(code, worldCountries) {
   var countryName = ""
   $.each(worldCountries, function(i, item) {

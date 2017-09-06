@@ -39,7 +39,7 @@ var serviceQuery = "1=1";
 //      Open sharing link
 //      Create screenshot
 //      Add this location
-//      (See 2. Geocoding for 'Find somewhere')
+//      (See 2. Geocoding for 'Find somewhere functions')
 // 4. UI interactions
 //
 
@@ -92,15 +92,14 @@ function createMap(extent) {
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
+    updateLocationSuggestion();
+
+    // Hide UI elements and update location suggestion on zoom/pan
     map.on("moveend", function(e) {
         $("#name").fadeOut();
         $("#button-group").fadeOut();
-        xycenter = map.getBounds().getCenter();
-        currentLocation = 'Here be dragons...'
-        reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-            data = makeReadable(data);
-            currentLocation = data;
-        });
+        currentLocation = 'Here be dragons...';
+        updateLocationSuggestion();
     });
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
@@ -127,11 +126,12 @@ function getExtent() {
 
 // 2. Geocoding
 
-// Catch geocode-form submit event
+// Catch geocode-form submit event and prevent page refresh
 function geocodeFormHandler(e) {
 
     if (e.preventDefault) e.preventDefault();
     geocode();
+
     return false;
 };
 
@@ -199,7 +199,7 @@ function reverseGeocode(lat, lng, elementId) {
 // Make geocode result into a friendly string
 // http://www.toptip.ca/2010/02/javascript-trim-leading-or-trailing.html
 function makeReadable(reverseGeocodeData) {
-
+    console.log(reverseGeocodeData);
     // Retrieve individual variables
     var address = reverseGeocodeData[0];
     var city = reverseGeocodeData[1];
@@ -213,12 +213,24 @@ function makeReadable(reverseGeocodeData) {
     } else if (map._zoom > 6 && map._zoom <= 8) {
         locationString = 'Somewhere in ' + country;
     } else if (map._zoom > 8 && map._zoom <= 11) {
-        locationString = 'Somewhere in ' + region + ', ' + country;
+        // avoid duplication (E.g. 'Somewhere in Turkmenistan, Turkmenistan')
+        if (region == country) {
+            locationString = 'Somewhere in ' + country;
+        } else {
+            locationString = 'Somewhere in ' + region + ', ' + country;
+        }
     } else if (map._zoom > 11 && map._zoom <= 15) {
         locationString = 'Somewhere in ' + city + ', ' + country;
     } else if (map._zoom > 15) {
         // Remove any specific building number from address
         address = address.replace(/[0-9]/g, '');
+        // Edge case for very remote areas e.g. himalayan Pakistan
+        if (address == "") {
+          address = "Somewhere in ";
+        }
+        if (city  == "") {
+          city = " "; // Will be removed by replace() below
+        }
         locationString = address + ', ' + city + ', ' + country;
     };
 
@@ -228,6 +240,15 @@ function makeReadable(reverseGeocodeData) {
     locationString = locationString.replace(/ ,/g, '');
 
     return locationString;
+};
+
+// Store readable location in currentLocation global variable
+function updateLocationSuggestion() {
+  xycenter = map.getBounds().getCenter();
+  reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+      data = makeReadable(data);
+      currentLocation = data;
+  });
 };
 
 // 3. Tools:
@@ -283,6 +304,7 @@ $.fn.isOnScreen = function() {
 function validateForm(e) {
     if (e.preventDefault) e.preventDefault();
     writeExtent();
+
     return false;
 };
 
@@ -329,17 +351,19 @@ function writeExtent() {
     return [xmin, xmax, ymin, ymax];
 };
 
-// 4. UI interaction
+// 4. UI interactions
 
 // Show location suggestion form
 function showForm() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
+
     if (extentButtonPressed == true) {
         hideForm();
         extentButtonPressed = false;
         return;
-    }
+    };
+
     extentButtonPressed = true;
     document.getElementById("location").value = currentLocation;
     // $(".details-form-div").show();
