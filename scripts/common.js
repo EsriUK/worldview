@@ -81,6 +81,7 @@ function randomise() {
 };
 
 // Create initial map
+// jQuery
 function createMap(extent) {
     var southWest = L.latLng(extent.ymin, extent.xmin);
     var northEast = L.latLng(extent.ymax, extent.xmax);
@@ -136,6 +137,7 @@ function geocodeFormHandler(e) {
 };
 
 // Perform a geocode to allow user to search locations
+// jQuery
 function geocode() {
 
     // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
@@ -173,6 +175,7 @@ function geocode() {
 
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
+// jQuery
 function reverseGeocode(lat, lng, elementId) {
 
     var deferred = $.Deferred();
@@ -198,6 +201,7 @@ function reverseGeocode(lat, lng, elementId) {
 
 // Make geocode result into a friendly string
 // http://www.toptip.ca/2010/02/javascript-trim-leading-or-trailing.html
+// jQuery
 function makeReadable(reverseGeocodeData) {
     console.log(reverseGeocodeData);
     // Retrieve individual variables
@@ -280,6 +284,7 @@ function shareExtent() {
 
 // Check which img are inView
 // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
+// jQuery
 $.fn.isOnScreen = function() {
     var win = $(window);
     var viewport = {
@@ -341,7 +346,7 @@ function writeExtent() {
     $.post(url,     {
         f: "json",
         adds: JSON.stringify(json)   
-    },     function(data, status) {    });
+    },     function(data, status) {});
 
     // Hide form and reset details
     extentButtonPressed = false;
@@ -375,6 +380,7 @@ function showForm() {
 };
 
 // Show location search form
+// jQuery
 function showSearch() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
@@ -388,8 +394,8 @@ function showSearch() {
         return;
     }
     extentButtonPressed = true;
-    //$(".details-form-div").show();
-
+    // Hide modal border for screenshot
+    modalSearch.style.border = "15px solid rgba(0, 0, 0, 0)";
     modalSearch.style.display = "block";
     $('#location-search').focus();
     // modalShare.style.display = "none";
@@ -397,6 +403,7 @@ function showSearch() {
 };
 
 // Show all default ui elements
+// jQuery
 function showStandardUiElements() {
     $("#button-group").fadeIn();
     // $("#name").fadeIn();
@@ -405,6 +412,7 @@ function showStandardUiElements() {
 };
 
 // Hide input form
+// jQuery
 function hideForm() {
     $(".details-form-div").hide();
     document.getElementById("details-form").reset();
@@ -412,18 +420,22 @@ function hideForm() {
 };
 
 // Hide share form
+// jQuery
 function hideShare() {
     $(".share-url-div").hide();
     shareButtonPressed = false;
 };
 
 // Hide save form
+// jQuery
 function hideSave() {
     $("#display-screenshot-div").hide();
     showStandardUiElements();
     saveButtonPressed = false;
 };
 
+// Hide all default UI elements
+// jQuery
 function hideStandardUiElements() {
     $("#button-group").fadeOut();
     $(".leaflet-bottom").fadeOut();
@@ -444,6 +456,7 @@ var modalSearch = document.getElementById('search-modal');
 var modalShare = document.getElementById("modalShare");
 
 // When the user clicks anywhere outside of the modal, close it
+// jQuery
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";

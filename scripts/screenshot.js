@@ -19,7 +19,7 @@ function getTileUrls() {
     // resolved following several edits on 05/09
 
     return tiles;
-}
+};
 
 // Parse row and column data from individual URLs
 function getRowAndColFromUrl(url) {
@@ -28,7 +28,7 @@ function getRowAndColFromUrl(url) {
     rowVal = splitUrl[splitUrl.length - 2];
 
     return [colVal, rowVal];
-}
+};
 
 // Create array of x-indices for every map tile on screen
 function getXArray(tiles) {
@@ -40,7 +40,7 @@ function getXArray(tiles) {
     }
 
     return xArray;
-}
+};
 
 // Create array of y-indices for every map tile on screen
 function getYArray(tiles) {
@@ -52,7 +52,7 @@ function getYArray(tiles) {
     }
 
     return yArray;
-}
+};
 
 // Function to filter duplicate values and order array
 function filterAndOrderArray(array) {
@@ -60,25 +60,25 @@ function filterAndOrderArray(array) {
         return index == self.indexOf(elem);
     });
     uniqueSorted = unique.sort(function(a, b) {
-        return a - b
+        return a - b;
     });
 
     return uniqueSorted;
-}
+};
 
 // Get total number of columns on screen
 function getNumCols(xArray) {
     var numOfCols = filterAndOrderArray(xArray).length;
 
     return numOfCols;
-}
+};
 
 // Get total number of rows on screen
 function getNumRows(yArray) {
     var numOfRows = Math.max.apply(null, yArray) - Math.min.apply(null, yArray) + 1;
 
     return numOfRows;
-}
+};
 
 // Re-order non continuous array
 function reOrderNonContinuousArray(array, start) {
@@ -93,7 +93,7 @@ function reOrderNonContinuousArray(array, start) {
     }
 
     return reOrderedNonContinuousArray;
-}
+};
 
 // Get max and min row index, and adjust when crossing dateline
 function maxMinIndexGetter(rowNumberArray, numOfRows) {
@@ -129,12 +129,12 @@ function maxMinIndexGetter(rowNumberArray, numOfRows) {
     }
 
     return [startRowIndex, stopRowIndex, uniqueSorted, uniqueReOrdered];
-}
+};
 
 // Create empty array with appropriate dimensions - to be filled with img src
 function orderedArrayMaker(numOfCols, numOfRows) {
     var masterArray = [];
-    subArray = []
+    subArray = [];
     for (j = 0; j < numOfRows; j++) {
         subArray[j] = "";
     }
@@ -143,7 +143,7 @@ function orderedArrayMaker(numOfCols, numOfRows) {
     }
 
     return masterArray;
-}
+};
 
 // Parse row and col number from each url, and place in appropriate location in array
 function parseAndPutInOrder(imgSrcArray, xArray, reOrderedColArray, sortedRowArray) {
@@ -164,7 +164,7 @@ function parseAndPutInOrder(imgSrcArray, xArray, reOrderedColArray, sortedRowArr
     }
 
     return [orderedArray, reOrderedColArray];
-}
+};
 
 // Get coordinate of viewport top left in first tile
 // jQuery
@@ -177,7 +177,7 @@ function getViewportOffset(orderedArray) {
     // http://stackoverflow.com/questions/27146403/efficiently-get-an-elements-visible-area-coordinates
     // http://stackoverflow.com/questions/1960082/position-of-div-in-relation-to-the-top-of-the-viewport
     var img = new Image();
-    img.onload = function() {}
+    img.onload = function() {};
     var x = $("img[src$='" + orderedArray[0][0] + "']");
     var pos = x.position();
     var allImages = document.getElementsByTagName("img");
@@ -192,7 +192,7 @@ function getViewportOffset(orderedArray) {
         }
 
     return [leftOffset, topOffset];
-}
+};
 
 function drawScreenShot(normalisedTileArray, viewportOffset) {
     // Normalised tile data
@@ -228,7 +228,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
     reOrderedColArray = [];
     sortedRowArray = [];
     orderedArray = [];
-}
+};
 
 
 // Logic --------------------------------------------------------------------------------------- //
@@ -247,7 +247,7 @@ function normaliseDateLine(tiles) {
     var ordered2dArray = parseAndPutInOrder(tiles, xArray, reOrderedColArray, sortedRowArray);
 
     return [ordered2dArray, sortedRowArray];
-}
+};
 
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
