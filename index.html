@@ -5,12 +5,20 @@
       <meta content="" name="description">
       <meta content="" name="author">
       <meta content="3 days" name="revisit-after">
-      <script src="scripts/lib/leaflet-0.7.3/leaflet.js"></script>
       <link href="styles/common.css" rel="stylesheet" />
       <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
       <script src="scripts/lib/fontsawesome/e2338abaf7.js"></script>
       <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
-      <script src="scripts/lib/esri-leaflet-1.0/esri-leaflet.min.js"></script>
+      
+        <!-- Load Leaflet from CDN-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet-src.js"></script>
+
+    <!-- Load Esri Leaflet from CDN -->
+    <script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+      <!-- Esri Leaflet Geocoder -->
+    <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
+    <script src="https://unpkg.com/esri-leaflet-geocoder@2.2.6"></script>
    </head>
    <body>
 

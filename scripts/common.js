@@ -1,7 +1,7 @@
 // Variables ----------------------------------------------------------------------------------- //
 //
 // Geographic globals
-var map, overviewMap, locationName, locationPoint, bounds;
+var map, overviewMap, locationName, locationPoint, bounds, searchControl;
 
 // Container for button press statuses. Initialised as false
 var homeButtonPressed = false;
@@ -105,6 +105,19 @@ function createMap(extent) {
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
 
+    searchControl = L.esri.Geocoding.geosearch().addTo(map);
+
+     // create an empty layer group to store the results and add it to the map
+     var results = L.layerGroup().addTo(map);
+     
+         // listen for the results event and add every result to the map
+         searchControl.on("results", function(data) {
+             results.clearLayers();
+             for (var i = data.results.length - 1; i >= 0; i--) {
+                 results.addLayer(L.marker(data.results[i].latlng));
+             }
+         });
+
     // Reveal button group on hover
     $("#hidden-button-group").mouseenter(
         function() {
@@ -112,6 +125,9 @@ function createMap(extent) {
         }
     );
 };
+
+ 
+    
 
 // Get geographic extent of map div on screen
 function getExtent() {
@@ -126,6 +142,9 @@ function getExtent() {
 };
 
 // 2. Geocoding
+
+
+
 
 // Catch geocode-form submit event and prevent page refresh
 function geocodeFormHandler(e) {
