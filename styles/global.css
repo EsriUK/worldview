@@ -333,6 +333,8 @@ label {
     width: 250px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0);
+    z-index: 99999;
+    
 }
 #button-group {
     top: 15;
@@ -341,6 +343,7 @@ label {
     width: 50px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.65);
+    z-index: 99999;
 }
 .button {
     width: 50px;
