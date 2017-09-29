@@ -277,16 +277,7 @@ function normaliseDateLine(tiles) {
 
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
-function makeScreenshot() {
-    // Toggle button visibility
-    //hideStandardUiElements();
-    if (saveButtonPressed == false) {
-        //$("#display-screenshot-div").fadeIn();
-        saveButtonPressed = true;
-    } else {
-        //$("#display-screenshot-div").fadeOut();
-        saveButtonPressed = false;
-    }
+function prepareScreenshot() {
 
     // Array of visible map tile URLs
     var tiles = getTileUrls();
@@ -297,7 +288,7 @@ function makeScreenshot() {
     // Measures distance between top left corner of viewport, and top left corner of top left tile
     var viewportOffset = getViewportOffset(orderedArray);
 
-    // Fill canvas with tile images and reveal it
+    // Fill hidden canvas with tile images ready to download
     drawScreenShot(normalisedTileArray, viewportOffset);
 };
 

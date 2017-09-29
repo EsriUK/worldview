@@ -93,7 +93,7 @@ function createMap(extent) {
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
     layer.on('load',function(){
-        makeScreenshot()
+        prepareScreenshot()
     })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
