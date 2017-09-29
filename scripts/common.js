@@ -232,24 +232,24 @@ function makeReadable(reverseGeocodeData) {
 
     // Concatenate suggestion based on map zoom level
     if (map._zoom <= 6) {
-        locationString = 'Somewhere in ' + worldRegion;
+        locationString = worldRegion;
     } else if (map._zoom > 6 && map._zoom <= 8) {
-        locationString = 'Somewhere in ' + country;
+        locationString = country;
     } else if (map._zoom > 8 && map._zoom <= 11) {
         // avoid duplication (E.g. 'Somewhere in Turkmenistan, Turkmenistan')
         if (region == country) {
-            locationString = 'Somewhere in ' + country;
+            locationString = country;
         } else {
-            locationString = 'Somewhere in ' + region + ', ' + country;
+            locationString = region + ', ' + country;
         }
     } else if (map._zoom > 11 && map._zoom <= 15) {
-        locationString = 'Somewhere in ' + city + ', ' + country;
+        locationString = city + ', ' + country;
     } else if (map._zoom > 15) {
         // Remove any specific building number from address
         address = address.replace(/[0-9]/g, '');
         // Edge case for very remote areas e.g. himalayan Pakistan
         if (address == "") {
-          address = "Somewhere in ";
+          address = "Near ";
         }
         if (city  == "") {
           city = " "; // Will be removed by replace() below
