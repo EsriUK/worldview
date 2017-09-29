@@ -509,12 +509,8 @@ function closeOnClick() {
 document.getElementById('share-button').addEventListener('click', shareExtent, false);
 
 // Create screenshot
-<<<<<<< HEAD
 document.getElementById('download').addEventListener('click', function(){
     makeScreenshot2(this, 'canvas', 'test.png'), false}); // see screenshot.js
-=======
-document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
->>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location

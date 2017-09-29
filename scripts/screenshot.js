@@ -227,12 +227,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
             })
             
         }
-    }
-<<<<<<< HEAD
-    deferred.resolve();
-    
-=======
->>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
+    }    
     reOrderedColArray = [];
     sortedRowArray = [];
     orderedArray = [];
@@ -281,10 +276,6 @@ function normaliseDateLine(tiles) {
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
 function makeScreenshot() {
-<<<<<<< HEAD
-
-=======
->>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
     // Toggle button visibility
     //hideStandardUiElements();
     if (saveButtonPressed == false) {
