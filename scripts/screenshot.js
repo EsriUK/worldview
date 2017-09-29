@@ -217,21 +217,46 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
     // Iterate normalised TileArray and arrange images on canvas
     for (var i = 0; i < reOrderedColArray.length; i++) {
         for (var j = 0; j < sortedRowArray.length; j++) {
-            var imageObj = new Image();
-            imageObj.src = orderedArray[i][j]; // << added
-            imageObj.setAtX = (i * mapTilePixels) + parsedLeftOffset;
-            imageObj.setAtY = (j * mapTilePixels) + (parsedTopOffset / 2);
-            imageObj.onload = function() {
-                context.drawImage(this, this.setAtX, this.setAtY);
-            };
+            var offsetX = (i * mapTilePixels) + parsedLeftOffset;
+            var offsetY = (j * mapTilePixels) + (parsedTopOffset / 2);
+            imageToBase64(orderedArray[i][j],offsetX,offsetY, function(result, resultX,resultY){
+                var imageObj = new Image();
+                imageObj.src = result; // << added
+                imageObj.onload = function() {
+                    context.drawImage(imageObj,resultX, resultY);
+                };
+            })
+            
         }
     }
     deferred.resolve();
+    
     reOrderedColArray = [];
     sortedRowArray = [];
     orderedArray = [];
     return deferred.promise();
 };
+
+var imageToBase64 = function(url, offsetX, offsetY, callback){
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            callback(reader.result,offsetX,offsetY);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function () {  
+        if (xhr.readyState === 4) {  
+            if (xhr.status != 200) { 
+                callback("error");   
+            }  
+        }  
+    }; 
+    xhr.responseType = 'blob';
+    xhr.send();
+}
 
 
 // Logic --------------------------------------------------------------------------------------- //
@@ -254,16 +279,15 @@ function normaliseDateLine(tiles) {
 
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
-function makeScreenshot(link, canvasId, filename) {
-    //link.href = document.getElementById(canvasId).toDataURL();
-    //link.download = filename;
+function makeScreenshot() {
+
     // Toggle button visibility
-    hideStandardUiElements();
+    //hideStandardUiElements();
     if (saveButtonPressed == false) {
-        $("#display-screenshot-div").fadeIn();
+        //$("#display-screenshot-div").fadeIn();
         saveButtonPressed = true;
     } else {
-        $("#display-screenshot-div").fadeOut();
+        //$("#display-screenshot-div").fadeOut();
         saveButtonPressed = false;
     }
 
@@ -277,9 +301,12 @@ function makeScreenshot(link, canvasId, filename) {
     var viewportOffset = getViewportOffset(orderedArray);
 
     // Fill canvas with tile images and reveal it
-    drawScreenShot(normalisedTileArray, viewportOffset).done(function(){
-        link.href = document.getElementById(canvasId).toDataURL();
-        link.download = filename;
-    });
-
+    drawScreenShot(normalisedTileArray, viewportOffset);
 };
+
+function makeScreenshot2(link,canvasId,filename){
+    link.download = filename;
+    
+    link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
+    console.log(link)
+}
