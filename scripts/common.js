@@ -110,7 +110,7 @@ function createMap(extent) {
 
      // create an empty layer group to store the results and add it to the map
      var results = L.layerGroup().addTo(map);
-     
+
          // listen for the results event and add every result to the map
          searchControl.on("results", function(data) {
              results.clearLayers();
@@ -127,8 +127,8 @@ function createMap(extent) {
     );
 };
 
- 
-    
+
+
 
 // Get geographic extent of map div on screen
 function getExtent() {
@@ -402,7 +402,6 @@ function showForm() {
 // Show location search form
 // jQuery
 function showSearch() {
-    console.log("here")
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
     var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
@@ -510,8 +509,12 @@ function closeOnClick() {
 document.getElementById('share-button').addEventListener('click', shareExtent, false);
 
 // Create screenshot
+<<<<<<< HEAD
 document.getElementById('download').addEventListener('click', function(){
     makeScreenshot2(this, 'canvas', 'test.png'), false}); // see screenshot.js
+=======
+document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
+>>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location
