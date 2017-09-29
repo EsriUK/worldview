@@ -218,6 +218,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
         for (var j = 0; j < sortedRowArray.length; j++) {
             var offsetX = (i * mapTilePixels) + parsedLeftOffset;
             var offsetY = (j * mapTilePixels) + (parsedTopOffset / 2);
+            //Pass image URL and offset informationt o convert image to base64 before loading it into the canvas
             imageToBase64(orderedArray[i][j],offsetX,offsetY, function(result, resultX,resultY){
                 var imageObj = new Image();
                 imageObj.src = result; // << added
@@ -233,6 +234,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
     orderedArray = [];
 };
 
+//Function to convert image URLS to base64 to get around 'tainted canvas' issues
 var imageToBase64 = function(url, offsetX, offsetY, callback){
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -275,16 +277,7 @@ function normaliseDateLine(tiles) {
 
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
-function makeScreenshot() {
-    // Toggle button visibility
-    //hideStandardUiElements();
-    if (saveButtonPressed == false) {
-        //$("#display-screenshot-div").fadeIn();
-        saveButtonPressed = true;
-    } else {
-        //$("#display-screenshot-div").fadeOut();
-        saveButtonPressed = false;
-    }
+function prepareScreenshot() {
 
     // Array of visible map tile URLs
     var tiles = getTileUrls();
@@ -295,13 +288,12 @@ function makeScreenshot() {
     // Measures distance between top left corner of viewport, and top left corner of top left tile
     var viewportOffset = getViewportOffset(orderedArray);
 
-    // Fill canvas with tile images and reveal it
+    // Fill hidden canvas with tile images ready to download
     drawScreenShot(normalisedTileArray, viewportOffset);
 };
 
-function makeScreenshot2(link,canvasId,filename){
+//Function to download canvas content as an image
+function downloadScreenshot(link,canvasId,filename){
     link.download = filename;
-    
     link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
-    console.log(link)
 }
