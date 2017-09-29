@@ -218,6 +218,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
         for (var j = 0; j < sortedRowArray.length; j++) {
             var offsetX = (i * mapTilePixels) + parsedLeftOffset;
             var offsetY = (j * mapTilePixels) + (parsedTopOffset / 2);
+            //Pass image URL and offset informationt o convert image to base64 before loading it into the canvas
             imageToBase64(orderedArray[i][j],offsetX,offsetY, function(result, resultX,resultY){
                 var imageObj = new Image();
                 imageObj.src = result; // << added
@@ -233,6 +234,7 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
     orderedArray = [];
 };
 
+//Function to convert image URLS to base64 to get around 'tainted canvas' issues
 var imageToBase64 = function(url, offsetX, offsetY, callback){
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -299,6 +301,7 @@ function makeScreenshot() {
     drawScreenShot(normalisedTileArray, viewportOffset);
 };
 
+//Function to download canvas content as an image
 function downloadScreenshot(link,canvasId,filename){
     link.download = filename;
     link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
