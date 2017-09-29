@@ -93,7 +93,8 @@ function createMap(extent) {
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
     layer.on('load',function(){
-        prepareScreenshot()
+        //prepareScreenshot()
+        updateDownloadImage(map);
     })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
@@ -514,7 +515,7 @@ document.getElementById('share-button').addEventListener('click', shareExtent, f
 
 // Create screenshot
 document.getElementById('download').addEventListener('click', function(){
-    downloadScreenshot(this, 'canvas', 'maptab.jpg'), false}); // see screenshot.js
+    downloadScreenshot(this,'maptab.jpg'), false}); // see screenshot.js
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location

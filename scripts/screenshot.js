@@ -292,8 +292,21 @@ function prepareScreenshot() {
     drawScreenShot(normalisedTileArray, viewportOffset);
 };
 
+function updateDownloadImage(map){
+    var link = document.getElementById('download');
+    var extent = map.getBounds();
+    var southWest = extent.getSouthWest();
+    var southEast = extent.getSouthEast();
+    var northWest = extent.getNorthWest();
+    var northEast = extent.getNorthEast();
+    var bbox = southWest.lng + "," + southWest.lat + "," + southEast.lng + "," + northEast.lat;
+    var exportUrl = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/export?bbox=" + bbox + "&bboxSR=4326&layers=&layerDefs=&size=1920%2C1080&imageSR=&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=json"
+    makeRequest("GET", exportUrl, true, function(resp) {
+        link.href = resp.href;
+    });
+}
+
 //Function to download canvas content as an image
-function downloadScreenshot(link,canvasId,filename){
-    link.download = filename;
-    link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
+function downloadScreenshot(link,filename){
+        link.download = filename; 
 }
