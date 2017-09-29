@@ -299,7 +299,7 @@ function makeScreenshot() {
     drawScreenShot(normalisedTileArray, viewportOffset);
 };
 
-function makeScreenshot2(link,canvasId,filename){
+function downloadScreenshot(link,canvasId,filename){
     link.download = filename;
     link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
 }

@@ -514,7 +514,7 @@ document.getElementById('share-button').addEventListener('click', shareExtent, f
 
 // Create screenshot
 document.getElementById('download').addEventListener('click', function(){
-    makeScreenshot2(this, 'canvas', 'test.png'), false}); // see screenshot.js
+    downloadScreenshot(this, 'canvas', 'maptab.jpg'), false}); // see screenshot.js
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location
