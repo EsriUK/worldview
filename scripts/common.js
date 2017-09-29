@@ -101,6 +101,7 @@ function createMap(extent) {
         $("#button-group").fadeOut();
         currentLocation = 'Here be dragons...';
         updateLocationSuggestion();
+        makeScreenshot()
     });
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
@@ -508,7 +509,8 @@ function closeOnClick() {
 document.getElementById('share-button').addEventListener('click', shareExtent, false);
 
 // Create screenshot
-document.getElementById('save-button').addEventListener('click', makeScreenshot, false); // see screenshot.js
+document.getElementById('download').addEventListener('click', function(){
+    makeScreenshot2(this, 'canvas', 'test.png'), false}); // see screenshot.js
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location

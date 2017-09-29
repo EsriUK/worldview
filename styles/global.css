@@ -7,8 +7,12 @@ html, body, #map {
 	margin: 0;
 	height: 100%;
 	width: 100%;
+<<<<<<< HEAD
+    overflow: hidden;
+=======
   overflow: hidden;
   z-index: 0;
+>>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
 }
 
 #overview-map,
@@ -129,13 +133,16 @@ html, body, #map {
     transform: translate(-50%,-50%);
     border-radius: 1em;
     clear: both;
+    z-index: 99999
 }
 #canvas {
     width: 100%;
     /*height: 90%;*/
+    z-index: 99999;
 }
 #canvas-beneath {
   float: left;
+  z-index: 999999;
 }
 #canvas-caption-div {
   position: absolute;
