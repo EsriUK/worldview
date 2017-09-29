@@ -1,5 +1,5 @@
 /*
- * Leaflet 1.1.0+Detached: a3a7e045229898137bb9a3af0a1407e409e06c4f.a3a7e04, a JS library for interactive maps. http://leafletjs.com
+ * Leaflet 1.1.0, a JS library for interactive maps. http://leafletjs.com
  * (c) 2010-2017 Vladimir Agafonkin, (c) 2010-2011 CloudMade
  */
 (function (global, factory) {
@@ -8,7 +8,7 @@
 	(factory((global.L = global.L || {})));
 }(this, (function (exports) { 'use strict';
 
-var version = "1.1.0+HEAD.a3a7e04";
+var version = "1.1.0";
 
 /*
  * @namespace Util

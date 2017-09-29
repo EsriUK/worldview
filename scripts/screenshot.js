@@ -195,7 +195,6 @@ function getViewportOffset(orderedArray) {
 };
 
 function drawScreenShot(normalisedTileArray, viewportOffset) {
-    var deferred = $.Deferred();
     // Normalised tile data
     var orderedArray = normalisedTileArray[0][0];
     var reOrderedColArray = normalisedTileArray[0][1];
@@ -226,11 +225,9 @@ function drawScreenShot(normalisedTileArray, viewportOffset) {
             };
         }
     }
-    deferred.resolve();
     reOrderedColArray = [];
     sortedRowArray = [];
     orderedArray = [];
-    return deferred.promise();
 };
 
 
@@ -254,9 +251,7 @@ function normaliseDateLine(tiles) {
 
 // Gets URLs of all visible map tiles and draws them to a single canvas element
 // jQuery
-function makeScreenshot(link, canvasId, filename) {
-    //link.href = document.getElementById(canvasId).toDataURL();
-    //link.download = filename;
+function makeScreenshot() {
     // Toggle button visibility
     hideStandardUiElements();
     if (saveButtonPressed == false) {
@@ -277,9 +272,5 @@ function makeScreenshot(link, canvasId, filename) {
     var viewportOffset = getViewportOffset(orderedArray);
 
     // Fill canvas with tile images and reveal it
-    drawScreenShot(normalisedTileArray, viewportOffset).done(function(){
-        link.href = document.getElementById(canvasId).toDataURL();
-        link.download = filename;
-    });
-
+    drawScreenShot(normalisedTileArray, viewportOffset);
 };

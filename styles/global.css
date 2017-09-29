@@ -7,8 +7,8 @@ html, body, #map {
 	margin: 0;
 	height: 100%;
 	width: 100%;
-    overflow: hidden;
-    z-index: -1
+  overflow: hidden;
+  z-index: 0;
 }
 
 #overview-map,
@@ -334,7 +334,6 @@ label {
     width: 250px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0);
-    
 }
 #button-group {
     top: 15;
@@ -343,7 +342,6 @@ label {
     width: 50px;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.65);
-    z-index: 99999;
 }
 .button {
     width: 50px;
