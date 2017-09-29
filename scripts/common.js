@@ -92,9 +92,14 @@ function createMap(extent) {
     }).fitBounds(bounds);
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
+<<<<<<< HEAD
     layer.on('load',function(){
         //prepareScreenshot()
         updateDownloadImage(map);
+=======
+    layer.on('load', function() {
+        prepareScreenshot();
+>>>>>>> e955195bfaceaaf4175e0bcfb9b65c7e1adfba92
     })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
@@ -105,6 +110,8 @@ function createMap(extent) {
     map.on("moveend", function(e) {
         $("#name").fadeOut();
         $("#button-group").fadeOut();
+        $(".geocoder-control-input").fadeOut();
+        $(".geocoder-control-input").fadeOut();
         currentLocation = 'Here be dragons...';
         updateLocationSuggestion();
     });
@@ -113,21 +120,29 @@ function createMap(extent) {
 
     searchControl = L.esri.Geocoding.geosearch().addTo(map);
 
-     // create an empty layer group to store the results and add it to the map
-     var results = L.layerGroup().addTo(map);
+    // create an empty layer group to store the results and add it to the map
+    var results = L.layerGroup().addTo(map);
 
-         // listen for the results event and add every result to the map
-         searchControl.on("results", function(data) {
-             results.clearLayers();
-             for (var i = data.results.length - 1; i >= 0; i--) {
-                 results.addLayer(L.marker(data.results[i].latlng));
-             }
-         });
+    // listen for the results event and add every result to the map
+    searchControl.on("results", function(data) {
+        results.clearLayers();
+        for (var i = data.results.length - 1; i >= 0; i--) {
+            results.addLayer(L.marker(data.results[i].latlng));
+        }
+    });
 
     // Reveal button group on hover
     $("#hidden-button-group").mouseenter(
         function() {
             $("#button-group").fadeIn();
+            $(".geocoder-control-input").fadeIn();
+        }
+    );
+
+    $(".geocoder-control-input").mouseenter(
+        function() {
+            $("#button-group").fadeIn();
+            $(".geocoder-control-input").fadeIn();
         }
     );
 };
@@ -238,27 +253,27 @@ function makeReadable(reverseGeocodeData) {
 
     // Concatenate suggestion based on map zoom level
     if (map._zoom <= 6) {
-        locationString = 'Somewhere in ' + worldRegion;
+        locationString = worldRegion;
     } else if (map._zoom > 6 && map._zoom <= 8) {
-        locationString = 'Somewhere in ' + country;
+        locationString = country;
     } else if (map._zoom > 8 && map._zoom <= 11) {
         // avoid duplication (E.g. 'Somewhere in Turkmenistan, Turkmenistan')
         if (region == country) {
-            locationString = 'Somewhere in ' + country;
+            locationString = country;
         } else {
-            locationString = 'Somewhere in ' + region + ', ' + country;
+            locationString = region + ', ' + country;
         }
     } else if (map._zoom > 11 && map._zoom <= 15) {
-        locationString = 'Somewhere in ' + city + ', ' + country;
+        locationString = city + ', ' + country;
     } else if (map._zoom > 15) {
         // Remove any specific building number from address
         address = address.replace(/[0-9]/g, '');
         // Edge case for very remote areas e.g. himalayan Pakistan
         if (address == "") {
-          address = "Somewhere in ";
+            address = "Near ";
         }
-        if (city  == "") {
-          city = " "; // Will be removed by replace() below
+        if (city == "") {
+            city = " "; // Will be removed by replace() below
         }
         locationString = address + ', ' + city + ', ' + country;
     };
@@ -273,11 +288,11 @@ function makeReadable(reverseGeocodeData) {
 
 // Store readable location in currentLocation global variable
 function updateLocationSuggestion() {
-  xycenter = map.getBounds().getCenter();
-  reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-      data = makeReadable(data);
-      currentLocation = data;
-  });
+    xycenter = map.getBounds().getCenter();
+    reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+        data = makeReadable(data);
+        currentLocation = data;
+    });
 };
 
 // 3. Tools:
@@ -292,20 +307,65 @@ function getShareUrl() {
 };
 
 // Generate sharing URL and reveal HTML linking to/copying it
-function shareExtent() {
+function shareExtent(e) {
+    if (e.preventDefault) e.preventDefault();
     if (shareButtonPressed == true) {
         hideShare();
         return
     }
     shareButtonPressed = true;
     shareUrl = getShareUrl();
-    // copyUrlToClipboard();
+    copyTextToClipboard(shareUrl);
     window.open(shareUrl);
     hideShare();
+    closeOnClick();
+};
+
+// Creates DOM element and adds text so that it can be copied onclick
+function copyTextToClipboard(text) {
+    var textArea = document.createElement("textarea");
+    textArea.value = text;
+    document.body.appendChild(textArea);
+    textArea.select();
+    try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Copying text command was ' + msg);
+    } catch (err) {
+        console.log('Oops, unable to copy');
+    }
+
+    document.body.removeChild(textArea);
+};
+
+// Gets current sharing URL and copies to clipboard
+function copyUrlToClipboard(e) {
+
+    if (e.preventDefault) e.preventDefault();
+    shareUrl = getShareUrl();
+    // window.prompt("Copy to clipboard: Ctrl+C, Enter", shareUrl);
+    copyTextToClipboard(shareUrl);
+    // hideShare();
+    closeOnClick();
+    showSnackBar("Link copied to clipboard");
+};
+
+function showSnackBar(text) {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar")
+    x.value = text;
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function() {
+        x.className = x.className.replace("show", "");
+    }, 2400);
 };
 
 // 3. Tools:
 //      Create screenshot
+
 
 // Check which img are inView
 // http://upshots.org/javascript/jquery-test-if-element-is-in-viewport-visible-on-screen
@@ -383,7 +443,7 @@ function writeExtent() {
 
 // 4. UI interactions
 
-// Show location suggestion form
+// Show location suggestion form modal
 function showForm() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
@@ -404,7 +464,7 @@ function showForm() {
     hideStandardUiElements();
 };
 
-// Show location search form
+// Show location search form modal
 // jQuery
 function showSearch() {
     // Click again to close
@@ -427,6 +487,12 @@ function showSearch() {
     hideStandardUiElements();
 };
 
+// Show share modal
+function showShare() {
+    modalShare.style.display = "block";
+    hideStandardUiElements();
+};
+
 // Show all default ui elements
 // jQuery
 function showStandardUiElements() {
@@ -434,6 +500,7 @@ function showStandardUiElements() {
     // $("#name").fadeIn();
     $(".leaflet-bottom").fadeIn();
     $("#hidden-button-group").fadeIn();
+    $(".geocoder-control-input").fadeIn();
 };
 
 // Hide input form
@@ -467,6 +534,7 @@ function hideStandardUiElements() {
     $("#name").fadeOut();
     $("div.sticky:not([id])").fadeOut();
     $("#hidden-button-group").hide();
+    $(".geocoder-control-input").fadeOut();
 };
 
 // Code for modal - suggestions box interactions
@@ -477,8 +545,11 @@ var modal = document.getElementById('modal');
 // Get the modal
 var modalSearch = document.getElementById('search-modal');
 
-// Get modal-content div
-var modalShare = document.getElementById("modalShare");
+// // Get modal-content div
+// var modalShare = document.getElementById("modalShare");
+
+// Get modal-share div
+var modalShare = document.getElementById("share-modal");
 
 // When the user clicks anywhere outside of the modal, close it
 // jQuery
@@ -503,6 +574,7 @@ window.onclick = function(event) {
 function closeOnClick() {
     modal.style.display = "none";
     modalSearch.style.display = "none";
+    modalShare.style.display = "none";
     // modalShare.style.display = "none";
     showStandardUiElements();
 };
@@ -511,11 +583,20 @@ function closeOnClick() {
 //
 
 // Open sharing link
-document.getElementById('share-button').addEventListener('click', shareExtent, false);
+// document.getElementById('share-button').addEventListener('click', shareExtent, false); // opens new window directly
+document.getElementById('share-button').addEventListener('click', showShare, false);
+document.getElementById('open-share-button').addEventListener('click', shareExtent, false);
+document.getElementById('copy-share-button').addEventListener('click', copyUrlToClipboard, false);
 
 // Create screenshot
+<<<<<<< HEAD
 document.getElementById('download').addEventListener('click', function(){
     downloadScreenshot(this,'maptab.jpg'), false}); // see screenshot.js
+=======
+document.getElementById('download').addEventListener('click', function() {
+    downloadScreenshot(this, 'canvas', 'maptab.jpg'), false
+}); // see screenshot.js
+>>>>>>> e955195bfaceaaf4175e0bcfb9b65c7e1adfba92
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location
@@ -530,6 +611,7 @@ document.getElementById('geocode-form').addEventListener('submit', geocodeFormHa
 document.getElementsByClassName('close')[0].addEventListener('click', closeOnClick, false);
 document.getElementsByClassName('close')[1].addEventListener('click', closeOnClick, false);
 document.getElementsByClassName('close')[2].addEventListener('click', closeOnClick, false);
+
 
 // Logic --------------------------------------------------------------------------------------- //
 //
