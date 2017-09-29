@@ -92,14 +92,9 @@ function createMap(extent) {
     }).fitBounds(bounds);
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
-<<<<<<< HEAD
     layer.on('load',function(){
         //prepareScreenshot()
         updateDownloadImage(map);
-=======
-    layer.on('load', function() {
-        prepareScreenshot();
->>>>>>> e955195bfaceaaf4175e0bcfb9b65c7e1adfba92
     })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
@@ -589,14 +584,8 @@ document.getElementById('open-share-button').addEventListener('click', shareExte
 document.getElementById('copy-share-button').addEventListener('click', copyUrlToClipboard, false);
 
 // Create screenshot
-<<<<<<< HEAD
 document.getElementById('download').addEventListener('click', function(){
     downloadScreenshot(this,'maptab.jpg'), false}); // see screenshot.js
-=======
-document.getElementById('download').addEventListener('click', function() {
-    downloadScreenshot(this, 'canvas', 'maptab.jpg'), false
-}); // see screenshot.js
->>>>>>> e955195bfaceaaf4175e0bcfb9b65c7e1adfba92
 document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
 
 // Add this location
