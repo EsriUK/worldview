@@ -301,7 +301,5 @@ function makeScreenshot() {
 
 function makeScreenshot2(link,canvasId,filename){
     link.download = filename;
-    
     link.href = document.getElementById(canvasId).toDataURL('image/jpeg', 0.75);
-    console.log(link)
 }

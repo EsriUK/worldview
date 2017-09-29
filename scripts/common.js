@@ -83,13 +83,18 @@ function randomise() {
 // Create initial map
 // jQuery
 function createMap(extent) {
+
     var southWest = L.latLng(extent.ymin, extent.xmin);
     var northEast = L.latLng(extent.ymax, extent.xmax);
     bounds = L.latLngBounds(southWest, northEast);
     map = L.map('map', {
         maxZoom: 18
     }).fitBounds(bounds);
-    L.esri.basemapLayer('Imagery').addTo(map);
+    var layer = L.esri.basemapLayer('Imagery');
+    layer.addTo(map)
+    layer.on('load',function(){
+        makeScreenshot()
+    })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
@@ -101,7 +106,6 @@ function createMap(extent) {
         $("#button-group").fadeOut();
         currentLocation = 'Here be dragons...';
         updateLocationSuggestion();
-        makeScreenshot()
     });
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
