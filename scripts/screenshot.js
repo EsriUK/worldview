@@ -4,7 +4,6 @@ var firstClick = true;
 //Function to get screenshot from ArcGIS Online
 function getScreenshot(map){
     var deferred = $.Deferred();
-    var link = document.getElementById('download');
     var extent = map.getBounds();
     var southWest = extent.getSouthWest();
     var southEast = extent.getSouthEast();
