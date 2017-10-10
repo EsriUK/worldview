@@ -12,6 +12,7 @@ function getScreenshot(map){
     var northEast = extent.getNorthEast();
     var bbox = southWest.lng + "," + southWest.lat + "," + southEast.lng + "," + northEast.lat;
     var exportUrl = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/export?bbox=" + bbox + "&bboxSR=4326&layers=&layerDefs=&size=1920%2C1080&imageSR=&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=&f=json"
+    //Make request function is in common.js
     makeRequest("GET", exportUrl, true, function(resp) {
         deferred.resolve(resp.href)
     });
