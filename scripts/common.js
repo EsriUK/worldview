@@ -92,10 +92,6 @@ function createMap(extent) {
     }).fitBounds(bounds);
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
-    layer.on('load',function(){
-        //prepareScreenshot()
-        updateDownloadImage(map);
-    })
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
@@ -583,10 +579,11 @@ document.getElementById('share-button').addEventListener('click', showShare, fal
 document.getElementById('open-share-button').addEventListener('click', shareExtent, false);
 document.getElementById('copy-share-button').addEventListener('click', copyUrlToClipboard, false);
 
-// Create screenshot
+//Download screenshot
 document.getElementById('download').addEventListener('click', function(){
-    downloadScreenshot(this,'maptab.jpg'), false}); // see screenshot.js
-document.getElementById('display-screenshot-div').addEventListener('click', hideSave, false);
+    var that = document.getElementById('download2');
+    downloadScreenshot(this,that,map,'maptab.jpg'), false
+}); // see screenshot.js
 
 // Add this location
 document.getElementById('show-form').addEventListener('click', showForm, false);
