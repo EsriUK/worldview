@@ -1,6 +1,5 @@
 //Variables
 var firstClick = true;
-var href;
 
 //Function to get screenshot from ArcGIS Online
 function getScreenshot(map){
@@ -24,8 +23,7 @@ function downloadScreenshot(link,link2,map,filename){
     if(firstClick == true){
         firstClick = false;        
         getScreenshot(map).done(function(response){
-            href = response;
-            link2.href = href;
+            link2.href = response;
             link2.download = filename;   
             link.click();            
         })
