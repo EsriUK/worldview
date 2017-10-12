@@ -7,12 +7,8 @@ html, body, #map {
 	margin: 0;
 	height: 100%;
 	width: 100%;
-<<<<<<< HEAD
     overflow: hidden;
-=======
-  overflow: hidden;
-  z-index: 0;
->>>>>>> 9a295a4a6b75d341267a85104896f7603ae84545
+    z-index: 0;
 }
 
 #overview-map,
@@ -460,3 +456,44 @@ However, delay the fade out process for 2.5 seconds */
     from {bottom: 30px; opacity: 1;}
     to {bottom: 0; opacity: 0;}
 }
+
+#overview{
+    width: 150px;
+    height: 150px;
+    z-index: 999999999;
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+.stroke {
+    fill: none;
+    stroke: #000;
+    stroke-width: 3px;
+  }
+  
+  .fill {
+    fill: rgb(235, 232, 232);
+  }
+  
+  .graticule {
+    fill: none;
+    stroke: #777;
+    stroke-width: .5px;
+    stroke-opacity: .5;
+    display: none
+  }
+  
+  .land {
+    fill: #222;
+  }
+  
+  .boundary {
+      display: none;
+    fill: none;
+    stroke: #fff;
+    stroke-width: .5px;
+  }
+

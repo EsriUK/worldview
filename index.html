@@ -19,11 +19,16 @@
     <!-- Esri Leaflet Geocoder -->
   <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
   <script src="scripts/lib/esri-leaflet-geocoder-2.2.6/esri-leaflet-geocoder-debug.js"></script>
+
+  <script src="//d3js.org/d3.v3.min.js"></script>
+  <script src="//d3js.org/topojson.v1.min.js"></script>
  </head>
  <body>
 
       <!-- Map and location name -->
       <div id="map"></div>
+      <div id ="overview">
+      </div>
       <div id="name" class="location location-name"></div>
 
       <!-- Placeholder buttons for new functions -->
@@ -111,5 +116,7 @@
       <script src="scripts/screenshot.js"></script>
       <script src="scripts/country-codes.js"></script>
       <script src="scripts/common.js"></script>
+      <script src="scripts/overviewmap.js"></script>
+      
    </body>
 </html>

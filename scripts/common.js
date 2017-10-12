@@ -95,6 +95,7 @@ function createMap(extent) {
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
+    panTo([lng,lat])
     updateLocationSuggestion();
 
     // Hide UI elements and update location suggestion on zoom/pan
@@ -105,6 +106,9 @@ function createMap(extent) {
         $(".geocoder-control-input").fadeOut();
         currentLocation = 'Here be dragons...';
         updateLocationSuggestion();
+        var lat = map.getCenter().lat;
+        var lng = map.getCenter().lng;
+        panTo([lng,lat])        
     });
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
