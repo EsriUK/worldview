@@ -92,6 +92,7 @@ function createMap(extent) {
     bounds = L.latLngBounds(southWest, northEast);
     map = L.map('map', {
         maxZoom: 18
+        //inertia: false
     }).fitBounds(bounds);
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)

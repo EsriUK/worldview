@@ -41,18 +41,43 @@ svg.insert("path", ".graticule")
   .attr("d", path);
 });
 
+// var marker = [
+//   {
+//     name: "location",
+//     location: {
+//       latitude: 0,
+//       longitude: 0
+//     }
+//   }
+// ]
+
+// svg.selectAll(".pin")
+// .data(marker)
+// .enter().append("circle", ".pin")
+// .attr("r", 5)
+// .attr("class", "marker")
+// .attr("transform", function(d) {
+//   return "translate(" + projection([
+//     d.location.longitude,
+//     d.location.latitude
+//   ]) + ")";
+// });
+
 d3.select(self.frameElement).style("height", height + "px");
 
   function panTo(where){
       d3.select("#overview").transition()
       .duration(500)
       .tween("rotate", function() {
+        var lng = where[0];
+        var lat = where[1];
+        console.log(lng,lat)
         var p = where,
-            r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+            r = d3.interpolate(projection.rotate(), [-lng, -lat]);
         return function (t) {
           projection.rotate(r(t));
           svg.selectAll(".land").attr("d", path);
-
+          svg.selectAll(".pin");          
         }
 })
 }
