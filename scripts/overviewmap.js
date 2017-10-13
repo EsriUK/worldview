@@ -43,10 +43,6 @@ svg.insert("path", ".graticule")
 
 d3.select(self.frameElement).style("height", height + "px");
 
-function refresh() {
-    svg.selectAll(".land").attr("d", path);
-  }
-
   function panTo(where){
       d3.select("#overview").transition()
       .duration(500)
