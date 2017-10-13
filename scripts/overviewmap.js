@@ -41,9 +41,9 @@ svg.insert("path", ".graticule")
   .attr("d", path);
 });
 
-var places = [
+var marker = [
   {
-    name: "Newcastle, Australia",
+    name: "location",
     location: {
       latitude: 0,
       longitude: 0
@@ -52,7 +52,7 @@ var places = [
 ]
 
 svg.selectAll(".pin")
-.data(places)
+.data(marker)
 .enter().append("circle", ".pin")
 .attr("r", 5)
 .attr("class", "marker")
@@ -69,8 +69,11 @@ d3.select(self.frameElement).style("height", height + "px");
       d3.select("#overview").transition()
       .duration(500)
       .tween("rotate", function() {
+        var lng = where[0];
+        var lat = where[1];
+        console.log(lng,lat)
         var p = where,
-            r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+            r = d3.interpolate(projection.rotate(), [-lng, -lat]);
         return function (t) {
           projection.rotate(r(t));
           svg.selectAll(".land").attr("d", path);
