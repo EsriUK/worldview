@@ -457,6 +457,8 @@ However, delay the fade out process for 2.5 seconds */
     to {bottom: 0; opacity: 0;}
 }
 
+/*overview map styling*/
+
 #overview{
     width: 150px;
     height: 150px;

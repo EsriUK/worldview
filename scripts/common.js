@@ -95,6 +95,7 @@ function createMap(extent) {
     initialCenter = map.getCenter();
     var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
+    //Update overview map (see overviewmap.js)
     panTo([lng,lat])
     updateLocationSuggestion();
 
@@ -108,6 +109,7 @@ function createMap(extent) {
         updateLocationSuggestion();
         var lat = map.getCenter().lat;
         var lng = map.getCenter().lng;
+        //Update overview map (see overviewmap.js)
         panTo([lng,lat])        
     });
 

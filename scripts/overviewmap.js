@@ -1,4 +1,4 @@
-//function letsGo(center){
+//
 
 var width = 150,
 height = 150;
@@ -24,17 +24,8 @@ svg.append("defs").append("path")
 .attr("d", path);
 
 svg.append("use")
-.attr("class", "stroke")
-.attr("xlink:href", "#sphere");
-
-svg.append("use")
 .attr("class", "fill")
 .attr("xlink:href", "#sphere");
-
-svg.append("path")
-.datum(graticule)
-.attr("class", "graticule")
-.attr("d", path);
 
 d3.json("assets/world-50m.json", function(error, world) {
 if (error) throw error;
@@ -65,6 +56,6 @@ function refresh() {
         return function (t) {
           projection.rotate(r(t));
           svg.selectAll(".land").attr("d", path);
+
         }
 })
-}
