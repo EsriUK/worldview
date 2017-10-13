@@ -1,3 +1,5 @@
+//function letsGo(center){
+
 var width = 150,
 height = 150;
 
@@ -55,6 +57,14 @@ function refresh() {
   }
 
   function panTo(where){
-      //projection.rotate(where);
-      refresh()
-  }
+      d3.select("#overview").transition()
+      .duration(500)
+      .tween("rotate", function() {
+        var p = where,
+            r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
+        return function (t) {
+          projection.rotate(r(t));
+          svg.selectAll(".land").attr("d", path);
+        }
+})
+}
