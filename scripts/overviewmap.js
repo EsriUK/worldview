@@ -71,7 +71,12 @@ d3.select(self.frameElement).style("height", height + "px");
       .tween("rotate", function() {
         var lng = where[0];
         var lat = where[1];
-        console.log(lng,lat)
+        if(lng<-180){
+          lng = (lng % 180)+180
+        }
+        else if(lng>180){
+          lng = (lng % 180)-180
+        } 
         var p = where,
             r = d3.interpolate(projection.rotate(), [-lng, -lat]);
         return function (t) {
