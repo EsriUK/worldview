@@ -499,6 +499,11 @@ However, delay the fade out process for 2.5 seconds */
     stroke-width: .5px;
   }
 
+  .marker{
+      fill: orange;
+      stroke: red;
+  }
+
 /* Social sharing */
 
 .share-btn {
