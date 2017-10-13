@@ -331,28 +331,19 @@ function twitterShare(shareUrl) {
   document.getElementsByClassName("share-btn twitter")[0].href = encodedUrl;
 };
 
-// Google+
-function googleShare(shareUrl) {
-  var baseUrl = "https://plus.google.com/share?url="
-  var params = encodeURIComponent(shareUrl);
-  var encodedUrl = baseUrl + params;
-  document.getElementsByClassName("share-btn google-plus")[0].href = encodedUrl;
-};
-
 // Facebook
 function facebookShare(shareUrl) {
   var baseUrl = "http://www.facebook.com/sharer/sharer.php?u="
-  var params = encodeURIComponent(shareUrl);
+  var params = encodeURIComponent(shareText) + encodeURIComponent(shareUrl);
   var encodedUrl = baseUrl + params;
   document.getElementsByClassName("share-btn facebook")[0].href = encodedUrl;
 };
 
 // Reddit
 function redditShare(shareUrl) {
-  var baseUrl = "http://reddit.com/submit?url="
-  var params = encodeURIComponent(shareUrl);
-  var encodedUrl = baseUrl + params;
-  document.getElementsByClassName("share-btn reddit")[0].href = encodedUrl;
+  var baseUrl = "http://reddit.com/"
+  var url = baseUrl + shareUrl;
+  document.getElementsByClassName("share-btn reddit")[0].href = url;
 };
 
 // linkedin
@@ -534,7 +525,6 @@ function showShare() {
     // Update social sharing links
     shareUrl = getShareUrl();
     twitterShare(shareUrl);
-    googleShare(shareUrl);
     facebookShare(shareUrl);
     redditShare(shareUrl);
     linkedinShare(shareUrl);
