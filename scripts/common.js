@@ -30,6 +30,9 @@ var uniqueIdField = "OBJECTID";
 // Query to restrict returned features. If all features are to be displayed it should be "1=1"
 var serviceQuery = "1=1";
 
+// Social sharing text prefix
+var shareText = "I found a cool place with maptabs by Esri UK! "
+
 
 // Functions ----------------------------------------------------------------------------------- //
 //
@@ -319,36 +322,43 @@ function shareExtent(e) {
 
 // Twitter
 function twitterShare(shareUrl) {
-  baseUrl = "https://twitter.com/intent/tweet?url="
-  encodedUrl = encodeURI(baseUrl + shareUrl);
+  var baseUrl = "https://twitter.com/intent/tweet?text="
+  var params = encodeURIComponent(shareText) + encodeURIComponent(shareUrl);
+  var encodedUrl = baseUrl + params;
+  // console.log(baseUrl + shareUrl);
+  // console.log(encodedUrl);
   document.getElementsByClassName("share-btn twitter")[0].href = encodedUrl;
 };
 
 // Google+
 function googleShare(shareUrl) {
-  baseUrl = "https://plus.google.com/share?url="
-  encodedUrl = encodeURI(baseUrl + shareUrl);
+  var baseUrl = "https://plus.google.com/share?url="
+  var params = encodeURIComponent(shareUrl);
+  var encodedUrl = baseUrl + params;
   document.getElementsByClassName("share-btn google-plus")[0].href = encodedUrl;
 };
 
 // Facebook
 function facebookShare(shareUrl) {
-  baseUrl = "http://www.facebook.com/sharer/sharer.php?u="
-  encodedUrl = encodeURI(baseUrl + shareUrl);
+  var baseUrl = "http://www.facebook.com/sharer/sharer.php?u="
+  var params = encodeURIComponent(shareUrl);
+  var encodedUrl = baseUrl + params;
   document.getElementsByClassName("share-btn facebook")[0].href = encodedUrl;
 };
 
 // Reddit
 function redditShare(shareUrl) {
-  baseUrl = "http://reddit.com/submit?url="
-  encodedUrl = encodeURI(baseUrl + shareUrl);
+  var baseUrl = "http://reddit.com/submit?url="
+  var params = encodeURIComponent(shareUrl);
+  var encodedUrl = baseUrl + params;
   document.getElementsByClassName("share-btn reddit")[0].href = encodedUrl;
 };
 
 // linkedin
 function linkedinShare(shareUrl) {
-  baseUrl = "http://www.linkedin.com/shareArticle?url="
-  encodedUrl = encodeURI(baseUrl + shareUrl);
+  var baseUrl = "http://www.linkedin.com/shareArticle?url="
+  var params = encodeURIComponent(shareUrl);
+  var encodedUrl = baseUrl + params;
   document.getElementsByClassName("share-btn linkedin")[0].href = encodedUrl;
 };
 
