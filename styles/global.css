@@ -504,6 +504,17 @@ However, delay the fade out process for 2.5 seconds */
       stroke: red;
   }
 
+  #marker-pin{
+      border-radius: 100%;
+      width: 10px;
+      height:10px;
+      position: absolute;
+      right:65px;
+      bottom:65px;
+      background-color: #eda504;
+      opacity: 0.8;
+  }
+
 /* Social sharing */
 
 .share-btn {
