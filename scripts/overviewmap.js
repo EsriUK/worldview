@@ -1,4 +1,4 @@
-//
+//Code based on sample at https://bl.ocks.org/mbostock/3757125
 
 var width = 150,
 height = 150;
@@ -59,3 +59,4 @@ function refresh() {
 
         }
 })
+}
