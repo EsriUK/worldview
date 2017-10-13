@@ -475,11 +475,11 @@ However, delay the fade out process for 2.5 seconds */
     stroke: #000;
     stroke-width: 3px;
   }
-  
+
   .fill {
     fill: rgb(235, 232, 232);
   }
-  
+
   .graticule {
     fill: none;
     stroke: #777;
@@ -487,11 +487,11 @@ However, delay the fade out process for 2.5 seconds */
     stroke-opacity: .5;
     display: none
   }
-  
+
   .land {
     fill: #222;
   }
-  
+
   .boundary {
       display: none;
     fill: none;
@@ -499,3 +499,35 @@ However, delay the fade out process for 2.5 seconds */
     stroke-width: .5px;
   }
 
+/* Social sharing */
+
+.share-btn {
+    display: inline-block;
+    color: #ffffff;
+    border: none;
+    padding: 0.5em;
+    width: 4em;
+    box-shadow: 0 2px 0 0 rgba(0,0,0,0.2);
+    outline: none;
+    text-align: center;
+}
+
+.share-btn:hover {
+  color: #eeeeee;
+}
+
+.share-btn:active {
+  position: relative;
+  top: 2px;
+  box-shadow: none;
+  color: #e2e2e2;
+  outline: none;
+}
+
+.share-btn.twitter     { background: #55acee; }
+.share-btn.google-plus { background: #dd4b39; }
+.share-btn.facebook    { background: #3B5998; }
+.share-btn.stumbleupon { background: #EB4823; }
+.share-btn.reddit      { background: #ff5700; }
+.share-btn.linkedin    { background: #4875B4; }
+.share-btn.email       { background: #444444; }

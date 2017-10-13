@@ -110,7 +110,7 @@ function createMap(extent) {
         var lat = map.getCenter().lat;
         var lng = map.getCenter().lng;
         //Update overview map (see overviewmap.js)
-        panTo([lng,lat])        
+        panTo([lng,lat])
     });
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
@@ -240,7 +240,6 @@ function reverseGeocode(lat, lng, elementId) {
 // http://www.toptip.ca/2010/02/javascript-trim-leading-or-trailing.html
 // jQuery
 function makeReadable(reverseGeocodeData) {
-    console.log(reverseGeocodeData);
     // Retrieve individual variables
     var address = reverseGeocodeData[0];
     var city = reverseGeocodeData[1];
@@ -264,15 +263,13 @@ function makeReadable(reverseGeocodeData) {
         locationString = city + ', ' + country;
     } else if (map._zoom > 15) {
         // Remove any specific building number from address
-        address = address.replace(/[0-9]/g, '');
+        address = address.replace(/[0-9]/g, '') + ', ';
+        // If a city is returned, add it to the result
+        if (city != "") {
+          city = city + ', ';
+        }
         // Edge case for very remote areas e.g. himalayan Pakistan
-        if (address == "") {
-            address = "Near ";
-        }
-        if (city == "") {
-            city = " "; // Will be removed by replace() below
-        }
-        locationString = address + ', ' + city + ', ' + country;
+        locationString = address + city + country;
     };
 
     // Remove any leading/trailing commas or spaces in case logic above fails
@@ -299,6 +296,7 @@ function updateLocationSuggestion() {
 function getShareUrl() {
     bbox = getExtent();
     shareUrl = "http://techresearch.maps.arcgis.com/apps/Minimalist/index.html?appid=80c7439232b64a079c88c64d4f52ce22&extent=" + bbox[0] + "," + bbox[2] + "," + bbox[1] + "," + bbox[3] + ",4326";
+    console.log("getShareUrl");
 
     return shareUrl;
 };
@@ -317,6 +315,44 @@ function shareExtent(e) {
     hideShare();
     closeOnClick();
 };
+
+// Generate social sharing links
+
+// Twitter
+function twitterShare(shareUrl) {
+  baseUrl = "https://twitter.com/intent/tweet?url="
+  encodedUrl = encodeURI(baseUrl + shareUrl);
+  document.getElementsByClassName("share-btn twitter")[0].href = encodedUrl;
+};
+
+// Google+
+function googleShare(shareUrl) {
+  baseUrl = "https://plus.google.com/share?url="
+  encodedUrl = encodeURI(baseUrl + shareUrl);
+  document.getElementsByClassName("share-btn google-plus")[0].href = encodedUrl;
+};
+
+// Facebook
+function facebookShare(shareUrl) {
+  baseUrl = "http://www.facebook.com/sharer/sharer.php?u="
+  encodedUrl = encodeURI(baseUrl + shareUrl);
+  document.getElementsByClassName("share-btn facebook")[0].href = encodedUrl;
+};
+
+// Reddit
+function redditShare(shareUrl) {
+  baseUrl = "http://reddit.com/submit?url="
+  encodedUrl = encodeURI(baseUrl + shareUrl);
+  document.getElementsByClassName("share-btn reddit")[0].href = encodedUrl;
+};
+
+// linkedin
+function linkedinShare(shareUrl) {
+  baseUrl = "http://www.linkedin.com/shareArticle?url="
+  encodedUrl = encodeURI(baseUrl + shareUrl);
+  document.getElementsByClassName("share-btn linkedin")[0].href = encodedUrl;
+};
+
 
 // Creates DOM element and adds text so that it can be copied onclick
 function copyTextToClipboard(text) {
@@ -486,6 +522,14 @@ function showSearch() {
 
 // Show share modal
 function showShare() {
+    // Update social sharing links
+    shareUrl = getShareUrl();
+    twitterShare(shareUrl);
+    googleShare(shareUrl);
+    facebookShare(shareUrl);
+    redditShare(shareUrl);
+    linkedinShare(shareUrl);
+
     modalShare.style.display = "block";
     hideStandardUiElements();
 };
