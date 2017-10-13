@@ -297,7 +297,6 @@ function updateLocationSuggestion() {
 function getShareUrl() {
     bbox = getExtent();
     shareUrl = "http://techresearch.maps.arcgis.com/apps/Minimalist/index.html?appid=80c7439232b64a079c88c64d4f52ce22&extent=" + bbox[0] + "," + bbox[2] + "," + bbox[1] + "," + bbox[3] + ",4326";
-    console.log("getShareUrl");
 
     return shareUrl;
 };
@@ -481,7 +480,6 @@ function writeExtent() {
 function showForm() {
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
-
     if (extentButtonPressed == true) {
         hideForm();
         extentButtonPressed = false;
@@ -617,6 +615,7 @@ function closeOnClick() {
     modal.style.display = "none";
     modalSearch.style.display = "none";
     modalShare.style.display = "none";
+    extentButtonPressed = false;
     // modalShare.style.display = "none";
     showStandardUiElements();
 };
