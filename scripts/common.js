@@ -119,7 +119,7 @@ function createMap(extent) {
 
     map._layersMinZoom = 4; // Min zoom to work around screenshot issue
 
-    searchControl = L.esri.Geocoding.geosearch().addTo(map);
+    searchControl = L.esri.Geocoding.geosearch({useMapBounds: false}).addTo(map);
 
     // create an empty layer group to store the results and add it to the map
     var results = L.layerGroup().addTo(map);
