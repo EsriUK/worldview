@@ -620,11 +620,18 @@ function closeOnClick() {
     showStandardUiElements();
 };
 
+function showFAB() {
+	$(this).find('button').toggleClass('active');
+}
+
 // Event listeners ----------------------------------------------------------------------------- //
 //
 
 // Open sharing link
 // document.getElementById('share-button').addEventListener('click', shareExtent, false); // opens new window directly
+
+document.getElementById('fixed-action-button').addEventListener('click', showFAB, false);
+
 document.getElementById('share-button').addEventListener('click', showShare, false);
 document.getElementById('open-share-button').addEventListener('click', shareExtent, false);
 document.getElementById('copy-share-button').addEventListener('click', copyUrlToClipboard, false);

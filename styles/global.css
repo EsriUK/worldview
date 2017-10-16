@@ -277,9 +277,11 @@ label {
     padding: 2px 7px;
 }
 .location.location-name {
-    font-size: 30px;
+    font-size: 13px;
     background-color: rgba(0, 0, 0, 0.65);
     padding: 4px 9px;
+    font-weight: 100;
+    letter-spacing: .5;
 }
 .location.location-extent {
     bottom: 15px;
@@ -290,8 +292,8 @@ label {
     font-weight: 100;
 }
 .location {
-    bottom: 45px;
-    left: 15px;
+    bottom: 20px;
+    left: 20px;
     color: #fff;
     font-size: 1rem;
     font-weight: bold;
