@@ -387,7 +387,7 @@ li .tooltiptext {
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    top: 0%;
+    top: 25%;
     right: 125%;
     margin-left: -60px;
     opacity: 0;
