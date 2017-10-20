@@ -375,38 +375,25 @@ label {
     align: right;
 }*/
 
-.button .tooltiptext {
+li .tooltiptext {
     visibility: hidden;
-    display: inline-block;
-    /* width: 120px; */
-    height: 46px;
-    width: 250px;
-    background-color: rgba(0, 0, 0, 0.65);
+    width: 150px;
+    background-color: rgb(22, 22, 22);
     color: #fff;
     text-align: center;
     border-radius: 6px;
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    top: 0%;
     right: 125%;
     margin-left: -60px;
     opacity: 0;
     transition: opacity 1s;
 }
 
-.button .tooltiptext::after {
-    content: "";
-    position: absolute;
-    bottom: 100%;
-    left: 100%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: #555 transparent transparent transparent;
-}
 
-.button:hover .tooltiptext {
+
+li:hover .tooltiptext {
     visibility: visible;
     opacity: 1;
 }
