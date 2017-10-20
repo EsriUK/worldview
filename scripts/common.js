@@ -86,7 +86,8 @@ function randomise() {
 function createMap(centroid, zoomLevel) {
     map = L.map('map', {
         center: [centroid.y, centroid.x],
-        zoom: zoomLevel
+        zoom: zoomLevel,
+        inertia: false
     });
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
