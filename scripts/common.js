@@ -31,7 +31,7 @@ var uniqueIdField = "OBJECTID";
 var serviceQuery = "1=1";
 
 // Social sharing text prefix
-var shareText = "I found a cool place with the worldview app by Esri UK! "
+var shareText = "I found a cool place with maptabs by Esri UK! "
 
 
 // Functions ----------------------------------------------------------------------------------- //
@@ -86,7 +86,7 @@ function randomise() {
 // Create initial map
 // jQuery
 function createMap(extent) {
-    console.log("extent: " + JSON.stringify(extent));
+
     var southWest = L.latLng(extent.ymin, extent.xmin);
     var northEast = L.latLng(extent.ymax, extent.xmax);
     bounds = L.latLngBounds(southWest, northEast);
@@ -164,6 +164,9 @@ function getExtent() {
 };
 
 // 2. Geocoding
+
+
+
 
 // Catch geocode-form submit event and prevent page refresh
 function geocodeFormHandler(e) {
@@ -458,7 +461,6 @@ function writeExtent() {
             "Location_Name": placeName
         }
     }];
-    console.log(json);
 
     $.post(url,     {
         f: "json",
