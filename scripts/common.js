@@ -16,10 +16,10 @@ var saveButtonPressed = false;
 var currentLocation = "";
 
 // URL to publicly-shared polygon feature service containing areas of interest
-var servicerUrl = "https://utility.arcgis.com/usrsvcs/servers/fd092b1add784ab1abbd84e50f18d841/rest/services/Approvals_Test/FeatureServer/0";
+var servicerUrl = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewlive/FeatureServer/0";
 
 // URL to service where submissions are stored
-var suggestionsService = "http://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/ChromeSuggestionsTest_wgs84/FeatureServer/0";
+var suggestionsService = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewsuggestions/FeatureServer/0";
 
 // Field name in feature service containing location name
 var locationField = "Location_Name";
@@ -63,7 +63,7 @@ function makeRequest(method, url, async, readyStateHandler) {
 
 // Randomly get a location from the feature service
 function randomise() {
-    var queryPart = "/query?geometryType=esriGeometryEnvelope&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=" + locationField + "%2C+" + uniqueIdField + "&returnGeometry=false&outSR=4326&f=pjson";
+    var queryPart = "/query?geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=*&returnGeometry=true&outSR=4326&f=json";
     var where;
     // For testing, you can append ?objectID to the app's URL to test specific locations
     var objectID = window.location.search.substring(1).split("&")[0];
@@ -74,26 +74,20 @@ function randomise() {
     }
     var requestUrl = servicerUrl + queryPart + where;
     makeRequest("GET", requestUrl, true, function(resp) {
-        var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)].attributes;
-        locationName = randomFeature[locationField];
+        var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)];
+        locationName = randomFeature.attributes.Location_Name;
         document.getElementsByClassName("location-name")[0].innerHTML = locationName;
-        makeRequest("GET", servicerUrl + queryPart + "&returnExtentOnly=true&objectIds=" + randomFeature[uniqueIdField], true, function(resp) {
-            createMap(resp.extent);
-        });
+        createMap(randomFeature.geometry, randomFeature.attributes.Zoom_Level);
     });
 };
 
 // Create initial map
 // jQuery
-function createMap(extent) {
-
-    var southWest = L.latLng(extent.ymin, extent.xmin);
-    var northEast = L.latLng(extent.ymax, extent.xmax);
-    bounds = L.latLngBounds(southWest, northEast);
+function createMap(centroid, zoomLevel) {
     map = L.map('map', {
-        maxZoom: 18
-        //inertia: false
-    }).fitBounds(bounds);
+        center: [centroid.y, centroid.x],
+        zoom: zoomLevel
+    });
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
     initialCenter = map.getCenter();
@@ -443,22 +437,10 @@ function writeExtent() {
     // Use AJAX to create features
     var url = suggestionsService + "/applyEdits";
     var json = [{
-        "geometry": {
-            "rings": [
-                [
-                    [xmax, ymax],
-                    [xmax, ymin],
-                    [xmin, ymin],
-                    [xmin, ymax],
-                    [xmax, ymax]
-                ]
-            ],
-            "spatialReference": {
-                "wkid": 4326
-            }
-        },
+        "geometry": {"x" : xymean.lng, "y" : xymean.lat},
         "attributes": {
-            "Location_Name": placeName
+            "Location_Name": placeName,
+            "Zoom_Level": map.getZoom(),
         }
     }];
 
