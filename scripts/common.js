@@ -413,6 +413,7 @@ $.fn.isOnScreen = function() {
 
 // Validate input from HTML form
 function validateForm(e) {
+    
     if (e.preventDefault) e.preventDefault();
     writeExtent();
 
@@ -454,6 +455,7 @@ function writeExtent() {
 
 // Show location suggestion form modal
 function showForm() {
+    closeOnClick()
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
     if (extentButtonPressed == true) {
@@ -497,7 +499,8 @@ function showForm() {
 
 // Show share modal
 function showShare() {
-    // Update social sharing links
+    closeOnClick()
+        // Update social sharing links
     shareUrl = getShareUrl();
     twitterShare(shareUrl);
     facebookShare(shareUrl);
@@ -595,7 +598,7 @@ function closeOnClick() {
 };
 
 function showFAB() {
-	$(this).find('button').toggleClass('active');
+	$('.action-button').toggleClass('active');
 
 };
 
@@ -605,7 +608,7 @@ function showFAB() {
 // Open sharing link
 // document.getElementById('share-button').addEventListener('click', shareExtent, false); // opens new window directly
 
-document.getElementById('fixed-action-button').addEventListener('click', showFAB, false);
+document.getElementsByClassName('action-button')[0].addEventListener('click', showFAB, false);
 
 document.getElementById('share-button').addEventListener('click', showShare, false);
 document.getElementById('open-share-button').addEventListener('click', shareExtent, false);
@@ -613,6 +616,7 @@ document.getElementById('copy-share-button').addEventListener('click', copyUrlTo
 
 //Download screenshot
 document.getElementById('download').addEventListener('click', function(){
+    closeOnClick()
     var that = document.getElementById('download2');
     downloadScreenshot(this,that,map,'worldview.jpg'), false
 }); // see screenshot.js
