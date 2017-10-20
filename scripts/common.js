@@ -647,7 +647,6 @@ document.getElementById('show-form').addEventListener('click', showForm, false);
 document.getElementById('details-form').addEventListener('submit', validateForm, false);
 
 // Find somewhere
-document.getElementById('search-button').addEventListener('click', showSearch, false);
 document.getElementById('geocode-form').addEventListener('submit', geocodeFormHandler, false);
 
 // Close windows with 'X'
