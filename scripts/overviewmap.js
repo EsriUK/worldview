@@ -67,7 +67,7 @@ d3.select(self.frameElement).style("height", height + "px");
 
   function panTo(where){
       d3.select("#overview").transition()
-      .duration(500)
+      .duration(0)
       .tween("rotate", function() {
         var lng = where[0];
         var lat = where[1];

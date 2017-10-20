@@ -87,7 +87,8 @@ function createMap(centroid, zoomLevel) {
     map = L.map('map', {
         center: [centroid.y, centroid.x],
         zoom: zoomLevel,
-        inertia: false
+        inertia: true,
+        inertiaMaxSpeed: 1000
     });
     var layer = L.esri.basemapLayer('Imagery');
     layer.addTo(map)
