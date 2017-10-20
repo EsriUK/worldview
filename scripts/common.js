@@ -31,7 +31,7 @@ var uniqueIdField = "OBJECTID";
 var serviceQuery = "1=1";
 
 // Social sharing text prefix
-var shareText = "I found a cool place with maptabs by Esri UK! "
+var shareText = "I found a cool place with the worldview browser extension from Esri UK! "
 
 
 // Functions ----------------------------------------------------------------------------------- //
@@ -142,9 +142,6 @@ function createMap(centroid, zoomLevel) {
     );
 };
 
-
-
-
 // Get geographic extent of map div on screen
 function getExtent() {
     // Get variables representing screen dimensions
@@ -160,53 +157,51 @@ function getExtent() {
 // 2. Geocoding
 
 
+// // Catch geocode-form submit event and prevent page refresh
+// function geocodeFormHandler(e) {
+//
+//     if (e.preventDefault) e.preventDefault();
+//     geocode();
+//
+//     return false;
+// };
 
-
-// Catch geocode-form submit event and prevent page refresh
-function geocodeFormHandler(e) {
-
-    if (e.preventDefault) e.preventDefault();
-    geocode();
-
-    return false;
-};
-
-// Perform a geocode to allow user to search locations
-// jQuery
-function geocode() {
-
-    // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
-    var deferred = $.Deferred();
-
-    // Get user input
-    var searchString = document.getElementById('location-search').value;
-    var encodedSearchString = encodeURI(searchString);
-
-    // Concatenate search URL
-    var requestUrlStart = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=';
-    var requestUrlEnd = '&f=json&maxLocations=1'; // return first result only
-    var params = searchString;
-    var concatUrl = requestUrlStart + params + requestUrlEnd;
-
-    // Call geocode service and pan to the extent of the result
-    makeRequest("GET", concatUrl, true, function(resp) {
-        // Get bounding box from response
-        var xmax = resp.candidates[0].extent.xmax;
-        var ymax = resp.candidates[0].extent.ymax;
-        var xmin = resp.candidates[0].extent.xmin;
-        var ymin = resp.candidates[0].extent.ymin;
-        // Pan to bounding box
-        map.fitBounds([
-            [ymin, xmin],
-            [ymax, xmax]
-        ]);
-
-        closeOnClick();
-        deferred.resolve(resp);
-    });
-
-    return deferred.promise();
-};
+// // Perform a geocode to allow user to search locations
+// // jQuery
+// function geocode() {
+//
+//     // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
+//     var deferred = $.Deferred();
+//
+//     // Get user input
+//     var searchString = document.getElementById('location-search').value;
+//     var encodedSearchString = encodeURI(searchString);
+//
+//     // Concatenate search URL
+//     var requestUrlStart = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=';
+//     var requestUrlEnd = '&f=json&maxLocations=1'; // return first result only
+//     var params = searchString;
+//     var concatUrl = requestUrlStart + params + requestUrlEnd;
+//
+//     // Call geocode service and pan to the extent of the result
+//     makeRequest("GET", concatUrl, true, function(resp) {
+//         // Get bounding box from response
+//         var xmax = resp.candidates[0].extent.xmax;
+//         var ymax = resp.candidates[0].extent.ymax;
+//         var xmin = resp.candidates[0].extent.xmin;
+//         var ymin = resp.candidates[0].extent.ymin;
+//         // Pan to bounding box
+//         map.fitBounds([
+//             [ymin, xmin],
+//             [ymax, xmax]
+//         ]);
+//
+//         closeOnClick();
+//         deferred.resolve(resp);
+//     });
+//
+//     return deferred.promise();
+// };
 
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
@@ -472,35 +467,35 @@ function showForm() {
     extentButtonPressed = true;
     document.getElementById("location").value = currentLocation;
     // $(".details-form-div").show();
-
+    saveButtonPressed = true;
     modal.style.display = "block";
     $('#location').focus();
     // modalShare.style.display = "none";
     hideStandardUiElements();
 };
 
-// Show location search form modal
-// jQuery
-function showSearch() {
-    // Click again to close
-    // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
-    var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
-    var random = suggestions[Math.floor(Math.random() * suggestions.length)];
-    document.getElementById("location-search").placeholder = "e.g. " + random;
-    document.getElementById("location-search").value = "";
-    if (extentButtonPressed == true) {
-        hideForm();
-        extentButtonPressed = false;
-        return;
-    }
-    extentButtonPressed = true;
-    // Hide modal border for screenshot
-    modalSearch.style.border = "15px solid rgba(0, 0, 0, 0)";
-    modalSearch.style.display = "block";
-    $('#location-search').focus();
-    // modalShare.style.display = "none";
-    hideStandardUiElements();
-};
+// // Show location search form modal
+// // jQuery
+// function showSearch() {
+//     // Click again to close
+//     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
+//     var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
+//     var random = suggestions[Math.floor(Math.random() * suggestions.length)];
+//     document.getElementById("location-search").placeholder = "e.g. " + random;
+//     document.getElementById("location-search").value = "";
+//     if (extentButtonPressed == true) {
+//         hideForm();
+//         extentButtonPressed = false;
+//         return;
+//     }
+//     extentButtonPressed = true;
+//     // Hide modal border for screenshot
+//     modalSearch.style.border = "15px solid rgba(0, 0, 0, 0)";
+//     modalSearch.style.display = "block";
+//     $('#location-search').focus();
+//     // modalShare.style.display = "none";
+//     hideStandardUiElements();
+// };
 
 // Show share modal
 function showShare() {
@@ -510,9 +505,9 @@ function showShare() {
     facebookShare(shareUrl);
     redditShare(shareUrl);
     linkedinShare(shareUrl);
-
     modalShare.style.display = "block";
     hideStandardUiElements();
+    shareButtonPressed = true;
 };
 
 // Show all default ui elements
@@ -556,7 +551,6 @@ function hideStandardUiElements() {
     $("#name").fadeOut();
     $("div.sticky:not([id])").fadeOut();
     $("#hidden-button-group").hide();
-    $(".geocoder-control-input").fadeOut();
 };
 
 // Code for modal - suggestions box interactions
@@ -604,7 +598,8 @@ function closeOnClick() {
 
 function showFAB() {
 	$(this).find('button').toggleClass('active');
-}
+
+};
 
 // Event listeners ----------------------------------------------------------------------------- //
 //
@@ -621,7 +616,7 @@ document.getElementById('copy-share-button').addEventListener('click', copyUrlTo
 //Download screenshot
 document.getElementById('download').addEventListener('click', function(){
     var that = document.getElementById('download2');
-    downloadScreenshot(this,that,map,'maptab.jpg'), false
+    downloadScreenshot(this,that,map,'worldview.jpg'), false
 }); // see screenshot.js
 
 // Add this location

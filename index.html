@@ -154,18 +154,18 @@
 		</button>
 		<ul class='actions'>
 			<li id="share-button"><span class="tooltiptext">share current view</span><a><span class="glyph-icon flaticon-share"></span></a></li>			<li>
-				<span class="tooltiptext">download image of current view</span><a id="download" id="save-button"><span class="glyph-icon flaticon-download"></span></a>				<a id="download2"></a>
+				<span class="tooltiptext">download current view</span><a id="download" id="save-button"><span class="glyph-icon flaticon-download"></span></a>				<a id="download2"></a>
 			</li>
-			<li id="show-form"><span class="tooltiptext">suggest current view be added to World View</span><a><span class="glyph-icon flaticon-placeholder"></span></a></li>
+			<li id="show-form"><span class="tooltiptext">suggest current view</span><a><span class="glyph-icon flaticon-placeholder"></span></a></li>
 		</ul>
 	</div>
 
       <!-- Map and location name -->
       <div id="map"></div>
-      
+
 	  <div id ="overview"><div id="marker-pin"></div></div>
-      
-	  <div id="name" class="location location-name"></div>     
+
+	  <div id="name" class="location location-name"></div>
 
       <!-- Input form for submitting suggestions -->
       <div id="modal" class="modal">
@@ -195,10 +195,11 @@
 
       <!-- Sharing modal -->
       <div id="share-modal" class="modal">
+        <br>
          <div class="modal-content">
             <span class="close">&times;</span>
             <br>
-            <form id="geocode-form">
+            <form id="share-form">
                <label for="location">Share this map view</label><br>
                <input class="option-buttons" type="Submit" id="open-share-button" value="Open app">
                <input class="option-buttons" type="Submit" id="copy-share-button" value="Copy link">
@@ -226,7 +227,7 @@
             <a href="" target="_blank" class="share-btn linkedin">
                 <i class="fa fa-linkedin"></i>
             </a>
-
+            <br>
          </div>
       </div>
 
