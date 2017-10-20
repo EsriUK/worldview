@@ -455,6 +455,7 @@ function writeExtent() {
 
 // Show location suggestion form modal
 function showForm() {
+    document.getElementsByClassName('modal')[0].style.backgroundImage = "url(../images/viewfinder.svg)";    
     closeOnClick()
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
@@ -499,8 +500,9 @@ function showForm() {
 
 // Show share modal
 function showShare() {
+    document.getElementsByClassName('modal')[0].style.backgroundImage = "none";
     closeOnClick()
-        // Update social sharing links
+    // Update social sharing links
     shareUrl = getShareUrl();
     twitterShare(shareUrl);
     facebookShare(shareUrl);

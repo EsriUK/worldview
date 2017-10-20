@@ -176,7 +176,6 @@ html, body, #map {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0, 0, 0, 0.39); /* Black w/ opacity */
     box-sizing: border-box;
-    background-image: url(../images/viewfinder.svg);
     background-repeat: no-repeat;
     background-size: cover;
 }
