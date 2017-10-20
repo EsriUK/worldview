@@ -100,9 +100,7 @@ function createMap(centroid, zoomLevel) {
     // Hide UI elements and update location suggestion on zoom/pan
     map.on("moveend", function(e) {
         $("#name").fadeOut();
-        $("#button-group").fadeOut();
-        $(".geocoder-control-input").fadeOut();
-        $(".geocoder-control-input").fadeOut();
+
         currentLocation = 'Here be dragons...';
         updateLocationSuggestion();
         var lat = map.getCenter().lat;
