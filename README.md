@@ -1,4 +1,4 @@
-# **worldview*
+# **worldview**
 
 # About
 
