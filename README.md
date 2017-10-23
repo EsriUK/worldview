@@ -1,24 +1,24 @@
 # **worldview**
 
-#About
+# About
 
 worldview a Chrome Extension that shows you the satellite imagery for locations across the globe when you open a new tab. Built using [Leaflet](https://github.com/Leaflet/Leaflet) and the [Esri Leaflet](https://github.com/Esri/esri-leaflet) plugin.
 
-#Sample
-The app has been published to the Chrome Web Store. The listing can be found [here](https://chrome.google.com/webstore/detail/esri-uk-maps/aflbpeobpgdpibcfhkkjhaonbbpkmefg?hl=en-GB).
+# Sample
+The app has been published to the Chrome Web Store. The listing can be found [here](http://bit.ly/2yDUDA2).
 
-#Configuring
+# Configuring
 Start with common.js and the below variables:
 - servicerUrl - URL to publicly available ArcGIS polygon feature service of areas of interest
 - locationField - Field in the polygon feature service that contains the name of the location
 - uniqueIdField - Unique numeric field in the polygon feature service, e.g. ObjectID 
 - serviceQuery - Query to restrict locations in the app to a subset of the feature service's content, 1=1 will include everything
 
-#Issues
+# Issues
 
 Find a bug or want to request a new feature? Please let us know by submitting an issue.
 
-#Licensing
+# Licensing
 
 Copyright 2016 ESRI (UK) Limited
 
