@@ -1,5 +1,6 @@
 // Variables ----------------------------------------------------------------------------------- //
 //
+
 // Geographic globals
 var map, overviewMap, locationName, locationPoint, bounds, searchControl;
 
@@ -16,7 +17,7 @@ var saveButtonPressed = false;
 var currentLocation = "";
 
 // URL to publicly-shared polygon feature service containing areas of interest
-var servicerUrl = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewlive/FeatureServer/0";
+var servicerUrl = "https://utility.arcgis.com/usrsvcs/servers/36da3269d90e4eae940b3d7a17ee6b4b/rest/services/worldviewlive_internal/FeatureServer/0";
 
 // URL to service where submissions are stored
 var suggestionsService = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewsuggestions/FeatureServer/0";
@@ -42,7 +43,6 @@ var shareText = "I found a cool place with the worldview browser extension from 
 //      Open sharing link
 //      Create screenshot
 //      Add this location
-//      (See 2. Geocoding for 'Find somewhere functions')
 // 4. UI interactions
 //
 
@@ -156,53 +156,6 @@ function getExtent() {
 
 // 2. Geocoding
 
-
-// // Catch geocode-form submit event and prevent page refresh
-// function geocodeFormHandler(e) {
-//
-//     if (e.preventDefault) e.preventDefault();
-//     geocode();
-//
-//     return false;
-// };
-
-// // Perform a geocode to allow user to search locations
-// // jQuery
-// function geocode() {
-//
-//     // e.g. https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=spiti,%20india&f=json&maxLocations=1
-//     var deferred = $.Deferred();
-//
-//     // Get user input
-//     var searchString = document.getElementById('location-search').value;
-//     var encodedSearchString = encodeURI(searchString);
-//
-//     // Concatenate search URL
-//     var requestUrlStart = 'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/findAddressCandidates?SingleLine=';
-//     var requestUrlEnd = '&f=json&maxLocations=1'; // return first result only
-//     var params = searchString;
-//     var concatUrl = requestUrlStart + params + requestUrlEnd;
-//
-//     // Call geocode service and pan to the extent of the result
-//     makeRequest("GET", concatUrl, true, function(resp) {
-//         // Get bounding box from response
-//         var xmax = resp.candidates[0].extent.xmax;
-//         var ymax = resp.candidates[0].extent.ymax;
-//         var xmin = resp.candidates[0].extent.xmin;
-//         var ymin = resp.candidates[0].extent.ymin;
-//         // Pan to bounding box
-//         map.fitBounds([
-//             [ymin, xmin],
-//             [ymax, xmax]
-//         ]);
-//
-//         closeOnClick();
-//         deferred.resolve(resp);
-//     });
-//
-//     return deferred.promise();
-// };
-
 // Perform a reverse geocode to display address information to the user
 // Orig elementClassName = "location-name"
 // jQuery
@@ -315,8 +268,6 @@ function twitterShare(shareUrl) {
   var baseUrl = "https://twitter.com/intent/tweet?text="
   var params = encodeURIComponent(shareText) + encodeURIComponent(shareUrl);
   var encodedUrl = baseUrl + params;
-  // console.log(baseUrl + shareUrl);
-  // console.log(encodedUrl);
   document.getElementsByClassName("share-btn twitter")[0].href = encodedUrl;
 };
 
@@ -366,9 +317,7 @@ function copyUrlToClipboard(e) {
 
     if (e.preventDefault) e.preventDefault();
     shareUrl = getShareUrl();
-    // window.prompt("Copy to clipboard: Ctrl+C, Enter", shareUrl);
     copyTextToClipboard(shareUrl);
-    // hideShare();
     closeOnClick();
     showSnackBar("Link copied to clipboard");
 };
@@ -415,7 +364,7 @@ $.fn.isOnScreen = function() {
 
 // Validate input from HTML form
 function validateForm(e) {
-    
+
     if (e.preventDefault) e.preventDefault();
     writeExtent();
 
@@ -457,7 +406,7 @@ function writeExtent() {
 
 // Show location suggestion form modal
 function showForm() {
-    document.getElementsByClassName('modal')[0].style.backgroundImage = "url(../images/viewfinder.svg)";    
+    document.getElementsByClassName('modal')[0].style.backgroundImage = "url(../images/viewfinder.svg)";
     closeOnClick()
     // Click again to close
     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
@@ -469,36 +418,11 @@ function showForm() {
 
     extentButtonPressed = true;
     document.getElementById("location").value = currentLocation;
-    // $(".details-form-div").show();
     saveButtonPressed = true;
     modal.style.display = "block";
     $('#location').focus();
-    // modalShare.style.display = "none";
     hideStandardUiElements();
 };
-
-// // Show location search form modal
-// // jQuery
-// function showSearch() {
-//     // Click again to close
-//     // ToDo: auto-set reverse geocode value https://stackoverflow.com/questions/20604299/what-is-innerhtml-on-input-elements
-//     var suggestions = ["Spiti", "Siem Reap", "Barcelona", "Beijing", "Leh", "Bangkok", "Dehli", "Kuala Lumpur", "Berlin"];
-//     var random = suggestions[Math.floor(Math.random() * suggestions.length)];
-//     document.getElementById("location-search").placeholder = "e.g. " + random;
-//     document.getElementById("location-search").value = "";
-//     if (extentButtonPressed == true) {
-//         hideForm();
-//         extentButtonPressed = false;
-//         return;
-//     }
-//     extentButtonPressed = true;
-//     // Hide modal border for screenshot
-//     modalSearch.style.border = "15px solid rgba(0, 0, 0, 0)";
-//     modalSearch.style.display = "block";
-//     $('#location-search').focus();
-//     // modalShare.style.display = "none";
-//     hideStandardUiElements();
-// };
 
 // Show share modal
 function showShare() {
@@ -519,7 +443,6 @@ function showShare() {
 // jQuery
 function showStandardUiElements() {
     $("#button-group").fadeIn();
-    // $("#name").fadeIn();
     $(".leaflet-bottom").fadeIn();
     $("#hidden-button-group").fadeIn();
     $(".geocoder-control-input").fadeIn();
@@ -566,9 +489,6 @@ var modal = document.getElementById('modal');
 // Get the modal
 var modalSearch = document.getElementById('search-modal');
 
-// // Get modal-content div
-// var modalShare = document.getElementById("modalShare");
-
 // Get modal-share div
 var modalShare = document.getElementById("share-modal");
 
@@ -597,7 +517,6 @@ function closeOnClick() {
     modalSearch.style.display = "none";
     modalShare.style.display = "none";
     extentButtonPressed = false;
-    // modalShare.style.display = "none";
     showStandardUiElements();
 };
 
@@ -609,11 +528,10 @@ function showFAB() {
 // Event listeners ----------------------------------------------------------------------------- //
 //
 
-// Open sharing link
-// document.getElementById('share-button').addEventListener('click', shareExtent, false); // opens new window directly
-
+// Show action buttons
 document.getElementsByClassName('action-button')[0].addEventListener('click', showFAB, false);
 
+// Share extent
 document.getElementById('share-button').addEventListener('click', showShare, false);
 document.getElementById('open-share-button').addEventListener('click', shareExtent, false);
 document.getElementById('copy-share-button').addEventListener('click', copyUrlToClipboard, false);

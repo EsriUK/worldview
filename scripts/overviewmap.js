@@ -41,28 +41,6 @@ svg.insert("path", ".graticule")
   .attr("d", path);
 });
 
-// var marker = [
-//   {
-//     name: "location",
-//     location: {
-//       latitude: 0,
-//       longitude: 0
-//     }
-//   }
-// ]
-
-// svg.selectAll(".pin")
-// .data(marker)
-// .enter().append("circle", ".pin")
-// .attr("r", 5)
-// .attr("class", "marker")
-// .attr("transform", function(d) {
-//   return "translate(" + projection([
-//     d.location.longitude,
-//     d.location.latitude
-//   ]) + ")";
-// });
-
 d3.select(self.frameElement).style("height", height + "px");
 
   function panTo(where){
@@ -76,13 +54,13 @@ d3.select(self.frameElement).style("height", height + "px");
         }
         else if(lng>180){
           lng = (lng % 180)-180
-        } 
+        }
         var p = where,
             r = d3.interpolate(projection.rotate(), [-lng, -lat]);
         return function (t) {
           projection.rotate(r(t));
           svg.selectAll(".land").attr("d", path);
-          svg.selectAll(".pin");          
+          svg.selectAll(".pin");
         }
 })
 }
