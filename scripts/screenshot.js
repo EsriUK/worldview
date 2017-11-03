@@ -2,7 +2,7 @@
 var firstClick = true;
 
 //Function to get screenshot from ArcGIS Online
-function getScreenshot(map){
+function getScreenshot(map) {
     var deferred = $.Deferred();
     var extent = map.getBounds();
     var southWest = extent.getSouthWest();
@@ -16,20 +16,19 @@ function getScreenshot(map){
         deferred.resolve(resp.href)
     });
     return deferred.promise();
-}
+};
 
 //Function to download screenshot
-function downloadScreenshot(link,link2,map,filename){
-    if(firstClick == true){
-        firstClick = false;        
-        getScreenshot(map).done(function(response){
+function downloadScreenshot(link, link2, map, filename) {
+    if (firstClick == true) {
+        firstClick = false;
+        getScreenshot(map).done(function(response) {
             link2.href = response;
-            link2.download = filename;   
-            link.click();            
+            link2.download = filename;
+            link.click();
         })
+    } else {
+        link2.click();
+        firstClick = true;
     }
-    else{
-        link2.click();                    
-        firstClick = true; 
-    }
-}
+};
