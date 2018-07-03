@@ -16,7 +16,7 @@ var saveButtonPressed = false;
 var currentLocation = "";
 
 // URL to publicly-shared polygon feature service containing areas of interest
-var servicerUrl = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewlive/FeatureServer/0";
+var servicerUrl = "https://utility.arcgis.com/usrsvcs/servers/36da3269d90e4eae940b3d7a17ee6b4b/rest/services/worldviewlive_internal/FeatureServer/0";
 
 // URL to service where submissions are stored
 var suggestionsService = "https://services.arcgis.com/Qo2anKIAMzIEkIJB/arcgis/rest/services/worldviewsuggestions/FeatureServer/0";

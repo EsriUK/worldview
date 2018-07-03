@@ -16,9 +16,9 @@
 	},
 	"incognito": "split",
 	"manifest_version": 2,
-	"name": "Esri UK Maps",
+	"name": "worldview",
   "permissions": [
     "storage"
   ],
-	"version": "1.0.4"
+	"version": "2.0"
 }
