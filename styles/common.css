@@ -1,3 +1,160 @@
 @import url("global.css");
-@import url("../scripts/lib/leaflet-0.7.3/leaflet.min.css");
-@import url("../scripts/lib/easy-button/easy-button.min.css");
+
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+#map-viewer {
+	position: absolute;
+    z-index: 1000;
+    background: #fff;
+    padding: 15px 25px 15px 50px;
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    top: 8px;
+    left: 8px;
+	font-size: 14px;
+	color: #4C8BF5;
+	font-weight: bold;
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACK0lEQVRIS7VVXU7bQBD+xqBKYFfNDdqeADgB8Noa1T1B4QQFiY3Utz7HSElP0HACjGz6nNzAuQE5QUHET0Seav3Xtb32wkNGihTbu/PNfPPtt4QNB204P4wAJ6PVaWrRITH2gewnI2ZCbDGCUNi3fUV2ApxcJV4KjInxQUmwLP6/L98x4d4CLsJLO9ABaQHc0WoCou9yAwHXIATNBLIzJhoDGOTreBIK56IJ0gJQkj8CqReJt7Pmpk+j1b5F9FuhLF/C/CsaOufq+hqApIUZN1lFzGfh0Jnq2nb91QygQy0lhK9qtzUA10/uAWT8MnB7J2yvTKJQIl9ltOhCzuTu0v5YfqsAigSy7SJ4HgnnqHzqq7rFu9LFfwA/mTLwrc4fT8BbQTjcmX/2k4CAL32SVKq+DoV9Wogkf+36SQxgr6PtqZXynPPBviTiSNgHTQA27Hzo4765NxJ2xk5FkesnJoAyx4IIP7eerfh5mz0Cy7PQCh1AJ0W1uTRkWIhjAuCdsm4RCTuzld4h6yrTnQ9v/HewXr+RBWYSl6e/NeS2TDsn8pAyH/8ZOjJhFaqMSSfTQknVQTMNfHttHQQ/duT6QoXV6V5Gwq4MstMqzFqkWSR2j+U66U1k0Y10XrX62gyqShQnNYFIpbj+0xFgSf8aGM3u1SCMAITcrzROqu2gBCmcVcqvulw6OloS4fxVF46aSAKB4XF+XZZWsiAg1l1EzSKMd7JpDqbvGwf4B7AA5xksLRW5AAAAAElFTkSuQmCC') !important;
+	background-position: 15px center;
+    background-repeat: no-repeat;
+	cursor: pointer;
+	transition: top .35s ease-in-out;
+}
+
+#map-viewer.low {
+	top: 105px;
+}
+
+.searchbox-shadow {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 -1px 0px rgba(0,0,0,0.02);
+}
+
+#omnibox-container {
+    top: 0;
+    position: absolute;
+    z-index: 4;
+	opacity: 0;
+	transition: opacity .5s ease-in-out;
+}
+
+.section-layout.section-cardbox {
+    border-bottom: 1px solid #E8EAED;
+    border-top: 1px solid #E8EAED;
+    margin-top: 8px;
+	margin-left: 8px;
+    position: relative;
+	position: relative;
+    border-radius: 0;
+	background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    width: 392px;
+	padding: 18px 14px 8px 20px;
+    z-index: 12;
+}
+
+#location {
+	font-size: 14px;
+	border: none;
+    padding: 0px;
+    margin: 0px;
+    height: auto;
+    width: 100%;
+    background: url(data:image/gif;base64,R0lGODlhAQABAID/AMDAwAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw%3D%3D) transparent;
+    position: absolute;
+    z-index: 6;
+    left: 0px;
+	color: #8c8c8c;
+    outline: none;
+}
+
+#map:after {
+    content: '';
+    pointer-events: none;
+    background-image: linear-gradient(185deg, rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 2) 100%) !important;
+    opacity: 0.6 !important;
+    position: absolute !important;
+    height: 60% !important;
+    width: 100% !important;
+    left: 0px !important;
+    bottom: 0px !important;
+    z-index: 999999;
+}
+
+.searchbox {
+    position: relative;
+    background: #fff;
+    border-radius: 0px;
+    box-sizing: border-box;
+    width: 392px;
+    border-bottom: 1px solid transparent;
+    padding: 12px 78px 11px 0;
+    transition-property: background,box-shadow;
+    transition-duration: 0.3s;
+}
+
+.sbib_b {
+    position: relative;
+}
+
+.searchbox-searchbutton-container {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.searchbox-searchbutton {
+	display: block;
+	padding-left: 12px;
+	margin-top: 9px;
+	padding-right: 5px;
+	border-left: 1px solid #dddddd;
+	cursor: pointer;
+}
+
+.searchbox-searchbutton:disabled {
+	cursor: default;
+	opacity: .35;
+}
+
+.searchbox-searchbutton::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    background: url('../images/icons/send-button-1x.png');
+	background-position: -24px 0;
+    background-size: 48px 24px;
+}
+
+.searchbox-searchclear {
+	opacity: 0;
+	width: 24px;
+    height: 24px;
+	background: url('../images/icons/clear-button-1x.png');
+	transition: opacity .35s ease-in-out;
+}
+
+input[data-state="valid"] ~ .searchbox-searchclear {
+	opacity: 1 !important;
+	cursor: pointer;
+}
+
+#brand {
+	background: url('../images/swoc.png');
+    width: 166px;
+    height: 158px;
+    display: block;
+    position: absolute;
+    z-index: 9999;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    bottom: 66px;
+    left: 20px;
+	transition: bottom .35s ease-in-out;
+}
+
+#brand.low {
+	bottom: 20px;
+}
