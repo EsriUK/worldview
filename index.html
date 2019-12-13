@@ -1,125 +1,72 @@
 <html lang="en">
-   <head>
-      <title>New Tab</title>
-      <meta charset="UTF-8">
-      <meta content="" name="description">
-      <meta content="" name="author">
-      <meta content="3 days" name="revisit-after">
-      <link rel="stylesheet" type="text/css" href="styles/common.css" />
-      <link rel="stylesheet" type="text/css" href="styles/fonts.css"/>
-      <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-      <script src="scripts/lib/fontsawesome/e2338abaf7.js"></script>
-      <script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
-      <!-- Load Leaflet from CDN-->
-      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
-      <script src="scripts/lib/leaflet-1.1.0/leaflet-src.js"></script>
-      <!-- Load Esri Leaflet from CDN -->
-      <script src="scripts/lib/esri-leaflet-2.0.8/esri-leaflet-debug.js"></script>
-      <!-- Esri Leaflet Geocoder -->
-      <link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.2.6/dist/esri-leaflet-geocoder.css">
-      <script src="scripts/lib/esri-leaflet-geocoder-2.2.6/esri-leaflet-geocoder-debug.js"></script>
-      <script src="scripts/lib/d3/d3.v3.min.js"></script>
-      <script src="scripts/lib/d3/topojson.v1.min.js"></script>
-      <style>
-      </style>
-   </head>
-   <body>
-      <div class='multi-action' id="fixed-action-button">
-         <button class='action-button'>
-         <span class="glyph-icon flaticon-close"></span>
-         </button>
-         <ul class='actions'>
-            <li id="share-button"><span class="tooltiptext">share current view</span><a><span class="glyph-icon flaticon-share"></span></a></li>
-            <li>
-               <span class="tooltiptext">download current view</span><a id="download" id="save-button"><span class="glyph-icon flaticon-download"></span></a>				<a id="download2"></a>
-            </li>
-            <li id="show-form"><span class="tooltiptext">add current view</span><a><span class="glyph-icon flaticon-placeholder"></span></a></li>
-         </ul>
-      </div>
-      <!-- Map and location name -->
-      <div id="map"></div>
-      <div id ="overview">
-         <div id="marker-pin"></div>
-      </div>
-      <div id="name" class="location location-name"></div>
-      <!-- Input form for submitting suggestions -->
-      <div id="modal" class="modal">
-         <div class="modal-content">
-            <span class="close">&times;</span>
-            <br>
-            <form id="details-form">
-               <label for="location">Location name (e.g. 'London Bridge')</label>
-               <input type="text" id="location" name="placeName" placeholder="Waiting for address suggestion..." required>
-               <input class="option-buttons" type="Submit" id="details-form-submit-button" value="Submit">
-            </form>
-         </div>
-      </div>
-      <!-- Input form for geocoding -->
-      <div id="search-modal" class="modal">
-         <div class="modal-content">
-            <span class="close">&times;</span>
-            <br>
-            <form id="geocode-form">
-               <label for="location">Where would you like to go?</label>
-               <input type="text" id="location-search" name="placeName" placeholder="e.g. Spiti" required>
-               <input class="option-buttons" type="Submit" id="geocode-submit-button" value="I'm feeling lucky...">
-            </form>
-         </div>
-      </div>
-      <!-- Sharing modal -->
-      <div id="share-modal" class="modal">
-         <br>
-         <div class="modal-content">
-            <span class="close">&times;</span>
-            <br>
-            <form id="share-form">
-               <label for="location">Share this map view<br></label><br>
-               <input class="option-buttons" type="Submit" id="open-share-button" value="Open app">
-               <input class="option-buttons" type="Submit" id="copy-share-button" value="Copy link">
-            </form>
-            <!-- Basic Share Links from schier.co -->
-            <!-- Twitter (url, text, @mention) -->
-            <!-- Twitter -->
-            <a href="" target="_blank" class="share-btn twitter">
-            <i class="fa fa-twitter"></i>
-            </a>
-            <!-- Facebook -->
-            <a href="" target="_blank" class="share-btn facebook">
-            <i class="fa fa-facebook"></i>
-            </a>
-            <!-- Reddit (url, title) -->
-            <a href="" target="_blank" class="share-btn reddit">
-            <i class="fa fa-reddit"></i>
-            </a>
-            <!-- LinkedIn -->
-            <a href="" target="_blank" class="share-btn linkedin">
-            <i class="fa fa-linkedin"></i>
-            </a>
-            <p></p>
-            <p></p>
-         </div>
-      </div>
-      <!-- 'Snackbar' text  notification -->
-      <div id="snackbar">Link copied to clipboard</div>
-      <!-- Div for displaying stitched image -->
-      <div id="display-screenshot-div">
-         <!-- Canvas for stitching and exporting map images -->
-         <canvas id="canvas">
-            Sorry - this feature isn't supported by your browser.
-         </canvas>
-         <div id="canvas-beneath">
-            <div id="canvas-caption-div">
-               <p>Right click image to save...</p>
-            </div>
-            <div id="canvas-close">
-               <span class="close">&times;</span>
-            </div>
-         </div>
-      </div>
-      <script type="text/javascript" src="scripts/lib/easy-button/easy-button.min.js"></script>
-      <script src="scripts/screenshot.js"></script>
-      <script src="scripts/country-codes.js"></script>
-      <script src="scripts/common.js"></script>
-      <script src="scripts/overviewmap.js"></script>
-   </body>
+	<head>
+		<title>New Tab</title>
+		<meta charset="UTF-8">
+		<meta content="" name="description">
+		<meta content="" name="author">
+		<meta content="3 days" name="revisit-after">
+
+		<link rel="stylesheet" type="text/css" href="styles/common.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto&display=swap">
+
+		<script src="scripts/lib/jquery-3.1.1/jquery.js"></script>
+
+		<!-- Load Leaflet from CDN-->
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css" />
+		<script src="scripts/lib/leaflet-1.1.0/leaflet-src.js"></script>
+
+		<!-- Load Esri Leaflet from CDN -->
+		<script src="scripts/lib/esri-leaflet-2.0.8/esri-leaflet-debug.js"></script>
+
+		<!-- Toast -->
+		<script src="scripts/lib/toastr.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="styles/toast.css"/>
+
+		<script src="scripts/lib/d3/d3.v3.min.js"></script>
+		<script src="scripts/lib/d3/topojson.v1.min.js"></script>
+      
+	</head>
+	<body>
+
+		<div id="map-viewer">Open in Esri</div>
+
+		<div id="omnibox-container">
+
+			<div class="section-layout section-cardbox searchbox-shadow">
+				<h1 style="font-weight:bold;font-size:16px;">Share this location</h1>
+				<div class="searchbox">
+					
+					<form id="details-form">
+						<div class="gstl_50 sbib_a">
+							<div class="sbib_b" id="sb_ifc50" dir="ltr">
+								<div id="gs_lc50" style="position: relative;">
+									<input type="text" value="" name="placeName" id="location" name="q" autofocus="autofocus" value="" placeholder="Enter location name (e.g. 'London Bridge')" autocomplete="off" class="tactile-searchbox-input">
+									<input type="button" id="searchbox-searchclear" class="searchbox-searchclear" style="position: absolute; right: -24px; top: -3px; z-index: 12;"/>
+								</div>
+							</div>
+						</div>
+						<div class="searchbox-searchbutton-container">
+							<button type="Submit" disabled id="searchbox-searchbutton" class="searchbox-searchbutton"></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="brand" class="brand brand-name"></div>
+	  
+		<div id="map"></div>
+
+		<div id ="overview">
+			<div id="marker-pin"></div>
+		</div>
+
+		<div id="name" class="location location-name"></div>
+
+		<script src="scripts/global.js"></script>
+		<script src="scripts/overviewmap.js"></script>	
+
+	</body>
+
 </html>

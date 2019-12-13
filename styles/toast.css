@@ -1,0 +1,251 @@
+.toast-title {
+	font-weight: 700
+}
+
+.toast-message {
+	-ms-word-wrap: break-word;
+	word-wrap: break-word
+}
+
+.toast-message a,
+.toast-message label {
+	color: #FFF
+}
+
+.toast-message a:hover {
+	color: #CCC;
+	text-decoration: none
+}
+
+.toast-close-button {
+	position: relative;
+	right: -.3em;
+	top: -.3em;
+	float: right;
+	font-size: 20px;
+	font-weight: 700;
+	color: #FFF;
+	-webkit-text-shadow: 0 1px 0 #fff;
+	text-shadow: 0 1px 0 #fff;
+	opacity: .8;
+	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+	filter: alpha(opacity=80);
+	line-height: 1
+}
+
+.toast-close-button:focus,
+.toast-close-button:hover {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+	opacity: .4;
+	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+	filter: alpha(opacity=40)
+}
+
+.rtl .toast-close-button {
+	left: -.3em;
+	float: left;
+	right: .3em
+}
+
+button.toast-close-button {
+	padding: 0;
+	cursor: pointer;
+	background: 0 0;
+	border: 0;
+	-webkit-appearance: none
+}
+
+.toast-top-center {
+	top: 0;
+	right: 0;
+	width: 100%
+}
+
+.toast-bottom-center {
+	bottom: 0;
+	right: 0;
+	width: 100%
+}
+
+.toast-top-full-width {
+	top: 0;
+	right: 0;
+	width: 100%
+}
+
+.toast-bottom-full-width {
+	bottom: 0;
+	right: 0;
+	width: 100%
+}
+
+.toast-top-left {
+	top: 105px;
+	left: 8px
+}
+
+.toast-top-right {
+	top: 8px;
+	right: 8px
+}
+
+.toast-bottom-right {
+	right: 8px;
+	bottom: 8px
+}
+
+.toast-bottom-left {
+	bottom: 8px;
+	left: 8px
+}
+
+#toast-container {
+	position: fixed;
+	z-index: 999999;
+	pointer-events: none
+}
+
+#toast-container * {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box
+}
+
+#toast-container>div {
+	position: relative;
+	pointer-events: auto;
+	overflow: hidden;
+	margin: 0 0 6px;
+	padding: 15px 15px 15px 50px;
+	width: 426px;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	background-position: 15px center;
+	background-repeat: no-repeat;
+	-moz-box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+	-webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+	box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+	color: #4C8BF5;
+	opacity: 1;
+	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+	filter: alpha(opacity=80)
+}
+
+#toast-container>div.rtl {
+	direction: rtl;
+	padding: 15px 50px 15px 15px;
+	background-position: right 15px center
+}
+
+#toast-container>div:hover {
+	-moz-box-shadow: 0 0 12px #000;
+	-webkit-box-shadow: 0 0 12px #000;
+	box-shadow: 0 0 12px #000;
+	opacity: 1;
+	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+	filter: alpha(opacity=100);
+	cursor: pointer
+}
+
+#toast-container>.toast-info {
+	background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAACLklEQVRIS7VVS3LTQBB9LY9SEEHFOQHmBDEnwFnHqYgTxDfArmIWrExWLERVfATnBIiKWGNuIJ8AOEGcCkooS1ZTI4+Co48nHzK7KU33e/36dYvwyIceOT+MAO7Hq1Yi0kOAOgC3l4QoBHgiEuvEf//05zqSawG6XvQBwFsAzZokMwCjQDpHdSC1AHte5BNwkPEFThjpWIgkVPckEW2C1WPgUFc0CeTmbhVIJcCed9kn8DGAcyB1A/l8UhXc9S46gOUD2GLQ4KvcHBXflQC05j+WD9PduuR5Ig3yTd1FYr0s9qQEoHUfKllOpdO7jcv2vWis5ToKpKP6dn0qAH5PAHpdZL//KXKZMWRC0wIGp+8cJU12/lXB3wP5rGMAiDgrV8y3/cG2colOEik7vtDXMJDOq/ybe3zWTJKNM3UPpHODdJVEWSIDwDSQjp4JYAXgVyCd1kMkUvo2idC/t0R5w+7T5KqYsk2XeiqZtu5o03Mh5q3VvukhLRsxtyqAGZC+MQzaZ71KShatBVBNWyQbo3wVMGFspda4Yf+ZqqBF/GQntdIeMbI5UdI0xLxfZF8LsGJN1dShYdgqmecxt1rXsWCXwIrtjg6cMmhsJ+Q/aF0XmXe95RAWh2ldhcYKVoP/C4BqcLywDyxGm2G1AVY/m+upLbANAZoR0jAlhHYj/mK0ade7sXMM/S19Nq+KzKKx7bJiTYo5qQry5hYzTgGegRESEDbs2DdWcFfKpvd/AVKvCyjexFrjAAAAAElFTkSuQmCC') !important
+}
+
+#toast-container.toast-bottom-center>div,
+#toast-container.toast-top-center>div {
+	width: 300px;
+	margin-left: auto;
+	margin-right: auto
+}
+
+#toast-container.toast-bottom-full-width>div,
+#toast-container.toast-top-full-width>div {
+	width: 96%;
+	margin-left: auto;
+	margin-right: auto
+}
+
+.toast {
+	background-color: #030303
+}
+
+.toast-success {
+	background-color: #51A351
+}
+
+.toast-error {
+	background-color: #BD362F
+}
+
+.toast-info {
+	background-color: #fff;
+}
+
+.toast-warning {
+	background-color: #F89406
+}
+
+.toast-progress {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 4px;
+	background-color: #000;
+	opacity: .4;
+	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
+	filter: alpha(opacity=40)
+}
+
+.toast-message {
+	font-size: 14px;
+	font-weight: bold;
+}
+
+@media all and (max-width:240px) {
+	#toast-container>div {
+		padding: 8px 8px 8px 50px;
+		width: 11em
+	}
+	#toast-container>div.rtl {
+		padding: 8px 50px 8px 8px
+	}
+	#toast-container .toast-close-button {
+		right: -.2em;
+		top: -.2em
+	}
+	#toast-container .rtl .toast-close-button {
+		left: -.2em;
+		right: .2em
+	}
+}
+
+@media all and (min-width:241px) and (max-width:480px) {
+	#toast-container>div {
+		padding: 8px 8px 8px 50px;
+		width: 18em
+	}
+	#toast-container>div.rtl {
+		padding: 8px 50px 8px 8px
+	}
+	#toast-container .toast-close-button {
+		right: -.2em;
+		top: -.2em
+	}
+	#toast-container .rtl .toast-close-button {
+		left: -.2em;
+		right: .2em
+	}
+}
+
+@media all and (min-width:481px) and (max-width:768px) {
+	#toast-container>div {
+		padding: 15px 15px 15px 50px;
+		width: 25em
+	}
+	#toast-container>div.rtl {
+		padding: 15px 50px 15px 15px
+	}
+}
