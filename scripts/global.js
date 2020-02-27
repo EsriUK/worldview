@@ -22,6 +22,15 @@ function makeRequest(method, url, async, readyStateHandler) {
 
 function init() {
 
+	/*
+	chrome.storage.sync.get("reporting", function (obj) {
+		if(obj['reporting']) {
+			var rp = document.getElementById("map-reporter");
+			rp.style.display = "block";
+		};
+	});
+	*/
+
     var query = "/query?geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=*&outSR=4326&returnGeometry=true&f=json";
     var where = "&where=" + serviceQuery;
 

@@ -4,6 +4,11 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+.leaflet-bottom.leaflet-right {
+	right: 100px;
+    bottom: 4px;
+}
+
 #map-viewer {
 	position: absolute;
     z-index: 1000;
@@ -31,9 +36,9 @@ body {
 	position: absolute;
     z-index: 1000;
     border-radius: 0;
-    top: 68px;
-    left: 14px;
-    font-size: 13px;
+    bottom: 11px;
+    right: 17px;
+    font-size: 11px;
     color: #ffffff;
     font-weight: bold;
     cursor: pointer;
@@ -50,11 +55,6 @@ body {
 	-webkit-filter: drop-shadow(-1px 2px 4px rgba(0, 0, 0, 0.7));
     filter: drop-shadow(-1px 2px 4px rgba(0, 0, 0, 0.7));
 }
-
-#map-reporter.low {
-	top: 165px;
-}
-
 
 #toast-container.toast-top-right > div {
 	width: auto !important;
