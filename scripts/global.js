@@ -73,6 +73,9 @@ function createMap(centroid, Zoom_Level) {
 		var mv = document.getElementById("map-viewer");
 		mv.classList.add('low');
 
+		var rp = document.getElementById("map-reporter");
+		rp.classList.add('low');
+
 	    var omni = document.getElementById("omnibox-container");
 		requestAnimationFrame(() => omni.style.opacity = 1);
 

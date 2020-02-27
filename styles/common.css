@@ -30,18 +30,31 @@ body {
 #map-reporter {
 	position: absolute;
     z-index: 1000;
-    background: #fff;
-    padding: 15px 25px 15px 25px;
     border-radius: 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    top: 8px;
-    right: 8px;
-	font-size: 14px;
-	color: #4C8BF5;
-	font-weight: bold;
-	cursor: pointer;
-	transition: top .35s ease-in-out;
+    top: 68px;
+    left: 14px;
+    font-size: 13px;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: -1px 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: aqua;
+    transition: top .35s ease-in-out;
+	display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
+
+#map-reporter svg {
+	margin-right: 4px;
+	-webkit-filter: drop-shadow(-1px 2px 4px rgba(0, 0, 0, 0.7));
+    filter: drop-shadow(-1px 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+#map-reporter.low {
+	top: 165px;
+}
+
 
 #toast-container.toast-top-right > div {
 	width: auto !important;
