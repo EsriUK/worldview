@@ -27,6 +27,26 @@ body {
 	top: 105px;
 }
 
+#map-reporter {
+	position: absolute;
+    z-index: 1000;
+    background: #fff;
+    padding: 15px 25px 15px 25px;
+    border-radius: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    top: 8px;
+    right: 8px;
+	font-size: 14px;
+	color: #4C8BF5;
+	font-weight: bold;
+	cursor: pointer;
+	transition: top .35s ease-in-out;
+}
+
+#toast-container.toast-top-right > div {
+	width: auto !important;
+}
+
 .searchbox-shadow {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2), 0 -1px 0px rgba(0,0,0,0.02);
 }

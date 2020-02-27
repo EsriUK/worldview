@@ -2,8 +2,11 @@ var map, overviewMap, Location_Name, locationPoint, bounds, searchControl;
 var currentLocation			= "";
 var masterServiceEndpoint	= "https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/arcgis/rest/services/WorldviewMaster/FeatureServer/0";
 var editableServiceEndpoint	= 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/arcgis/rest/services/WorldviewEditable/FeatureServer/0';
+var reportServiceEndpoint	= 'https://services.arcgis.com/WQ9KVmV6xGGMnCiQ/arcgis/rest/services/WorldviewReported/FeatureServer/0';
 var serviceQuery			= "Status='Approved'";
 var existing;
+
+var loadedObj;
 
 function makeRequest(method, url, async, readyStateHandler) {
     var xhr = new XMLHttpRequest();
@@ -28,11 +31,14 @@ function init() {
 
 		var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)];
 
+		loadedObj = randomFeature;
+
 		Location_Name = randomFeature.attributes.Location_Name;
 		document.getElementsByClassName("location-name")[0].innerHTML = Location_Name;
 		createMap(randomFeature.geometry, randomFeature.attributes.Zoom_Level);
 
     });
+
 };
 
 function createMap(centroid, Zoom_Level) {
@@ -70,6 +76,11 @@ function createMap(centroid, Zoom_Level) {
 	    var omni = document.getElementById("omnibox-container");
 		requestAnimationFrame(() => omni.style.opacity = 1);
 
+		var lat = map.getCenter().lat;
+        var lng = map.getCenter().lng;
+        //Update overview map (see overviewmap.js)
+        panTo([lng,lat])
+
     });
 
     map._layersMinZoom = 4;
@@ -94,6 +105,40 @@ function openMapViewer() {
 
 	var win = window.open(url, '_blank');
 	win.focus();
+}
+
+function openMapReporter() {
+
+	toastr.clear();
+
+	toastr.options = {
+		"positionClass": "toast-top-right",
+		"timeOut": "5000",
+		"extendedTimeOut": "1000",
+		"showEasing": "swing",
+		"hideEasing": "linear",
+		"showMethod": "fadeIn",
+		"hideMethod": "fadeOut"
+	}
+
+	loadedObj.attributes.Reported = 1;
+
+	var url = reportServiceEndpoint + "/applyEdits";
+
+    var payload = '[' + JSON.stringify(loadedObj) + ']';
+    
+	$.post(url, {
+        f: "json",
+        updates: payload
+    }, function(data, status) {
+		var d = JSON.parse(data);
+		if(d.updateResults[0].success) {
+			toastr["info"]("Location successfully reported")
+		} else {
+			toastr["error"]("Oh no... Something went wrong")
+		};
+	});
+	
 }
 
 function validateForm(e) {
@@ -163,6 +208,7 @@ function writeExtent() {
 
 document.getElementById('details-form').addEventListener('submit', validateForm, false);
 document.getElementById('map-viewer').addEventListener('click', openMapViewer, false);
+document.getElementById('map-reporter').addEventListener('click', openMapReporter, false);
 
 const input		= document.querySelector('input');
 const clear		= document.getElementById('searchbox-searchclear');
