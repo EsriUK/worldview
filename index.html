@@ -47,13 +47,13 @@
 						<div class="gstl_50 sbib_a">
 							<div class="sbib_b" id="sb_ifc50" dir="ltr">
 								<div id="gs_lc50" style="position: relative;">
-									<input type="text" value="" name="placeName" id="location" name="q" autofocus="autofocus" value="" placeholder="Enter location name (e.g. 'London Bridge')" autocomplete="off" class="tactile-searchbox-input">
+									<input type="text" value="" readonly name="placeName" id="location" name="q" autofocus="autofocus" value="" placeholder="Enter location name (e.g. 'London Bridge')" autocomplete="off" class="tactile-searchbox-input">
 									<input type="button" id="searchbox-searchclear" class="searchbox-searchclear" style="position: absolute; right: -24px; top: -3px; z-index: 12;"/>
 								</div>
 							</div>
 						</div>
 						<div class="searchbox-searchbutton-container">
-							<button type="Submit" disabled id="searchbox-searchbutton" class="searchbox-searchbutton"></button>
+							<button type="Submit" id="searchbox-searchbutton" class="searchbox-searchbutton"></button>
 						</div>
 					</form>
 				</div>
@@ -71,6 +71,7 @@
 
 		<div id="name" class="location location-name"></div>
 
+		<script src="scripts/country-codes.js"></script>
 		<script src="scripts/global.js"></script>
 		<script src="scripts/overviewmap.js"></script>	
 

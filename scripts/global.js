@@ -22,15 +22,6 @@ function makeRequest(method, url, async, readyStateHandler) {
 
 function init() {
 
-	/*
-	chrome.storage.sync.get("reporting", function (obj) {
-		if(obj['reporting']) {
-			var rp = document.getElementById("map-reporter");
-			rp.style.display = "block";
-		};
-	});
-	*/
-
     var query = "/query?geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=*&outSR=4326&returnGeometry=true&f=json";
     var where = "&where=" + serviceQuery;
 
@@ -48,6 +39,91 @@ function init() {
 
     });
 
+};
+
+function reverseGeocode(lat, lng, elementId) {
+
+    var deferred = $.Deferred();
+    var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
+    
+	makeRequest("GET", requestUrl, true, function(resp) {
+
+        if (!resp.error) {
+            var address		= resp.address.Address;
+            var city		= resp.address.City;
+            var region		= resp.address.Region;
+            var country		= resp.address.CountryCode;
+            var worldRegion = "";
+
+            [country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
+            
+			deferred.resolve(
+				[address, city, region, country, worldRegion]
+			);
+
+        };
+
+        var suggestionString = "";
+
+        var geocodeResult = [address, city, country];
+
+		//console.log(geocodeResult);
+
+        //return suggestionString;
+		return geocodeResult;
+    
+	});
+
+    return deferred.promise();
+};
+
+function makeReadable(reverseGeocodeData) {
+    // Retrieve individual variables
+    var address = reverseGeocodeData[0];
+    var city = reverseGeocodeData[1];
+    var region = reverseGeocodeData[2];
+    var country = reverseGeocodeData[3];
+    var worldRegion = reverseGeocodeData[4];
+
+    // Concatenate suggestion based on map zoom level
+    if (map._zoom <= 6) {
+        locationString = worldRegion;
+    } else if (map._zoom > 6 && map._zoom <= 8) {
+        locationString = country;
+    } else if (map._zoom > 8 && map._zoom <= 11) {
+        // avoid duplication (E.g. 'Somewhere in Turkmenistan, Turkmenistan')
+        if (region == country) {
+            locationString = country;
+        } else {
+            locationString = region + ', ' + country;
+        }
+    } else if (map._zoom > 11 && map._zoom <= 15) {
+        locationString = city + ', ' + country;
+    } else if (map._zoom > 15) {
+        // Remove any specific building number from address
+        address = address.replace(/[0-9]/g, '') + ', ';
+        // If a city is returned, add it to the result
+        if (city != "") {
+          city = city + ', ';
+        }
+        // Edge case for very remote areas e.g. himalayan Pakistan
+        locationString = address + city + country;
+    };
+
+    // Remove any leading/trailing commas or spaces in case logic above fails
+    locationString = locationString.replace(/^\s*,+\s*|\s*,+\s*$/g, '');
+    // Remove any commas preceded by spaces within the string
+    locationString = locationString.replace(/ ,/g, '');
+
+    return locationString;
+};
+
+function updateLocationSuggestion() {
+    xycenter = map.getBounds().getCenter();
+    reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+        data = makeReadable(data);
+        document.getElementById("location").value = data;
+    });
 };
 
 function createMap(centroid, Zoom_Level) {
@@ -72,6 +148,8 @@ function createMap(centroid, Zoom_Level) {
 	var omni = document.getElementById("omnibox-container");
 
     map.on("moveend", function(e) {
+
+		updateLocationSuggestion();
 		
 		var elem = document.getElementById("name");
 		requestAnimationFrame(() => elem.style.opacity = 0);
@@ -161,15 +239,6 @@ function validateForm(e) {
 
 function writeExtent() {
 
-	const search	= document.getElementById('searchbox-searchbutton');
-	const clear		= document.getElementById('searchbox-searchclear');
-	const input		= document.querySelector('input');
-
-	clear.style.opacity = 0;
-
-	search.disabled		= true;
-	input.dataset.state = 'invalid';
-	
 	toastr.clear();
 	
 	var [xmin, xmax, ymin, ymax, xymean] = getExtent();
@@ -204,11 +273,9 @@ function writeExtent() {
 
 		var d = JSON.parse(data);
 			
-		if(d.addResults[0].success) {
-			$('#details-form').find('input[name="placeName"]').val('');
+		if(d.addResults[0].success) {;
 			toastr["info"]("Location successfully added")
 		} else {
-			$('#details-form').find('input[name="placeName"]').val('');	
 			toastr["error"]("Oh no... Something went wrong")
 		};
 		
