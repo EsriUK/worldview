@@ -8,6 +8,8 @@ var existing;
 
 var loadedObj;
 
+var currentLocation;
+
 function makeRequest(method, url, async, readyStateHandler) {
     var xhr = new XMLHttpRequest();
     xhr.open(method, url, async);
@@ -118,22 +120,40 @@ function makeReadable(reverseGeocodeData) {
     return locationString;
 };
 
-function updateLocationSuggestion() {
-    xycenter = map.getBounds().getCenter();
-    reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
-        data = makeReadable(data);
-        document.getElementById("location").value = data;
-    });
-};
+var getLocationSuggestion = function() {
+
+	return new Promise(function(resolve, reject) {
+
+		xycenter = map.getBounds().getCenter();
+
+		var placename = '';
+
+		reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
+			data = makeReadable(data);
+			this.placename = data;
+		});
+
+		resolve(this.placename);		
+		
+	});
+
+	
+}
 
 function createMap(centroid, Zoom_Level) {
 
-	map = L.map('map', {
-		center: [centroid.y, centroid.x],
-		zoom: Zoom_Level,
+	map = L.map('map',{
 		inertia: true,
 		inertiaMaxSpeed: 1000
+	})
+			
+	map.on("load", function(e) {
+		getLocationSuggestion().then(function(place) {
+			document.getElementById("location").value = place;
+		});
 	});
+		
+	map.setView([centroid.y, centroid.x],Zoom_Level);
 
 	var layer = L.esri.basemapLayer('Imagery');
 	layer.addTo(map);
@@ -142,14 +162,22 @@ function createMap(centroid, Zoom_Level) {
     
 	var lat = map.getCenter().lat;
     var lng = map.getCenter().lng;
-    
 	panTo([lng,lat]);
 
 	var omni = document.getElementById("omnibox-container");
 
-    map.on("moveend", function(e) {
+    map.on("move", function(e) {
+		var lat = map.getCenter().lat;
+        var lng = map.getCenter().lng;
+        panTo([lng,lat])
 
-		updateLocationSuggestion();
+    });
+
+	map.on("moveend", function(e) {
+
+		getLocationSuggestion().then(function(place) {
+			document.getElementById("location").value = place;
+		});
 		
 		var elem = document.getElementById("name");
 		requestAnimationFrame(() => elem.style.opacity = 0);
@@ -165,11 +193,6 @@ function createMap(centroid, Zoom_Level) {
 
 	    var omni = document.getElementById("omnibox-container");
 		requestAnimationFrame(() => omni.style.opacity = 1);
-
-		var lat = map.getCenter().lat;
-        var lng = map.getCenter().lng;
-        //Update overview map (see overviewmap.js)
-        panTo([lng,lat])
 
     });
 
