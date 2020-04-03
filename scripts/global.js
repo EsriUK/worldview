@@ -182,8 +182,6 @@ function createMap(centroid, Zoom_Level) {
 		var elem = document.getElementById("name");
 		requestAnimationFrame(() => elem.style.opacity = 0);
 
-		var br = document.getElementById("brand");
-		br.classList.add('low');
 
 		var mv = document.getElementById("map-viewer");
 		mv.classList.add('low');
