@@ -11,7 +11,7 @@ var loadedObj;
 var currentLocation;
 
 function makeRequest(method, url, async, readyStateHandler) {
-    var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest(); 
     xhr.open(method, url, async);
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -23,57 +23,44 @@ function makeRequest(method, url, async, readyStateHandler) {
 };
 
 function init() {
+	var query = "/query?geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=*&outSR=4326&returnGeometry=true&f=json";
+	var where = "&where=" + serviceQuery;
 
-    var query = "/query?geometryType=esriGeometryPoint&spatialRel=esriSpatialRelIntersects&units=esriSRUnit_Meter&outFields=*&outSR=4326&returnGeometry=true&f=json";
-    var where = "&where=" + serviceQuery;
-
-    var requestUrl = masterServiceEndpoint + query + where;
-   
+	var requestUrl = masterServiceEndpoint + query + where;
+	
 	makeRequest("GET", requestUrl, true, function(resp) {
-
 		var randomFeature = resp.features[Math.floor(Math.random() * resp.features.length)];
-
 		loadedObj = randomFeature;
-
 		Location_Name = randomFeature.attributes.Location_Name;
 		document.getElementsByClassName("location-name")[0].innerHTML = Location_Name;
 		createMap(randomFeature.geometry, randomFeature.attributes.Zoom_Level);
-
-    });
-
+	});
 };
 
 function reverseGeocode(lat, lng, elementId) {
-
-    var deferred = $.Deferred();
-    var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
-    
+	var deferred = $.Deferred();
+	var requestUrl = "http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer/reverseGeocode?f=json&location=" + lng + "," + lat;
+		
 	makeRequest("GET", requestUrl, true, function(resp) {
 
-        if (!resp.error) {
-            var address		= resp.address.Address;
-            var city		= resp.address.City;
-            var region		= resp.address.Region;
-            var country		= resp.address.CountryCode;
-            var worldRegion = "";
-
-            [country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
-            
+    if (!resp.error) {
+			var address		= resp.address.Address;
+			var city		= resp.address.City;
+			var region		= resp.address.Region;
+			var country		= resp.address.CountryCode;
+			var worldRegion = "";
+			[country, worldRegion] = getNameFromCode(country, worldCountries); // country-codes.js
 			deferred.resolve(
 				[address, city, region, country, worldRegion]
 			);
-
-        };
-
-        var suggestionString = "";
-
-        var geocodeResult = [address, city, country];
-
-		//console.log(geocodeResult);
-
-        //return suggestionString;
+			var suggestionString = "";
+			var geocodeResult = [address, city, country];
+			
+		} else {
+			var geocodeResult = "";
+			deferred.reject();
+		};
 		return geocodeResult;
-    
 	});
 
     return deferred.promise();
@@ -121,23 +108,18 @@ function makeReadable(reverseGeocodeData) {
 };
 
 var getLocationSuggestion = function() {
-
 	return new Promise(function(resolve, reject) {
-
 		xycenter = map.getBounds().getCenter();
-
 		var placename = '';
-
 		reverseGeocode(xycenter.lat, xycenter.lng).done(function(data) {
 			data = makeReadable(data);
 			this.placename = data;
+
+		}).fail(function(){
+			this.placename = "Somewhere on Planet Earth";
 		});
-
 		resolve(this.placename);		
-		
 	});
-
-	
 }
 
 function createMap(centroid, Zoom_Level) {
@@ -161,19 +143,22 @@ function createMap(centroid, Zoom_Level) {
 	initialCenter = map.getCenter();
     
 	var lat = map.getCenter().lat;
-    var lng = map.getCenter().lng;
+  var lng = map.getCenter().lng;
 	panTo([lng,lat]);
 
 	var omni = document.getElementById("omnibox-container");
 
-    map.on("move", function(e) {
-		var lat = map.getCenter().lat;
-        var lng = map.getCenter().lng;
-        panTo([lng,lat])
-
-    });
+  // map.on("move", function(e) {
+	//   var lat = map.getCenter().lat;
+  //   var lng = map.getCenter().lng;
+  //   panTo([lng,lat]);
+  // });
 
 	map.on("moveend", function(e) {
+
+		var lat = map.getCenter().lat;
+    var lng = map.getCenter().lng;
+    panTo([lng,lat]);
 
 		getLocationSuggestion().then(function(place) {
 			document.getElementById("location").value = place;
@@ -189,10 +174,10 @@ function createMap(centroid, Zoom_Level) {
 		var rp = document.getElementById("map-reporter");
 		rp.classList.add('low');
 
-	    var omni = document.getElementById("omnibox-container");
+		var omni = document.getElementById("omnibox-container");
 		requestAnimationFrame(() => omni.style.opacity = 1);
 
-    });
+	});
 
     map._layersMinZoom = 4;
 
